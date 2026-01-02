@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "createdAt": "2026-01-02T14:31:58.511Z",
+  "createdAt": "2026-01-02T14:43:54.321Z",
   "workspaces": [
     {
       "name": "ubuntu-portfolio",
@@ -12,7 +12,7 @@
       "mediaLibrary": {
         "enabled": false
       },
-      "schema": "7feef2b3.create-schema.json",
+      "schema": "28deefab.create-schema.json",
       "tools": "ba47da56.create-tools.json"
     }
   ],

@@ -8,6 +8,12 @@ import themeSettings from './themeSettings'
 import desktopApp from './desktopApp'
 import desktopShortcut from './desktopShortcut'
 
+// About schemas (Story 1.6)
+import aboutSection from './aboutSection'
+import experience from './experience'
+import education from './education'
+import skill from './skill'
+
 // Document schemas (placeholders - to be expanded in later stories)
 import radioStream from './radioStream'
 import wallpaper from './wallpaper'
@@ -23,6 +29,12 @@ export const schemaTypes = [
   // Desktop schemas (Story 1.5)
   desktopApp,
   desktopShortcut,
+
+  // About schemas (Story 1.6)
+  aboutSection,
+  experience,
+  education,
+  skill,
 
   // Media schemas (Story 1.8 - placeholder)
   radioStream,
