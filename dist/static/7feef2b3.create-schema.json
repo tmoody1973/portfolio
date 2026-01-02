@@ -1,0 +1,997 @@
+[
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "The main title of the portfolio site",
+        "name": "siteTitle",
+        "type": "string"
+      },
+      {
+        "rows": 3,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "max",
+                "constraint": 160
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Meta description for SEO",
+        "name": "siteDescription",
+        "type": "text"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Your full name",
+        "name": "authorName",
+        "type": "string"
+      },
+      {
+        "description": "e.g., \"Developer & Radio Curator\"",
+        "name": "authorTitle",
+        "type": "string",
+        "title": "Author Title/Tagline"
+      },
+      {
+        "name": "contactEmail",
+        "type": "string"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "options": {
+                  "list": [
+                    {
+                      "title": "GitHub",
+                      "value": "github"
+                    },
+                    {
+                      "title": "LinkedIn",
+                      "value": "linkedin"
+                    },
+                    {
+                      "title": "Twitter/X",
+                      "value": "twitter"
+                    },
+                    {
+                      "title": "Substack",
+                      "value": "substack"
+                    },
+                    {
+                      "title": "Buy Me a Coffee",
+                      "value": "buymeacoffee"
+                    },
+                    {
+                      "title": "Instagram",
+                      "value": "instagram"
+                    },
+                    {
+                      "title": "YouTube",
+                      "value": "youtube"
+                    },
+                    {
+                      "title": "Other",
+                      "value": "other"
+                    }
+                  ]
+                },
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "valid",
+                        "constraint": [
+                          "github",
+                          "linkedin",
+                          "twitter",
+                          "substack",
+                          "buymeacoffee",
+                          "instagram",
+                          "youtube",
+                          "other"
+                        ]
+                      },
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "platform",
+                "type": "string"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "uri",
+                        "constraint": {
+                          "options": {
+                            "scheme": [
+                              "/^http$/",
+                              "/^https$/"
+                            ],
+                            "allowRelative": false,
+                            "relativeOnly": false,
+                            "allowCredentials": false
+                          }
+                        }
+                      },
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "url",
+                "type": "url",
+                "title": "URL"
+              },
+              {
+                "description": "Custom label for \"Other\" platforms",
+                "name": "label",
+                "type": "string",
+                "title": "Label (optional)"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "socialLinks",
+        "type": "array"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "description": "Default image for social sharing (Open Graph)",
+        "name": "seoImage",
+        "type": "image",
+        "title": "Default SEO Image"
+      }
+    ],
+    "name": "siteSettings",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "initialValue": true,
+        "description": "Toggle the boot sequence on/off",
+        "name": "enabled",
+        "type": "boolean",
+        "title": "Boot Sequence Enabled"
+      },
+      {
+        "rows": 15,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "ASCII art displayed during boot (e.g., your name in ASCII)",
+        "name": "asciiArt",
+        "type": "text",
+        "title": "ASCII Art"
+      },
+      {
+        "initialValue": 50,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 10
+              },
+              {
+                "flag": "max",
+                "constraint": 200
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Milliseconds per character for typing effect",
+        "name": "asciiAnimationSpeed",
+        "type": "number",
+        "title": "ASCII Animation Speed (ms)"
+      },
+      {
+        "description": "Messages that appear during boot sequence",
+        "of": [
+          {
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "e.g., \"Loading architecture blueprints... Howard '96\"",
+                "name": "message",
+                "type": "string"
+              },
+              {
+                "initialValue": 500,
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "min",
+                        "constraint": 100
+                      },
+                      {
+                        "flag": "max",
+                        "constraint": 3000
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "Milliseconds to wait after showing this message",
+                "name": "delay",
+                "type": "number",
+                "title": "Delay After (ms)"
+              },
+              {
+                "initialValue": true,
+                "description": "Display with success styling (green checkmark)",
+                "name": "isSuccess",
+                "type": "boolean",
+                "title": "Show as Success"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "bootMessages",
+        "type": "array"
+      },
+      {
+        "initialValue": 5000,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 2000
+              },
+              {
+                "flag": "max",
+                "constraint": 10000
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Maximum time for entire boot sequence before auto-completing",
+        "name": "totalDuration",
+        "type": "number",
+        "title": "Maximum Total Duration (ms)"
+      },
+      {
+        "initialValue": true,
+        "description": "Allow users to skip the boot sequence",
+        "name": "allowSkip",
+        "type": "boolean"
+      },
+      {
+        "initialValue": "Skip",
+        "description": "Text for the skip button",
+        "name": "skipButtonText",
+        "type": "string"
+      },
+      {
+        "initialValue": true,
+        "description": "Auto-skip for returning visitors who previously skipped",
+        "name": "rememberSkipPreference",
+        "type": "boolean"
+      }
+    ],
+    "name": "bootSequence",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "initialValue": true,
+        "description": "Toggle the audio player on/off",
+        "name": "enabled",
+        "type": "boolean",
+        "title": "Audio Player Enabled"
+      },
+      {
+        "description": "The stream that plays by default when player opens",
+        "to": [
+          {
+            "type": "radioStream"
+          }
+        ],
+        "name": "defaultStream",
+        "type": "reference"
+      },
+      {
+        "initialValue": 75,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              },
+              {
+                "flag": "max",
+                "constraint": 100
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Default volume level (0-100)",
+        "name": "defaultVolume",
+        "type": "number"
+      },
+      {
+        "initialValue": false,
+        "description": "Automatically start playing when player opens",
+        "name": "autoplay",
+        "type": "boolean"
+      },
+      {
+        "initialValue": true,
+        "description": "Display current track information from Spinitron",
+        "name": "showNowPlaying",
+        "type": "boolean"
+      },
+      {
+        "initialValue": true,
+        "description": "Display recently played tracks list",
+        "name": "showRecentTracks",
+        "type": "boolean"
+      },
+      {
+        "initialValue": 5,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 3
+              },
+              {
+                "flag": "max",
+                "constraint": 15
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Number of recent tracks to display",
+        "name": "recentTracksCount",
+        "type": "number"
+      },
+      {
+        "initialValue": true,
+        "description": "Display link to Mixcloud show archives",
+        "name": "showMixcloudArchives",
+        "type": "boolean"
+      },
+      {
+        "description": "Your Mixcloud username for fetching archives",
+        "name": "mixcloudUsername",
+        "type": "string"
+      },
+      {
+        "description": "URL to custom Webamp skin (.wsz file)",
+        "name": "webampSkin",
+        "type": "string"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": 100,
+            "name": "x",
+            "type": "number",
+            "title": "X Position"
+          },
+          {
+            "initialValue": 100,
+            "name": "y",
+            "type": "number",
+            "title": "Y Position"
+          }
+        ],
+        "name": "playerPosition",
+        "type": "object",
+        "title": "Default Player Position"
+      }
+    ],
+    "name": "playerConfig",
+    "type": "document",
+    "title": "Player Configuration"
+  },
+  {
+    "fields": [
+      {
+        "description": "The currently active desktop wallpaper",
+        "to": [
+          {
+            "type": "wallpaper"
+          }
+        ],
+        "name": "activeWallpaper",
+        "type": "reference"
+      },
+      {
+        "initialValue": "#2C001E",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "regex",
+                "constraint": {
+                  "pattern": "/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/",
+                  "name": "hex color",
+                  "invert": false
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Hex color to use if wallpaper fails to load",
+        "name": "fallbackWallpaperColor",
+        "type": "string"
+      },
+      {
+        "initialValue": "#E95420",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "regex",
+                "constraint": {
+                  "pattern": "/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/",
+                  "name": "hex color",
+                  "invert": false
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Primary accent color (Ubuntu orange by default)",
+        "name": "accentColor",
+        "type": "string"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Ubuntu (Default)",
+              "value": "ubuntu"
+            },
+            {
+              "title": "macOS",
+              "value": "macos"
+            },
+            {
+              "title": "Windows",
+              "value": "windows"
+            }
+          ]
+        },
+        "initialValue": "ubuntu",
+        "name": "windowStyle",
+        "type": "string"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Left",
+              "value": "left"
+            },
+            {
+              "title": "Bottom",
+              "value": "bottom"
+            }
+          ]
+        },
+        "initialValue": "left",
+        "name": "dockPosition",
+        "type": "string"
+      },
+      {
+        "initialValue": false,
+        "description": "Automatically hide dock when not in use",
+        "name": "dockAutoHide",
+        "type": "boolean",
+        "title": "Auto-hide Dock"
+      },
+      {
+        "initialValue": true,
+        "description": "Display shortcut icons on the desktop",
+        "name": "showDesktopIcons",
+        "type": "boolean"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Small",
+              "value": "small"
+            },
+            {
+              "title": "Medium",
+              "value": "medium"
+            },
+            {
+              "title": "Large",
+              "value": "large"
+            }
+          ]
+        },
+        "initialValue": "medium",
+        "name": "iconSize",
+        "type": "string",
+        "title": "Desktop Icon Size"
+      },
+      {
+        "initialValue": "Ubuntu, sans-serif",
+        "description": "Font family for the desktop UI",
+        "name": "fontFamily",
+        "type": "string",
+        "title": "System Font"
+      }
+    ],
+    "name": "themeSettings",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "regex",
+                "constraint": {
+                  "pattern": "/^[a-z-]+$/",
+                  "name": "lowercase-kebab",
+                  "invert": false
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Unique identifier for the app (e.g., \"about\", \"terminal\", \"chrome\", \"player\", \"crates\")",
+        "name": "appId",
+        "type": "string",
+        "title": "App ID"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Display name shown in window title bar",
+        "name": "title",
+        "type": "string",
+        "title": "App Title"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "description": "Icon displayed in dock and window title bar",
+        "name": "icon",
+        "type": "image",
+        "title": "App Icon"
+      },
+      {
+        "description": "Use a predefined icon name instead of custom image (e.g., \"terminal\", \"chrome\", \"folder\")",
+        "name": "iconName",
+        "type": "string",
+        "title": "Icon Name (Alternative)"
+      },
+      {
+        "initialValue": true,
+        "description": "Show this app in the dock",
+        "name": "enabled",
+        "type": "boolean"
+      },
+      {
+        "initialValue": true,
+        "description": "Display this app in the dock launcher",
+        "name": "showInDock",
+        "type": "boolean",
+        "title": "Show in Dock"
+      },
+      {
+        "initialValue": 0,
+        "description": "Position in the dock (lower numbers appear first)",
+        "name": "dockOrder",
+        "type": "number"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": 800,
+            "description": "Default window width in pixels",
+            "name": "width",
+            "type": "number",
+            "title": "Default Width"
+          },
+          {
+            "initialValue": 600,
+            "description": "Default window height in pixels",
+            "name": "height",
+            "type": "number",
+            "title": "Default Height"
+          },
+          {
+            "initialValue": 100,
+            "description": "Default horizontal position",
+            "name": "x",
+            "type": "number",
+            "title": "Default X Position"
+          },
+          {
+            "initialValue": 50,
+            "description": "Default vertical position",
+            "name": "y",
+            "type": "number",
+            "title": "Default Y Position"
+          },
+          {
+            "initialValue": true,
+            "description": "Allow window resizing",
+            "name": "resizable",
+            "type": "boolean"
+          },
+          {
+            "initialValue": true,
+            "description": "Allow window minimizing",
+            "name": "minimizable",
+            "type": "boolean"
+          },
+          {
+            "initialValue": true,
+            "description": "Allow window maximizing",
+            "name": "maximizable",
+            "type": "boolean"
+          }
+        ],
+        "name": "defaultWindowConfig",
+        "type": "object",
+        "title": "Default Window Configuration"
+      }
+    ],
+    "name": "desktopApp",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Label displayed under the icon",
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "External URL to open when clicked",
+        "name": "url",
+        "type": "url",
+        "title": "URL"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "description": "Custom icon image for this shortcut",
+        "name": "icon",
+        "type": "image",
+        "title": "Custom Icon"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Custom Image",
+              "value": "custom"
+            },
+            {
+              "title": "GitHub",
+              "value": "github"
+            },
+            {
+              "title": "LinkedIn",
+              "value": "linkedin"
+            },
+            {
+              "title": "Twitter/X",
+              "value": "twitter"
+            },
+            {
+              "title": "Substack",
+              "value": "substack"
+            },
+            {
+              "title": "Buy Me a Coffee",
+              "value": "buymeacoffee"
+            },
+            {
+              "title": "Instagram",
+              "value": "instagram"
+            },
+            {
+              "title": "YouTube",
+              "value": "youtube"
+            },
+            {
+              "title": "Email",
+              "value": "email"
+            },
+            {
+              "title": "Website",
+              "value": "website"
+            },
+            {
+              "title": "Folder",
+              "value": "folder"
+            },
+            {
+              "title": "File",
+              "value": "file"
+            }
+          ]
+        },
+        "initialValue": "custom",
+        "description": "Use a predefined platform icon instead of custom image",
+        "name": "iconType",
+        "type": "string"
+      },
+      {
+        "initialValue": 0,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Position on desktop (lower numbers appear first, left to right, top to bottom)",
+        "name": "order",
+        "type": "number",
+        "title": "Display Order"
+      },
+      {
+        "initialValue": true,
+        "description": "Show this shortcut on the desktop",
+        "name": "enabled",
+        "type": "boolean"
+      },
+      {
+        "initialValue": true,
+        "description": "Open link in a new browser tab",
+        "name": "openInNewTab",
+        "type": "boolean",
+        "title": "Open in New Tab"
+      },
+      {
+        "description": "Tooltip text shown on hover",
+        "name": "description",
+        "type": "string"
+      }
+    ],
+    "name": "desktopShortcut",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "name",
+        "type": "string",
+        "title": "Stream Name"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Direct URL to the audio stream",
+        "name": "streamUrl",
+        "type": "url",
+        "title": "Stream URL"
+      },
+      {
+        "initialValue": false,
+        "description": "Set as the default stream",
+        "name": "isDefault",
+        "type": "boolean",
+        "title": "Default Stream"
+      }
+    ],
+    "name": "radioStream",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "name",
+        "type": "string",
+        "title": "Wallpaper Name"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "image",
+        "type": "image",
+        "title": "Wallpaper Image"
+      },
+      {
+        "initialValue": false,
+        "description": "Set as the active wallpaper",
+        "name": "isActive",
+        "type": "boolean",
+        "title": "Active"
+      }
+    ],
+    "name": "wallpaper",
+    "type": "document"
+  }
+]

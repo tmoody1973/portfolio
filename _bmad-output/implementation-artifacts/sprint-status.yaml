@@ -39,9 +39,9 @@ development_status:
   epic-1: in-progress
   1-1-nextjs-15-app-router-migration: done
   1-2-typescript-configuration-and-base-types: done
-  1-3-sanity-project-setup-and-studio-integration: backlog
-  1-4-core-singleton-schemas: backlog
-  1-5-desktop-content-schemas: backlog
+  1-3-sanity-project-setup-and-studio-integration: done
+  1-4-core-singleton-schemas: done
+  1-5-desktop-content-schemas: done
   1-6-about-content-schemas: backlog
   1-7-project-and-terminal-schemas: backlog
   1-8-media-and-stream-schemas: backlog
