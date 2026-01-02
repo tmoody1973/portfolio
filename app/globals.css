@@ -205,3 +205,95 @@ input[type=range].ubuntu-slider::-webkit-slider-thumb {
 .list-arrow {
     list-style: "⇀";
 }
+
+/* Desktop Environment Styles */
+.desktop {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh; /* Dynamic viewport height for mobile */
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background-color: #2C001E; /* Ubuntu dark aubergine fallback */
+}
+
+.desktop-topbar {
+    position: relative;
+    z-index: 50;
+    flex-shrink: 0;
+    height: 28px;
+    background-color: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.desktop-content {
+    position: relative;
+    z-index: 10;
+    flex: 1;
+    overflow: hidden;
+    padding: 12px;
+}
+
+.desktop-icon-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 85px);
+    grid-template-rows: repeat(auto-fill, 90px);
+    gap: 8px;
+    align-content: start;
+    height: 100%;
+    width: 100%;
+}
+
+.desktop-dock {
+    position: relative;
+    z-index: 50;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4px 0;
+    min-height: 56px;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.desktop-windows {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    pointer-events: none;
+}
+
+.desktop-windows > * {
+    pointer-events: auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .desktop-topbar {
+        height: 24px;
+    }
+
+    .desktop-icon-grid {
+        grid-template-columns: repeat(auto-fill, 75px);
+        grid-template-rows: repeat(auto-fill, 80px);
+        gap: 6px;
+        padding: 8px;
+    }
+
+    .desktop-dock {
+        min-height: 64px;
+        padding: 8px 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .desktop-icon-grid {
+        grid-template-columns: repeat(auto-fill, 70px);
+        grid-template-rows: repeat(auto-fill, 75px);
+    }
+}
