@@ -22,6 +22,9 @@ import terminalCommand from './terminalCommand'
 import radioStream from './radioStream'
 import wallpaper from './wallpaper'
 
+// Crates schemas (Epic 10)
+import curatedItem from './curatedItem'
+
 // Export all schema types
 export const schemaTypes = [
   // Singletons (Story 1.4)
@@ -47,4 +50,7 @@ export const schemaTypes = [
   // Media schemas (Story 1.8 - placeholder)
   radioStream,
   wallpaper,
+
+  // Crates schemas (Epic 10)
+  curatedItem,
 ]

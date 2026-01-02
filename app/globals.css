@@ -238,13 +238,15 @@ input[type=range].ubuntu-slider::-webkit-slider-thumb {
 }
 
 .desktop-icon-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, 85px);
-    grid-template-rows: repeat(auto-fill, 90px);
-    gap: 8px;
-    align-content: start;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: flex-end;
+    align-items: flex-end;
+    gap: 4px;
     height: 100%;
     width: 100%;
+    padding-right: 8px;
 }
 
 .desktop-dock {
@@ -313,10 +315,8 @@ input[type=range].ubuntu-slider::-webkit-slider-thumb {
     }
 
     .desktop-icon-grid {
-        grid-template-columns: repeat(auto-fill, 75px);
-        grid-template-rows: repeat(auto-fill, 80px);
-        gap: 6px;
-        padding: 8px;
+        gap: 4px;
+        padding-right: 6px;
     }
 
     .desktop-dock {
@@ -336,7 +336,56 @@ input[type=range].ubuntu-slider::-webkit-slider-thumb {
 
 @media (max-width: 480px) {
     .desktop-icon-grid {
-        grid-template-columns: repeat(auto-fill, 70px);
-        grid-template-rows: repeat(auto-fill, 75px);
+        gap: 2px;
+        padding-right: 4px;
+    }
+}
+
+/* Touch-friendly utilities */
+.touch-manipulation {
+    touch-action: manipulation;
+}
+
+/* Safe area insets for iOS notch/home indicator */
+.safe-area-inset-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.safe-area-inset-top {
+    padding-top: env(safe-area-inset-top, 0px);
+}
+
+/* Minimum touch target sizes (44x44 for accessibility) */
+.touch-target {
+    min-width: 44px;
+    min-height: 44px;
+}
+
+/* Prevent text selection on touch devices for interactive elements */
+.no-select {
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/* Smooth scrolling with momentum for iOS */
+.scroll-touch {
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Hide scrollbars on mobile but keep functionality */
+@media (max-width: 768px) {
+    .hide-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    .hide-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+}
+
+/* Active state for touch devices */
+@media (hover: none) {
+    .touch-active:active {
+        background-color: rgba(255, 255, 255, 0.1);
     }
 }

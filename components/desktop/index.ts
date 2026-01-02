@@ -5,6 +5,7 @@ export { DesktopShortcut } from './DesktopShortcut'
 export { ShortcutGrid } from './ShortcutGrid'
 export { Dock } from './Dock'
 export { DockApp } from './DockApp'
+export { DockSocialMenu } from './DockSocialMenu'
 
 // Shortcuts configuration
 export { DEFAULT_SHORTCUTS, EXTERNAL_SHORTCUTS, ALL_SHORTCUTS } from './shortcuts'

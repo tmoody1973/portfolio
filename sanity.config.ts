@@ -17,6 +17,9 @@ export default defineConfig({
   projectId,
   dataset,
 
+  // Required for embedded Studio in Next.js App Router
+  basePath: '/studio',
+
   plugins: [
     structureTool({ structure }),
     visionTool({ defaultApiVersion: '2024-01-01' }),

@@ -25,3 +25,37 @@ export type {
   WindowSize,
   OpenWindowOptions,
 } from './useWindowStore'
+
+// Terminal store
+export {
+  useTerminalStore,
+  useTerminalOutput,
+  useTerminalInput,
+  useTerminalDirectory,
+} from './useTerminalStore'
+
+export type {
+  TerminalState,
+  TerminalEntry,
+  TerminalActions,
+} from './useTerminalStore'
+
+// Audio store
+export {
+  useAudioStore,
+  useIsPlaying,
+  useCurrentStream,
+  useVolume,
+  useNowPlaying,
+  useRecentTracks,
+  DEFAULT_STREAMS,
+} from './useAudioStore'
+
+export type {
+  AudioState,
+  AudioActions,
+  RadioStream,
+  NowPlaying,
+  RecentTrack,
+  MixcloudEpisode,
+} from './useAudioStore'

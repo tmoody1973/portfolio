@@ -44,7 +44,7 @@ export const DOCK_APPS: DockAppConfig[] = [
   {
     id: 'crates',
     name: 'Crates',
-    icon: '/themes/Yaru/apps/spotify.png',
+    icon: '/themes/Yaru/apps/crates.svg',
     appType: 'crates',
   },
 ]

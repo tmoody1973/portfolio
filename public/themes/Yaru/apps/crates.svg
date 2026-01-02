@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+  <!-- Vinyl record crate icon -->
+  <defs>
+    <linearGradient id="woodGrain" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8B4513"/>
+      <stop offset="50%" stop-color="#A0522D"/>
+      <stop offset="100%" stop-color="#8B4513"/>
+    </linearGradient>
+    <linearGradient id="vinyl" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a1a1a"/>
+      <stop offset="50%" stop-color="#333"/>
+      <stop offset="100%" stop-color="#1a1a1a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Crate body -->
+  <rect x="4" y="14" width="40" height="30" rx="2" fill="url(#woodGrain)" stroke="#5D3A1A" stroke-width="1"/>
+
+  <!-- Wood slat lines -->
+  <line x1="4" y1="22" x2="44" y2="22" stroke="#5D3A1A" stroke-width="0.5" opacity="0.6"/>
+  <line x1="4" y1="30" x2="44" y2="30" stroke="#5D3A1A" stroke-width="0.5" opacity="0.6"/>
+  <line x1="4" y1="38" x2="44" y2="38" stroke="#5D3A1A" stroke-width="0.5" opacity="0.6"/>
+
+  <!-- Vinyl records sticking up -->
+  <ellipse cx="16" cy="12" rx="10" ry="10" fill="url(#vinyl)" stroke="#000" stroke-width="1"/>
+  <circle cx="16" cy="12" r="3" fill="#E77500" stroke="#000" stroke-width="0.5"/>
+  <circle cx="16" cy="12" r="1" fill="#1a1a1a"/>
+
+  <ellipse cx="32" cy="10" rx="10" ry="10" fill="url(#vinyl)" stroke="#000" stroke-width="1"/>
+  <circle cx="32" cy="10" r="3" fill="#4169E1" stroke="#000" stroke-width="0.5"/>
+  <circle cx="32" cy="10" r="1" fill="#1a1a1a"/>
+
+  <!-- Groove lines on vinyl -->
+  <circle cx="16" cy="12" r="5" fill="none" stroke="#2a2a2a" stroke-width="0.3"/>
+  <circle cx="16" cy="12" r="7" fill="none" stroke="#2a2a2a" stroke-width="0.3"/>
+  <circle cx="32" cy="10" r="5" fill="none" stroke="#2a2a2a" stroke-width="0.3"/>
+  <circle cx="32" cy="10" r="7" fill="none" stroke="#2a2a2a" stroke-width="0.3"/>
+
+  <!-- Crate handle cutouts -->
+  <rect x="8" y="24" width="12" height="6" rx="1" fill="#2C001E" opacity="0.8"/>
+  <rect x="28" y="24" width="12" height="6" rx="1" fill="#2C001E" opacity="0.8"/>
+</svg>

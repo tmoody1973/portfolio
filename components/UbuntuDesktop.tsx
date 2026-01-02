@@ -2,27 +2,70 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import { useBootStore, useWindowStore } from '@/store'
+import { useViewport } from '@/hooks'
 import { BootSequence } from './boot'
 import { Desktop, Dock, ShortcutGrid, DesktopShortcut, DOCK_APPS, DEFAULT_SHORTCUTS, EXTERNAL_SHORTCUTS } from './desktop'
 import { WindowShell } from './window'
+import { MobileAppDrawer, MobileBottomNav, MobileAppView } from './mobile'
+import { AboutApp } from './apps/about'
+import { TerminalApp } from './apps/terminal/TerminalApp'
+import { PlayerApp } from './apps/player/PlayerApp'
+import { ChromeApp } from './apps/chrome/ChromeApp'
+import { ContactApp } from './apps/contact'
+import { CratesApp } from './apps/crates'
 import Navbar from './screen/navbar'
 
 // Screen states
 type ScreenState = 'boot' | 'desktop' | 'locked' | 'shutdown'
 
+// App configuration for both desktop and mobile
+const APP_CONFIGS: Record<string, { title: string; icon: string; appType: string }> = {
+  about: { title: 'About Me', icon: '/themes/Yaru/apps/user-info.png', appType: 'about' },
+  terminal: { title: 'Terminal', icon: '/themes/Yaru/apps/bash.png', appType: 'terminal' },
+  chrome: { title: 'Projects', icon: '/themes/Yaru/apps/chrome.png', appType: 'chrome' },
+  vscode: { title: 'VS Code', icon: '/themes/Yaru/apps/vscode.png', appType: 'vscode' },
+  trash: { title: 'Trash', icon: '/themes/Yaru/apps/user-trash-full.png', appType: 'trash' },
+  files: { title: 'Files', icon: '/themes/Yaru/apps/filemanager.png', appType: 'files' },
+  player: { title: 'Music', icon: '/themes/Yaru/apps/rhythmbox.png', appType: 'player' },
+  crates: { title: 'Crates', icon: '/themes/Yaru/apps/crates.svg', appType: 'crates' },
+  contact: { title: 'Contact', icon: '/themes/Yaru/apps/email.svg', appType: 'contact' },
+}
+
+// Mobile nav items (subset of apps for quick access)
+const MOBILE_NAV_ITEMS = [
+  { id: 'about', name: 'About', icon: '/themes/Yaru/apps/user-info.png', appType: 'about' },
+  { id: 'chrome', name: 'Projects', icon: '/themes/Yaru/apps/chrome.png', appType: 'chrome' },
+  { id: 'player', name: 'Music', icon: '/themes/Yaru/apps/rhythmbox.png', appType: 'player' },
+  { id: 'contact', name: 'Contact', icon: '/themes/Yaru/apps/email.svg', appType: 'contact' },
+]
+
+// All apps for mobile drawer
+const MOBILE_DRAWER_APPS = Object.entries(APP_CONFIGS).map(([id, config]) => ({
+  id,
+  name: config.title,
+  icon: config.icon,
+  appType: config.appType,
+}))
+
 /**
  * Main Ubuntu Desktop component
  * Orchestrates the entire desktop experience using Zustand stores
+ * Now with responsive support for mobile/tablet
  */
 export function UbuntuDesktop() {
   const [screenState, setScreenState] = useState<ScreenState>('boot')
   const [wallpaper, setWallpaper] = useState('wall-9')
+  const [mobileActiveApp, setMobileActiveApp] = useState<string | null>(null)
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+
+  // Viewport detection
+  const { isMobile, isTablet } = useViewport()
 
   // Boot store
   const { isBooting, isComplete, startBoot, complete, skip } = useBootStore()
 
-  // Window store
-  const { openWindow, windows } = useWindowStore()
+  // Window store (for desktop)
+  const { openWindow, windows, closeWindow } = useWindowStore()
 
   // Initialize boot sequence on mount
   useEffect(() => {
@@ -56,22 +99,10 @@ export function UbuntuDesktop() {
     skip()
   }, [skip])
 
-  // Handle opening apps from shortcuts
+  // Handle opening apps (desktop)
   const handleOpenApp = useCallback(
     (appId: string) => {
-      // Map shortcut IDs to window configs
-      const appConfigs: Record<string, { title: string; icon: string; appType: string }> = {
-        about: { title: 'About Me', icon: '/themes/Yaru/apps/user-info.png', appType: 'about' },
-        terminal: { title: 'Terminal', icon: '/themes/Yaru/apps/bash.png', appType: 'terminal' },
-        chrome: { title: 'Projects', icon: '/themes/Yaru/apps/chrome.png', appType: 'chrome' },
-        vscode: { title: 'VS Code', icon: '/themes/Yaru/apps/vscode.png', appType: 'vscode' },
-        trash: { title: 'Trash', icon: '/themes/Yaru/apps/user-trash-full.png', appType: 'trash' },
-        files: { title: 'Files', icon: '/themes/Yaru/apps/filemanager.png', appType: 'files' },
-        player: { title: 'Music', icon: '/themes/Yaru/apps/rhythmbox.png', appType: 'player' },
-        crates: { title: 'Crates', icon: '/themes/Yaru/apps/spotify.png', appType: 'crates' },
-      }
-
-      const config = appConfigs[appId]
+      const config = APP_CONFIGS[appId]
       if (config) {
         openWindow({
           id: appId,
@@ -83,6 +114,17 @@ export function UbuntuDesktop() {
     },
     [openWindow]
   )
+
+  // Handle opening apps (mobile)
+  const handleMobileOpenApp = useCallback((appId: string) => {
+    setMobileActiveApp(appId)
+    setIsDrawerOpen(false)
+  }, [])
+
+  // Handle mobile back
+  const handleMobileBack = useCallback(() => {
+    setMobileActiveApp(null)
+  }, [])
 
   // Handle lock screen
   const handleLockScreen = useCallback(() => {
@@ -105,15 +147,13 @@ export function UbuntuDesktop() {
   // Handle turn on (from shutdown)
   const handleTurnOn = useCallback(() => {
     localStorage.setItem('shut-down', 'false')
-    // Reset boot and restart
     useBootStore.getState().reset()
     startBoot()
   }, [startBoot])
 
   // Handle "Show Applications" from dock
   const handleShowApps = useCallback(() => {
-    // TODO: Implement app grid overlay
-    console.log('Show Applications clicked')
+    setIsDrawerOpen(true)
   }, [])
 
   // Render boot sequence
@@ -138,7 +178,7 @@ export function UbuntuDesktop() {
         />
         <button
           onClick={handleTurnOn}
-          className="bg-white rounded-full p-3 hover:bg-gray-200 transition-colors"
+          className="bg-white rounded-full p-3 hover:bg-gray-200 transition-colors touch-manipulation"
         >
           <img
             src="/themes/Yaru/status/power-button.svg"
@@ -169,12 +209,121 @@ export function UbuntuDesktop() {
           />
         </div>
         <h2 className="text-white text-2xl font-medium mb-2">Tarik Moody</h2>
-        <p className="text-white/70 text-sm">Click anywhere to unlock</p>
+        <p className="text-white/70 text-sm">Tap anywhere to unlock</p>
       </div>
     )
   }
 
-  // Render desktop
+  // Mobile Layout
+  if (isMobile) {
+    const activeAppConfig = mobileActiveApp ? APP_CONFIGS[mobileActiveApp] : null
+
+    return (
+      <div
+        className="w-screen h-screen overflow-hidden bg-cover bg-center"
+        style={{ backgroundImage: `url(/images/wallpapers/${wallpaper}.webp)` }}
+        id="ubuntu-mobile"
+      >
+        {/* Active App (Full Screen) */}
+        {mobileActiveApp && activeAppConfig ? (
+          <MobileAppView
+            title={activeAppConfig.title}
+            onBack={handleMobileBack}
+          >
+            <AppContent appType={activeAppConfig.appType} windowId={mobileActiveApp} />
+          </MobileAppView>
+        ) : (
+          // Home screen with welcome message
+          <div className="h-full flex flex-col items-center justify-center p-6 pb-20">
+            <div className="bg-black/40 backdrop-blur-md rounded-2xl p-8 text-center max-w-sm">
+              <img
+                src="/themes/Yaru/status/cof_orange_hex.svg"
+                alt="Ubuntu Logo"
+                className="w-16 h-16 mx-auto mb-4"
+              />
+              <h1 className="text-2xl font-bold text-white mb-2">Tarik Moody</h1>
+              <p className="text-white/70 text-sm mb-4">
+                Software Engineer & Creative Technologist
+              </p>
+              <p className="text-white/50 text-xs">
+                Use the navigation below to explore
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Bottom Navigation */}
+        <MobileBottomNav
+          items={MOBILE_NAV_ITEMS}
+          activeAppId={mobileActiveApp || undefined}
+          onNavClick={handleMobileOpenApp}
+          onShowDrawer={() => setIsDrawerOpen(true)}
+        />
+
+        {/* App Drawer */}
+        <MobileAppDrawer
+          isOpen={isDrawerOpen}
+          onClose={() => setIsDrawerOpen(false)}
+          onOpenApp={handleMobileOpenApp}
+          apps={MOBILE_DRAWER_APPS}
+        />
+      </div>
+    )
+  }
+
+  // Tablet Layout (simplified desktop - single window at a time)
+  if (isTablet) {
+    return (
+      <div className="w-screen h-screen overflow-hidden" id="ubuntu-tablet">
+        <Desktop
+          wallpaper={wallpaper}
+          topBar={
+            <Navbar
+              lockScreen={handleLockScreen}
+              shutDown={handleShutdown}
+            />
+          }
+          sidebarDock={
+            <Dock
+              apps={DOCK_APPS}
+              onShowApps={handleShowApps}
+            />
+          }
+          hasSidebarDock={true}
+          windowLayer={
+            <TabletWindowLayer />
+          }
+        >
+          {/* Desktop Shortcuts (larger touch targets) */}
+          <ShortcutGrid>
+            {DEFAULT_SHORTCUTS.map((shortcut) => (
+              <DesktopShortcut
+                key={shortcut.id}
+                {...shortcut}
+                onOpen={handleOpenApp}
+              />
+            ))}
+            {EXTERNAL_SHORTCUTS.map((shortcut) => (
+              <DesktopShortcut
+                key={shortcut.id}
+                {...shortcut}
+              />
+            ))}
+          </ShortcutGrid>
+        </Desktop>
+
+        {/* App Drawer for tablet */}
+        <MobileAppDrawer
+          isOpen={isDrawerOpen}
+          onClose={() => setIsDrawerOpen(false)}
+          onOpenApp={handleOpenApp}
+          apps={MOBILE_DRAWER_APPS}
+        />
+      </div>
+    )
+  }
+
+  // Desktop Layout (original)
   return (
     <div className="w-screen h-screen overflow-hidden" id="ubuntu-desktop">
       <Desktop
@@ -213,13 +362,20 @@ export function UbuntuDesktop() {
           ))}
         </ShortcutGrid>
       </Desktop>
+
+      {/* App Drawer for desktop */}
+      <MobileAppDrawer
+        isOpen={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+        onOpenApp={handleOpenApp}
+        apps={MOBILE_DRAWER_APPS}
+      />
     </div>
   )
 }
 
 /**
- * Window layer component - renders all open windows
- * Uses WindowShell for consistent window chrome
+ * Window layer component - renders all open windows (desktop)
  */
 function WindowLayer() {
   const { windows } = useWindowStore()
@@ -240,72 +396,85 @@ function WindowLayer() {
 }
 
 /**
- * Renders app-specific content based on appType
- * Placeholder until individual app components are built
+ * Tablet window layer - only shows the most recent window maximized
  */
-function AppContent({ appType, windowId }: { appType: string; windowId: string }) {
-  // TODO: Map appType to actual app components (Epic 4-7)
-  // For now, render placeholder content
-  const appPlaceholders: Record<string, { title: string; description: string }> = {
-    about: {
-      title: 'About Me',
-      description: 'Bio, journey, education, and skills (Epic 4)',
-    },
-    terminal: {
-      title: 'Terminal',
-      description: 'Interactive command-line interface (Epic 5)',
-    },
-    chrome: {
-      title: 'Projects',
-      description: 'Case studies and portfolio items (Epic 7)',
-    },
-    vscode: {
-      title: 'VS Code',
-      description: 'Code editor view',
-    },
-    files: {
-      title: 'Files',
-      description: 'File manager',
-    },
-    player: {
-      title: 'Music Player',
-      description: 'Webamp audio player (Epic 6)',
-    },
-    crates: {
-      title: 'Crates',
-      description: 'Curated discoveries (Epic 10)',
-    },
-    trash: {
-      title: 'Trash',
-      description: 'Deleted items',
-    },
+function TabletWindowLayer() {
+  const { windows, closeWindow } = useWindowStore()
+
+  // Only show the most recent (top) window
+  const topWindow = windows.length > 0 ? windows[windows.length - 1] : null
+
+  if (!topWindow) {
+    return null
   }
 
-  const placeholder = appPlaceholders[appType] || {
-    title: appType,
-    description: 'Unknown app',
+  return (
+    <div className="fixed inset-0 pt-8 pl-14 z-20 bg-[#1e1e1e]">
+      {/* Window header */}
+      <div className="flex items-center justify-between h-10 px-4 bg-[#2d2d2d] border-b border-white/10">
+        <span className="text-white/80 font-medium">{topWindow.title}</span>
+        <button
+          onClick={() => closeWindow(topWindow.id)}
+          className="w-8 h-8 flex items-center justify-center rounded hover:bg-white/10 transition-colors touch-manipulation"
+          aria-label="Close"
+        >
+          <svg className="w-4 h-4 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      {/* Window content */}
+      <div className="h-[calc(100%-40px)] overflow-hidden">
+        <AppContent appType={topWindow.appType} windowId={topWindow.id} />
+      </div>
+    </div>
+  )
+}
+
+/**
+ * Renders app-specific content based on appType
+ */
+function AppContent({ appType, windowId }: { appType: string; windowId: string }) {
+  switch (appType) {
+    case 'about':
+      return <AboutApp />
+    case 'terminal':
+      return <TerminalApp windowId={windowId} />
+    case 'player':
+      return <PlayerApp />
+    case 'chrome':
+      return <ChromeApp />
+    case 'contact':
+      return <ContactApp />
+    case 'crates':
+      return <CratesApp />
+    default:
+      return <AppPlaceholder appType={appType} windowId={windowId} />
   }
+}
+
+/**
+ * Placeholder for apps not yet implemented
+ */
+function AppPlaceholder({ appType, windowId }: { appType: string; windowId: string }) {
+  const appPlaceholders: Record<string, { title: string; description: string }> = {
+    vscode: { title: 'VS Code', description: 'Code editor view' },
+    files: { title: 'Files', description: 'File manager' },
+    crates: { title: 'Crates', description: 'Curated discoveries (Epic 10)' },
+    trash: { title: 'Trash', description: 'Deleted items' },
+  }
+
+  const placeholder = appPlaceholders[appType] || { title: appType, description: 'Unknown app' }
 
   return (
     <div className="p-6 h-full flex flex-col items-center justify-center text-center">
       <div className="text-white/30 mb-4">
-        <svg
-          className="w-16 h-16 mx-auto"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={1}
-            d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-          />
+        <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
         </svg>
       </div>
       <h3 className="text-white/70 text-lg font-medium mb-2">{placeholder.title}</h3>
       <p className="text-white/40 text-sm max-w-xs">{placeholder.description}</p>
-      <p className="text-white/20 text-xs mt-4">Window ID: {windowId}</p>
     </div>
   )
 }

@@ -30,10 +30,21 @@ export const DEFAULT_SHORTCUTS: Omit<DesktopShortcutProps, 'onOpen'>[] = [
     name: 'Trash',
     icon: '/themes/Yaru/apps/user-trash-full.png',
   },
+  {
+    id: 'contact',
+    name: 'Contact',
+    icon: '/themes/Yaru/apps/email.svg',
+  },
+  {
+    id: 'crates',
+    name: 'Crates',
+    icon: '/themes/Yaru/apps/crates.svg',
+  },
 ]
 
 /**
  * External link shortcuts (open in new tab)
+ * Social links and contact options
  */
 export const EXTERNAL_SHORTCUTS: Omit<DesktopShortcutProps, 'onOpen'>[] = [
   {
@@ -49,6 +60,27 @@ export const EXTERNAL_SHORTCUTS: Omit<DesktopShortcutProps, 'onOpen'>[] = [
     icon: '/themes/Yaru/apps/linkedin.png',
     isExternal: true,
     url: 'https://www.linkedin.com/in/tarikmoody/',
+  },
+  {
+    id: 'twitter',
+    name: 'X / Twitter',
+    icon: '/themes/Yaru/apps/x-twitter.svg',
+    isExternal: true,
+    url: 'https://x.com/taaborern',
+  },
+  {
+    id: 'substack',
+    name: 'Substack',
+    icon: '/themes/Yaru/apps/substack.svg',
+    isExternal: true,
+    url: 'https://tarikmoody.substack.com',
+  },
+  {
+    id: 'buymeacoffee',
+    name: 'Buy Me a Coffee',
+    icon: '/themes/Yaru/apps/buymeacoffee.svg',
+    isExternal: true,
+    url: 'https://buymeacoffee.com/tarikmoody',
   },
 ]
 

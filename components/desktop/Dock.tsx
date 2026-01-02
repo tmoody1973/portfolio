@@ -3,6 +3,7 @@
 import { useState, useCallback } from 'react'
 import Image from 'next/image'
 import { DockApp } from './DockApp'
+import { DockSocialMenu } from './DockSocialMenu'
 import { useWindowStore } from '@/store'
 
 export interface DockAppConfig {
@@ -132,6 +133,9 @@ export function Dock({
             />
           ))}
         </div>
+
+        {/* Social Links Menu */}
+        <DockSocialMenu />
 
         {/* Show Applications Button */}
         <div

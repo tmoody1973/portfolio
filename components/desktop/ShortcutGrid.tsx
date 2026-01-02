@@ -10,29 +10,15 @@ interface ShortcutGridProps {
 }
 
 /**
- * Grid container for desktop shortcuts
- * Arranges shortcuts in a responsive column-first grid
+ * Container for desktop shortcuts
+ * Arranges shortcuts vertically on the right side of the desktop
+ * Layout is controlled by parent .desktop-icon-grid CSS
  */
 export function ShortcutGrid({ children, className = '' }: ShortcutGridProps) {
   return (
-    <div
-      className={`
-        shortcut-grid
-        h-full w-full
-        grid
-        grid-flow-col
-        auto-cols-max
-        gap-1
-        p-2
-        content-start
-        ${className}
-      `}
-      style={{
-        gridTemplateRows: 'repeat(auto-fill, minmax(90px, max-content))',
-      }}
-    >
+    <>
       {children}
-    </div>
+    </>
   )
 }
 
