@@ -63,8 +63,8 @@ development_status:
   # ===========================================
   # Epic 3: Desktop Environment Shell
   # ===========================================
-  epic-3: backlog
-  3-1-window-state-management: backlog
+  epic-3: in-progress
+  3-1-window-state-management: done
   3-2-desktop-layout-and-wallpaper: backlog
   3-3-desktop-shortcut-icons: backlog
   3-4-dock-component-with-app-launchers: backlog
