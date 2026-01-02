@@ -52,8 +52,8 @@ development_status:
   # ===========================================
   # Epic 2: Boot Sequence Experience
   # ===========================================
-  epic-2: backlog
-  2-1-boot-sequence-state-management: backlog
+  epic-2: in-progress
+  2-1-boot-sequence-state-management: done
   2-2-ascii-name-animation-component: backlog
   2-3-boot-messages-display: backlog
   2-4-skip-boot-functionality: backlog

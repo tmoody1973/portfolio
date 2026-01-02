@@ -8249,7 +8249,7 @@ zod@^4.3.4:
   resolved "https://registry.npmjs.org/zod/-/zod-4.3.4.tgz"
   integrity sha512-Zw/uYiiyF6pUT1qmKbZziChgNPRu+ZRneAsMUDU6IwmXdWt5JwcUfy2bvLOCUtz5UniaN/Zx5aFttZYbYc7O/A==
 
-zustand@^5.0.4:
+zustand@^5.0.4, zustand@^5.0.9:
   version "5.0.9"
   resolved "https://registry.npmjs.org/zustand/-/zustand-5.0.9.tgz"
   integrity sha512-ALBtUj0AfjJt3uNRQoL1tL2tMvj6Gp/6e39dnfT6uzpelGru8v1tPOGBzayOWbPJvujM8JojDk3E1LxeFisBNg==
