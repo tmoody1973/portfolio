@@ -45,7 +45,7 @@ development_status:
   1-6-about-content-schemas: done
   1-7-project-and-terminal-schemas: done
   1-8-media-and-stream-schemas: done
-  1-9-sanity-studio-structure-and-content-groups: backlog
+  1-9-sanity-studio-structure-and-content-groups: done
   1-10-content-fetching-utilities-and-isr-configuration: backlog
   epic-1-retrospective: optional
 
