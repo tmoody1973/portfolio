@@ -1,0 +1,156 @@
+# generated: 2026-01-02
+# project: portfolio
+# tracking_system: file-system
+# story_location: _bmad-output/implementation-artifacts
+
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+#
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created, ready for development
+#   - in-progress: Developer actively working on implementation
+#   - review: Implementation complete, ready for review
+#   - done: Story completed
+#
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+#
+# WORKFLOW NOTES:
+# ===============
+# - Mark epic as 'in-progress' when starting work on its first story
+# - SM typically creates next story ONLY after previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then Dev runs code-review (fresh context, ideally different LLM)
+
+generated: 2026-01-02
+project: portfolio
+tracking_system: file-system
+story_location: _bmad-output/implementation-artifacts
+
+development_status:
+  # ===========================================
+  # Epic 1: Foundation & CMS Infrastructure
+  # ===========================================
+  epic-1: in-progress
+  1-1-nextjs-15-app-router-migration: done
+  1-2-typescript-configuration-and-base-types: done
+  1-3-sanity-project-setup-and-studio-integration: backlog
+  1-4-core-singleton-schemas: backlog
+  1-5-desktop-content-schemas: backlog
+  1-6-about-content-schemas: backlog
+  1-7-project-and-terminal-schemas: backlog
+  1-8-media-and-stream-schemas: backlog
+  1-9-sanity-studio-structure-and-content-groups: backlog
+  1-10-content-fetching-utilities-and-isr-configuration: backlog
+  epic-1-retrospective: optional
+
+  # ===========================================
+  # Epic 2: Boot Sequence Experience
+  # ===========================================
+  epic-2: backlog
+  2-1-boot-sequence-state-management: backlog
+  2-2-ascii-name-animation-component: backlog
+  2-3-boot-messages-display: backlog
+  2-4-skip-boot-functionality: backlog
+  2-5-desktop-transition: backlog
+  epic-2-retrospective: optional
+
+  # ===========================================
+  # Epic 3: Desktop Environment Shell
+  # ===========================================
+  epic-3: backlog
+  3-1-window-state-management: backlog
+  3-2-desktop-layout-and-wallpaper: backlog
+  3-3-desktop-shortcut-icons: backlog
+  3-4-dock-component-with-app-launchers: backlog
+  3-5-window-component-shell: backlog
+  3-6-window-dragging: backlog
+  epic-3-retrospective: optional
+
+  # ===========================================
+  # Epic 4: About Application
+  # ===========================================
+  epic-4: backlog
+  4-1-about-app-window-integration: backlog
+  4-2-tabbed-navigation-component: backlog
+  4-3-bio-section-content: backlog
+  4-4-journey-timeline-section: backlog
+  4-5-education-section: backlog
+  4-6-skills-section: backlog
+  epic-4-retrospective: optional
+
+  # ===========================================
+  # Epic 5: Terminal Application
+  # ===========================================
+  epic-5: backlog
+  5-1-terminal-state-management: backlog
+  5-2-terminal-app-window-integration: backlog
+  5-3-command-input-and-display: backlog
+  5-4-core-command-responses: backlog
+  5-5-extended-commands: backlog
+  5-6-unrecognized-command-handling: backlog
+  5-7-command-history-navigation: backlog
+  epic-5-retrospective: optional
+
+  # ===========================================
+  # Epic 6: Audio Player (Webamp)
+  # ===========================================
+  epic-6: backlog
+  6-1-audio-state-management: backlog
+  6-2-webamp-integration-and-basic-playback: backlog
+  6-3-stream-switching: backlog
+  6-4-volume-control: backlog
+  6-5-spinitron-now-playing-integration: backlog
+  6-6-recent-tracks-display: backlog
+  6-7-mixcloud-archives-access: backlog
+  epic-6-retrospective: optional
+
+  # ===========================================
+  # Epic 7: Case Studies (Chrome App)
+  # ===========================================
+  epic-7: backlog
+  7-1-chrome-app-window-integration: backlog
+  7-2-project-list-view: backlog
+  7-3-case-study-detail-view: backlog
+  7-4-architecture-inspired-section-format: backlog
+  7-5-screenshot-gallery: backlog
+  7-6-case-study-navigation: backlog
+  epic-7-retrospective: optional
+
+  # ===========================================
+  # Epic 8: Contact & Social Integration
+  # ===========================================
+  epic-8: backlog
+  8-1-desktop-shortcut-social-links: backlog
+  8-2-social-links-in-dock-menu: backlog
+  8-3-contact-form-or-email-link: backlog
+  epic-8-retrospective: optional
+
+  # ===========================================
+  # Epic 9: Responsive Experience
+  # ===========================================
+  epic-9: backlog
+  9-1-mobile-app-drawer-navigation: backlog
+  9-2-mobile-audio-player-controls: backlog
+  9-3-tablet-desktop-optimization: backlog
+  9-4-touch-friendly-interactions: backlog
+  epic-9-retrospective: optional
+
+  # ===========================================
+  # Epic 10: Crates (Curated Discoveries)
+  # ===========================================
+  epic-10: backlog
+  10-1-curated-item-sanity-schema: backlog
+  10-2-crates-app-window-integration: backlog
+  10-3-crate-category-navigation: backlog
+  10-4-music-item-display-with-embeds: backlog
+  10-5-book-recommendations-display: backlog
+  10-6-curated-links-and-tools-display: backlog
+  10-7-curator-notes-display: backlog
+  10-8-featured-items-highlight: backlog
+  epic-10-retrospective: optional

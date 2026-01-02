@@ -33,3 +33,13 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# typescript
+*.tsbuildinfo
+
+# IDE
+.vscode/
+.idea/
+
+# claude code setup (optional tooling)
+awesome-claude-code-setup/
