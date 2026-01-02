@@ -36,7 +36,7 @@ development_status:
   # ===========================================
   # Epic 1: Foundation & CMS Infrastructure
   # ===========================================
-  epic-1: in-progress
+  epic-1: done
   1-1-nextjs-15-app-router-migration: done
   1-2-typescript-configuration-and-base-types: done
   1-3-sanity-project-setup-and-studio-integration: done
@@ -46,7 +46,7 @@ development_status:
   1-7-project-and-terminal-schemas: done
   1-8-media-and-stream-schemas: done
   1-9-sanity-studio-structure-and-content-groups: done
-  1-10-content-fetching-utilities-and-isr-configuration: backlog
+  1-10-content-fetching-utilities-and-isr-configuration: done
   epic-1-retrospective: optional
 
   # ===========================================
