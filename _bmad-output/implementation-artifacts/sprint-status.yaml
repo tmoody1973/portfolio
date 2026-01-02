@@ -56,7 +56,7 @@ development_status:
   2-1-boot-sequence-state-management: done
   2-2-ascii-name-animation-component: done
   2-3-boot-messages-display: done
-  2-4-skip-boot-functionality: backlog
+  2-4-skip-boot-functionality: done
   2-5-desktop-transition: backlog
   epic-2-retrospective: optional
 
