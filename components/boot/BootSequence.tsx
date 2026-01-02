@@ -8,7 +8,7 @@ import { SkipButton } from './SkipButton'
 import type { BootMessageItem } from './BootMessages'
 
 // Boot sequence phases
-type BootPhase = 'ascii' | 'messages' | 'complete' | 'exiting'
+type BootPhase = 'ascii' | 'waiting' | 'messages' | 'complete' | 'exiting'
 
 interface BootSequenceProps {
   /** ASCII art to display (uses default if not provided) */
@@ -27,25 +27,61 @@ interface BootSequenceProps {
   exitDuration?: number
   /** Background color */
   backgroundColor?: string
+  /** Whether to require keypress to continue after ASCII */
+  requireKeypress?: boolean
 }
 
 export function BootSequence({
   asciiArt,
   messages = DEFAULT_BOOT_MESSAGES,
-  asciiDuration = 2000,
+  asciiDuration = 4000, // Slower default (was 2000)
   onComplete,
   onSkip,
   isActive = true,
   exitDuration = 800,
   backgroundColor = '#000000',
+  requireKeypress = true, // Default to requiring keypress
 }: BootSequenceProps) {
   const [phase, setPhase] = useState<BootPhase>('ascii')
   const [isExiting, setIsExiting] = useState(false)
 
   // Handle phase transitions
   const handleAsciiComplete = useCallback(() => {
-    setPhase('messages')
-  }, [])
+    if (requireKeypress) {
+      setPhase('waiting')
+    } else {
+      setPhase('messages')
+    }
+  }, [requireKeypress])
+
+  const handleKeyPress = useCallback(() => {
+    if (phase === 'waiting') {
+      setPhase('messages')
+    }
+  }, [phase])
+
+  // Listen for keypress when in waiting phase
+  useEffect(() => {
+    if (phase !== 'waiting') return
+
+    const handleKey = (e: KeyboardEvent) => {
+      // Ignore modifier keys alone
+      if (['Shift', 'Control', 'Alt', 'Meta'].includes(e.key)) return
+      handleKeyPress()
+    }
+
+    const handleClick = () => {
+      handleKeyPress()
+    }
+
+    window.addEventListener('keydown', handleKey)
+    window.addEventListener('click', handleClick)
+
+    return () => {
+      window.removeEventListener('keydown', handleKey)
+      window.removeEventListener('click', handleClick)
+    }
+  }, [phase, handleKeyPress])
 
   const handleMessagesComplete = useCallback(() => {
     setPhase('complete')
@@ -91,7 +127,7 @@ export function BootSequence({
         <div className="flex flex-col items-center justify-center px-4 max-w-4xl w-full">
           {/* ASCII Name Animation */}
           <AnimatePresence mode="wait">
-            {phase === 'ascii' && (
+            {(phase === 'ascii' || phase === 'waiting') && (
               <motion.div
                 key="ascii-phase"
                 initial={{ opacity: 0 }}
@@ -105,6 +141,24 @@ export function BootSequence({
                   duration={asciiDuration}
                   onComplete={handleAsciiComplete}
                 />
+
+                {/* Press any key prompt */}
+                {phase === 'waiting' && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.5, duration: 0.5 }}
+                    className="mt-8 text-center"
+                  >
+                    <motion.p
+                      animate={{ opacity: [0.4, 1, 0.4] }}
+                      transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                      className="text-white/70 text-sm font-mono"
+                    >
+                      Press any key to continue...
+                    </motion.p>
+                  </motion.div>
+                )}
               </motion.div>
             )}
           </AnimatePresence>

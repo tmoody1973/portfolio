@@ -13,10 +13,11 @@ export const DEFAULT_WALLPAPERS: Record<string, string> = {
   'wall-6': '/images/wallpapers/wall-6.webp',
   'wall-7': '/images/wallpapers/wall-7.webp',
   'wall-8': '/images/wallpapers/wall-8.webp',
+  'wall-9': '/images/wallpapers/wall-9.webp',
 }
 
 // Default wallpaper if none specified
-export const DEFAULT_WALLPAPER_KEY = 'wall-2'
+export const DEFAULT_WALLPAPER_KEY = 'wall-9'
 
 interface WallpaperProps {
   /** Wallpaper key from DEFAULT_WALLPAPERS or full URL */
