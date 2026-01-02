@@ -8,9 +8,11 @@ export default function StudioLayout({
 }: {
   children: React.ReactNode
 }) {
+  // Don't wrap in html/body - parent RootLayout already provides those
+  // Use a div wrapper to isolate studio styles
   return (
-    <html lang="en">
-      <body style={{ margin: 0 }}>{children}</body>
-    </html>
+    <div className="sanity-studio-wrapper" style={{ height: '100vh', width: '100vw' }}>
+      {children}
+    </div>
   )
 }

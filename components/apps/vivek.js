@@ -7,7 +7,7 @@ export class AboutVivek extends Component {
         super();
         this.screens = {};
         this.state = {
-            screen: () => { },
+            screen: null,
             active_screen: "about", // by default 'about' screen is active
             navbar: false,
         }
