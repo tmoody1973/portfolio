@@ -1,7 +1,9 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+import Image from 'next/image'
 import { useAudioStore, RadioStream, DEFAULT_STREAMS } from '@/store'
+import { useSpinitronPolling } from '@/hooks'
 
 interface PlayerAppProps {
   className?: string
@@ -29,6 +31,9 @@ export function PlayerApp({ className = '' }: PlayerAppProps) {
   } = useAudioStore()
 
   const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(null)
+
+  // Initialize Spinitron polling for now playing data
+  useSpinitronPolling()
 
   // Initialize audio element
   useEffect(() => {
@@ -103,12 +108,39 @@ export function PlayerApp({ className = '' }: PlayerAppProps) {
       {/* Now Playing Section */}
       <div className="flex-1 flex flex-col items-center justify-center p-6 bg-[#1e1e1e]">
         {/* Album Art / Visualizer */}
-        <div className="w-48 h-48 rounded-xl bg-[#3d3d3d] shadow-lg mb-6 flex items-center justify-center overflow-hidden">
+        <div className="w-48 h-48 rounded-xl bg-[#3d3d3d] shadow-lg mb-6 flex items-center justify-center overflow-hidden relative">
           {isLoading ? (
             <div className="flex flex-col items-center gap-3">
               <div className="w-12 h-12 border-3 border-ub-orange border-t-transparent rounded-full animate-spin" />
               <span className="text-white/50 text-sm">Connecting...</span>
             </div>
+          ) : nowPlaying?.artwork ? (
+            // Display album artwork from Spinitron
+            <>
+              <Image
+                src={nowPlaying.artwork}
+                alt={`${nowPlaying.title} by ${nowPlaying.artist}`}
+                fill
+                className="object-cover"
+                sizes="192px"
+                unoptimized // External URLs need this
+              />
+              {/* Subtle overlay with playing indicator */}
+              {isPlaying && (
+                <div className="absolute bottom-2 right-2 flex items-end gap-0.5 bg-black/50 rounded px-1.5 py-1">
+                  {[...Array(3)].map((_, i) => (
+                    <div
+                      key={i}
+                      className="w-1 bg-ub-orange rounded-t animate-pulse"
+                      style={{
+                        height: `${8 + i * 4}px`,
+                        animationDelay: `${i * 0.15}s`,
+                      }}
+                    />
+                  ))}
+                </div>
+              )}
+            </>
           ) : isPlaying ? (
             <div className="flex items-end justify-center gap-1 h-24">
               {[...Array(5)].map((_, i) => (
@@ -136,6 +168,9 @@ export function PlayerApp({ className = '' }: PlayerAppProps) {
             <>
               <div className="text-lg font-medium text-white truncate">{nowPlaying.title}</div>
               <div className="text-sm text-white/60 truncate">{nowPlaying.artist}</div>
+              {nowPlaying.album && (
+                <div className="text-xs text-white/40 truncate mt-1">{nowPlaying.album}</div>
+              )}
             </>
           ) : (
             <>

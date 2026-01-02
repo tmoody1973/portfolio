@@ -130,7 +130,7 @@ export const DEFAULT_STREAMS: RadioStream[] = [
     name: 'HYFIN',
     url: 'https://wyms.streamguys1.com/hyfin',
     description: 'Black music & culture',
-    hasSpinnitron: false,
+    hasSpinnitron: true,
   },
 ]
 
