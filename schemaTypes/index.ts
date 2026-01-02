@@ -25,6 +25,9 @@ import wallpaper from './wallpaper'
 // Crates schemas (Epic 10)
 import curatedItem from './curatedItem'
 
+// Desktop extras
+import stickyNote from './stickyNote'
+
 // Export all schema types
 export const schemaTypes = [
   // Singletons (Story 1.4)
@@ -53,4 +56,7 @@ export const schemaTypes = [
 
   // Crates schemas (Epic 10)
   curatedItem,
+
+  // Desktop extras
+  stickyNote,
 ]

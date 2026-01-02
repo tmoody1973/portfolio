@@ -8,7 +8,7 @@ export const DEFAULT_SHORTCUTS: Omit<DesktopShortcutProps, 'onOpen'>[] = [
   {
     id: 'about',
     name: 'About Me',
-    icon: '/themes/Yaru/apps/user-info.png',
+    icon: '/themes/Yaru/apps/user-info.svg',
   },
   {
     id: 'terminal',
@@ -21,14 +21,9 @@ export const DEFAULT_SHORTCUTS: Omit<DesktopShortcutProps, 'onOpen'>[] = [
     icon: '/themes/Yaru/apps/chrome.png',
   },
   {
-    id: 'vscode',
-    name: 'VS Code',
-    icon: '/themes/Yaru/apps/vscode.png',
-  },
-  {
     id: 'trash',
     name: 'Trash',
-    icon: '/themes/Yaru/apps/user-trash-full.png',
+    icon: '/themes/Yaru/apps/trash.svg',
   },
   {
     id: 'contact',
@@ -57,7 +52,7 @@ export const EXTERNAL_SHORTCUTS: Omit<DesktopShortcutProps, 'onOpen'>[] = [
   {
     id: 'linkedin',
     name: 'LinkedIn',
-    icon: '/themes/Yaru/apps/linkedin.png',
+    icon: '/themes/Yaru/apps/linkedin.svg',
     isExternal: true,
     url: 'https://www.linkedin.com/in/tarikmoody/',
   },

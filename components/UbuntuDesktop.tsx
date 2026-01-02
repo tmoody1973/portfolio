@@ -4,7 +4,8 @@ import { useEffect, useState, useCallback } from 'react'
 import { useBootStore, useWindowStore } from '@/store'
 import { useViewport } from '@/hooks'
 import { BootSequence } from './boot'
-import { Desktop, Dock, ShortcutGrid, DesktopShortcut, DOCK_APPS, DEFAULT_SHORTCUTS, EXTERNAL_SHORTCUTS } from './desktop'
+import { getBootSequenceConfig, BootSequenceConfig, getStickyNoteConfig, StickyNoteConfig } from '@/lib/sanity'
+import { Desktop, Dock, ShortcutGrid, DesktopShortcut, StickyNote, DOCK_APPS, DEFAULT_SHORTCUTS, EXTERNAL_SHORTCUTS } from './desktop'
 import { WindowShell } from './window'
 import { MobileAppDrawer, MobileBottomNav, MobileAppView } from './mobile'
 import { AboutApp } from './apps/about'
@@ -20,22 +21,21 @@ type ScreenState = 'boot' | 'desktop' | 'locked' | 'shutdown'
 
 // App configuration for both desktop and mobile
 const APP_CONFIGS: Record<string, { title: string; icon: string; appType: string }> = {
-  about: { title: 'About Me', icon: '/themes/Yaru/apps/user-info.png', appType: 'about' },
+  about: { title: 'About Me', icon: '/themes/Yaru/apps/user-info.svg', appType: 'about' },
   terminal: { title: 'Terminal', icon: '/themes/Yaru/apps/bash.png', appType: 'terminal' },
   chrome: { title: 'Projects', icon: '/themes/Yaru/apps/chrome.png', appType: 'chrome' },
-  vscode: { title: 'VS Code', icon: '/themes/Yaru/apps/vscode.png', appType: 'vscode' },
-  trash: { title: 'Trash', icon: '/themes/Yaru/apps/user-trash-full.png', appType: 'trash' },
-  files: { title: 'Files', icon: '/themes/Yaru/apps/filemanager.png', appType: 'files' },
-  player: { title: 'Music', icon: '/themes/Yaru/apps/rhythmbox.png', appType: 'player' },
+  trash: { title: 'Trash', icon: '/themes/Yaru/apps/trash.svg', appType: 'trash' },
+  files: { title: 'Files', icon: '/themes/Yaru/apps/filemanager.svg', appType: 'files' },
+  player: { title: 'Music', icon: '/themes/Yaru/apps/music-player.png', appType: 'player' },
   crates: { title: 'Crates', icon: '/themes/Yaru/apps/crates.svg', appType: 'crates' },
   contact: { title: 'Contact', icon: '/themes/Yaru/apps/email.svg', appType: 'contact' },
 }
 
 // Mobile nav items (subset of apps for quick access)
 const MOBILE_NAV_ITEMS = [
-  { id: 'about', name: 'About', icon: '/themes/Yaru/apps/user-info.png', appType: 'about' },
+  { id: 'about', name: 'About', icon: '/themes/Yaru/apps/user-info.svg', appType: 'about' },
   { id: 'chrome', name: 'Projects', icon: '/themes/Yaru/apps/chrome.png', appType: 'chrome' },
-  { id: 'player', name: 'Music', icon: '/themes/Yaru/apps/rhythmbox.png', appType: 'player' },
+  { id: 'player', name: 'Music', icon: '/themes/Yaru/apps/music-player.png', appType: 'player' },
   { id: 'contact', name: 'Contact', icon: '/themes/Yaru/apps/email.svg', appType: 'contact' },
 ]
 
@@ -57,6 +57,8 @@ export function UbuntuDesktop() {
   const [wallpaper, setWallpaper] = useState('wall-9')
   const [mobileActiveApp, setMobileActiveApp] = useState<string | null>(null)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const [bootConfig, setBootConfig] = useState<BootSequenceConfig | null>(null)
+  const [stickyNoteConfig, setStickyNoteConfig] = useState<StickyNoteConfig | null>(null)
 
   // Viewport detection
   const { isMobile, isTablet } = useViewport()
@@ -67,9 +69,24 @@ export function UbuntuDesktop() {
   // Window store (for desktop)
   const { openWindow, windows, closeWindow } = useWindowStore()
 
-  // Initialize boot sequence on mount
+  // Fetch configs from Sanity on mount
   useEffect(() => {
-    startBoot()
+    // Fetch boot config
+    getBootSequenceConfig().then((config) => {
+      setBootConfig(config)
+      // Start boot after config is loaded (or immediately if no config)
+      startBoot()
+    }).catch(() => {
+      // On error, start with defaults
+      startBoot()
+    })
+
+    // Fetch sticky note config
+    getStickyNoteConfig().then((config) => {
+      setStickyNoteConfig(config)
+    }).catch(() => {
+      // Silently fail - sticky note is optional
+    })
   }, [startBoot])
 
   // Sync screen state with boot store
@@ -158,11 +175,20 @@ export function UbuntuDesktop() {
 
   // Render boot sequence
   if (screenState === 'boot' && isBooting) {
+    // Transform Sanity boot messages to component format
+    const bootMessages = bootConfig?.bootMessages?.map((msg) => ({
+      text: msg.message,
+      delay: msg.delay,
+    }))
+
     return (
       <BootSequence
         isActive={true}
         onComplete={handleBootComplete}
         onSkip={handleBootSkip}
+        asciiArt={bootConfig?.asciiArt}
+        messages={bootMessages}
+        asciiDuration={bootConfig?.asciiAnimationSpeed ? bootConfig.asciiAnimationSpeed * 80 : undefined}
       />
     )
   }
@@ -312,6 +338,9 @@ export function UbuntuDesktop() {
           </ShortcutGrid>
         </Desktop>
 
+        {/* Sticky Note */}
+        <StickyNote config={stickyNoteConfig} />
+
         {/* App Drawer for tablet */}
         <MobileAppDrawer
           isOpen={isDrawerOpen}
@@ -362,6 +391,9 @@ export function UbuntuDesktop() {
           ))}
         </ShortcutGrid>
       </Desktop>
+
+      {/* Sticky Note */}
+      <StickyNote config={stickyNoteConfig} />
 
       {/* App Drawer for desktop */}
       <MobileAppDrawer

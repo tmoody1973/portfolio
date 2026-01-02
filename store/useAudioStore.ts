@@ -112,17 +112,24 @@ export interface AudioActions {
 // Default streams
 export const DEFAULT_STREAMS: RadioStream[] = [
   {
-    id: 'rhythm-lab-247',
+    id: 'rhythm-lab',
     name: 'Rhythm Lab 24/7',
-    url: 'https://stream.rhythmlab.fm/radio/8000/stream',
+    url: 'https://wyms.streamguys1.com/rhythmLabRadio',
     description: 'Global sounds, always on',
     hasSpinnitron: true,
   },
   {
-    id: 'wbgo',
-    name: 'WBGO Jazz 88.3',
-    url: 'https://wbgo.streamguys1.com/wbgo128',
-    description: "Newark's jazz station",
+    id: '88nine',
+    name: '88Nine Radio Milwaukee',
+    url: 'https://wyms.streamguys1.com/live',
+    description: 'Milwaukee community radio',
+    hasSpinnitron: true,
+  },
+  {
+    id: 'hyfin',
+    name: 'HYFIN',
+    url: 'https://wyms.streamguys1.com/hyfin',
+    description: 'Black music & culture',
     hasSpinnitron: false,
   },
 ]

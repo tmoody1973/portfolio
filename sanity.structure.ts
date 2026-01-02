@@ -8,10 +8,11 @@ const icons = {
   projects: () => '📁',
   terminal: () => '💻',
   media: () => '🎨',
+  crates: () => '📦',
 }
 
 // Singleton document IDs (these should match what you create in the CMS)
-const singletonTypes = new Set(['siteSettings', 'bootSequence', 'playerConfig', 'themeSettings'])
+const singletonTypes = new Set(['siteSettings', 'bootSequence', 'playerConfig', 'themeSettings', 'stickyNote'])
 
 // Helper to create a singleton item
 const singletonListItem = (
@@ -48,6 +49,7 @@ export const structure: StructureResolver = (S) =>
               singletonListItem(S, 'bootSequence', 'Boot Sequence', () => '🚀'),
               singletonListItem(S, 'playerConfig', 'Player Config', () => '🎵'),
               singletonListItem(S, 'themeSettings', 'Theme Settings', () => '🎨'),
+              singletonListItem(S, 'stickyNote', 'Sticky Note', () => '📝'),
             ])
         ),
 
@@ -180,6 +182,21 @@ export const structure: StructureResolver = (S) =>
                     .title('Wallpapers')
                     .defaultOrdering([{ field: 'order', direction: 'asc' }])
                 ),
+            ])
+        ),
+
+      // ==========================================
+      // Crates Group (Curated Discoveries)
+      // ==========================================
+      S.listItem()
+        .title('Crates')
+        .icon(icons.crates)
+        .child(
+          S.documentTypeList('curatedItem')
+            .title('Curated Items')
+            .defaultOrdering([
+              { field: 'featured', direction: 'desc' },
+              { field: 'order', direction: 'asc' },
             ])
         ),
     ])

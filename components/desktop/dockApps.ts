@@ -8,13 +8,13 @@ export const DOCK_APPS: DockAppConfig[] = [
   {
     id: 'files',
     name: 'Files',
-    icon: '/themes/Yaru/apps/filemanager.png',
+    icon: '/themes/Yaru/apps/filemanager.svg',
     appType: 'files',
   },
   {
     id: 'about',
     name: 'About Me',
-    icon: '/themes/Yaru/apps/user-info.png',
+    icon: '/themes/Yaru/apps/user-info.svg',
     appType: 'about',
   },
   {
@@ -30,15 +30,9 @@ export const DOCK_APPS: DockAppConfig[] = [
     appType: 'chrome',
   },
   {
-    id: 'vscode',
-    name: 'VS Code',
-    icon: '/themes/Yaru/apps/vscode.png',
-    appType: 'vscode',
-  },
-  {
     id: 'player',
     name: 'Music',
-    icon: '/themes/Yaru/apps/rhythmbox.png',
+    icon: '/themes/Yaru/apps/music-player.png',
     appType: 'player',
   },
   {

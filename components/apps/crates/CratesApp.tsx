@@ -271,7 +271,7 @@ export function CratesApp({ className = '' }: CratesAppProps) {
                   <h2 className="text-lg font-semibold text-amber-200 mb-4 flex items-center gap-2">
                     <span className="text-amber-400">★</span> Featured Picks
                   </h2>
-                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                     {featuredItems.map((item) => (
                       <CrateItemCard
                         key={item.id}
@@ -290,7 +290,7 @@ export function CratesApp({ className = '' }: CratesAppProps) {
                   <h2 className="text-lg font-semibold text-amber-200 mb-4">All Items</h2>
                 )}
                 {filteredItems.length > 0 ? (
-                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                     {filteredItems.map((item) => (
                       <CrateItemCard
                         key={item.id}
