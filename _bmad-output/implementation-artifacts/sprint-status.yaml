@@ -43,7 +43,7 @@ development_status:
   1-4-core-singleton-schemas: done
   1-5-desktop-content-schemas: done
   1-6-about-content-schemas: done
-  1-7-project-and-terminal-schemas: backlog
+  1-7-project-and-terminal-schemas: done
   1-8-media-and-stream-schemas: backlog
   1-9-sanity-studio-structure-and-content-groups: backlog
   1-10-content-fetching-utilities-and-isr-configuration: backlog

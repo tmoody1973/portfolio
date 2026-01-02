@@ -14,6 +14,10 @@ import experience from './experience'
 import education from './education'
 import skill from './skill'
 
+// Project and Terminal schemas (Story 1.7)
+import project from './project'
+import terminalCommand from './terminalCommand'
+
 // Document schemas (placeholders - to be expanded in later stories)
 import radioStream from './radioStream'
 import wallpaper from './wallpaper'
@@ -35,6 +39,10 @@ export const schemaTypes = [
   experience,
   education,
   skill,
+
+  // Project and Terminal schemas (Story 1.7)
+  project,
+  terminalCommand,
 
   // Media schemas (Story 1.8 - placeholder)
   radioStream,
