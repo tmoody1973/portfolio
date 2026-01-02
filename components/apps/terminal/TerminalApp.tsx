@@ -61,9 +61,9 @@ export function TerminalApp({ className = '', windowId }: TerminalAppProps) {
 
       if (result.action === 'open-app' && result.appToOpen) {
         const appConfigs: Record<string, { title: string; icon: string; appType: string }> = {
-          about: { title: 'About Me', icon: '/themes/Yaru/apps/user-info.png', appType: 'about' },
+          about: { title: 'About Me', icon: '/themes/Yaru/apps/user-info.svg', appType: 'about' },
           chrome: { title: 'Projects', icon: '/themes/Yaru/apps/chrome.png', appType: 'chrome' },
-          player: { title: 'Music', icon: '/themes/Yaru/apps/rhythmbox.png', appType: 'player' },
+          player: { title: 'Music', icon: '/themes/Yaru/apps/music-player.png', appType: 'player' },
         }
         const config = appConfigs[result.appToOpen]
         if (config) {

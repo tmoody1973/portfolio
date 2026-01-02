@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useState, useEffect, useRef } from 'react'
+import { motion, AnimatePresence, useDragControls } from 'framer-motion'
 
 export interface StickyNoteConfig {
   enabled: boolean
@@ -61,30 +61,54 @@ const COLOR_SCHEMES = {
   },
 }
 
-// Position classes
-const POSITION_CLASSES = {
-  'top-right': 'top-16 right-4',
-  'top-left': 'top-16 left-20',
-  'bottom-right': 'bottom-20 right-4',
-  'bottom-left': 'bottom-20 left-20',
+// Default starting positions based on config
+const getDefaultPosition = (position: string) => {
+  switch (position) {
+    case 'top-left':
+      return { x: 80, y: 60 }
+    case 'bottom-right':
+      return { x: typeof window !== 'undefined' ? window.innerWidth - 280 : 500, y: typeof window !== 'undefined' ? window.innerHeight - 300 : 400 }
+    case 'bottom-left':
+      return { x: 80, y: typeof window !== 'undefined' ? window.innerHeight - 300 : 400 }
+    case 'top-right':
+    default:
+      return { x: typeof window !== 'undefined' ? window.innerWidth - 280 : 500, y: 60 }
+  }
 }
 
-const STORAGE_KEY = 'sticky-note-hidden'
+const STORAGE_KEY_HIDDEN = 'sticky-note-hidden'
+const STORAGE_KEY_POSITION = 'sticky-note-position'
 
 /**
- * StickyNote - A dismissible welcome note on the desktop
- * Persists hide state to localStorage
+ * StickyNote - A draggable, dismissible welcome note on the desktop
+ * Persists hide state and position to localStorage
  */
 export function StickyNote({ config }: StickyNoteProps) {
   const [isHidden, setIsHidden] = useState(true) // Start hidden to prevent flash
   const [isLoaded, setIsLoaded] = useState(false)
+  const [position, setPosition] = useState({ x: 0, y: 0 })
+  const [isDragging, setIsDragging] = useState(false)
+  const constraintsRef = useRef<HTMLDivElement>(null)
 
-  // Load hide state from localStorage
+  // Load state from localStorage
   useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY)
-    setIsHidden(stored === 'true')
+    const storedHidden = localStorage.getItem(STORAGE_KEY_HIDDEN)
+    const storedPosition = localStorage.getItem(STORAGE_KEY_POSITION)
+
+    setIsHidden(storedHidden === 'true')
+
+    if (storedPosition) {
+      try {
+        setPosition(JSON.parse(storedPosition))
+      } catch {
+        setPosition(getDefaultPosition(config?.position || 'top-right'))
+      }
+    } else {
+      setPosition(getDefaultPosition(config?.position || 'top-right'))
+    }
+
     setIsLoaded(true)
-  }, [])
+  }, [config?.position])
 
   // Don't render if no config or disabled
   if (!config || !config.enabled || !isLoaded) {
@@ -92,21 +116,31 @@ export function StickyNote({ config }: StickyNoteProps) {
   }
 
   const colors = COLOR_SCHEMES[config.color || 'yellow']
-  const position = POSITION_CLASSES[config.position || 'top-right']
   const rotation = config.rotation ?? 2
 
-  const handleHide = () => {
+  const handleHide = (e: React.MouseEvent) => {
+    e.stopPropagation()
     setIsHidden(true)
-    localStorage.setItem(STORAGE_KEY, 'true')
+    localStorage.setItem(STORAGE_KEY_HIDDEN, 'true')
   }
 
   const handleShow = () => {
     setIsHidden(false)
-    localStorage.setItem(STORAGE_KEY, 'false')
+    localStorage.setItem(STORAGE_KEY_HIDDEN, 'false')
+  }
+
+  const handleDragEnd = (_: any, info: { point: { x: number; y: number } }) => {
+    const newPosition = { x: info.point.x - 128, y: info.point.y - 20 } // Offset for note center
+    setPosition(newPosition)
+    localStorage.setItem(STORAGE_KEY_POSITION, JSON.stringify(newPosition))
+    setIsDragging(false)
   }
 
   return (
     <>
+      {/* Drag constraints container (full screen) */}
+      <div ref={constraintsRef} className="fixed inset-0 pointer-events-none z-20" />
+
       {/* Reveal button (shown when note is hidden) */}
       <AnimatePresence>
         {isHidden && (
@@ -117,7 +151,7 @@ export function StickyNote({ config }: StickyNoteProps) {
             transition={{ duration: 0.2 }}
             onClick={handleShow}
             className={`
-              fixed ${position} z-30
+              fixed top-16 right-4 z-30
               w-10 h-10 rounded-lg ${colors.icon}
               flex items-center justify-center
               shadow-lg hover:scale-110 transition-transform
@@ -137,22 +171,43 @@ export function StickyNote({ config }: StickyNoteProps) {
       <AnimatePresence>
         {!isHidden && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: -20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: -20 }}
+            drag
+            dragMomentum={false}
+            dragConstraints={constraintsRef}
+            dragElastic={0.1}
+            onDragStart={() => setIsDragging(true)}
+            onDragEnd={handleDragEnd}
+            initial={{ opacity: 0, scale: 0.9, x: position.x, y: position.y }}
+            animate={{
+              opacity: 1,
+              scale: 1,
+              x: position.x,
+              y: position.y,
+              rotate: isDragging ? 0 : rotation
+            }}
+            exit={{ opacity: 0, scale: 0.9 }}
             transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-            className={`fixed ${position} z-30`}
-            style={{ transform: `rotate(${rotation}deg)` }}
+            className="fixed top-0 left-0 z-30 touch-none"
+            style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
           >
             <div
               className={`
                 relative w-64 ${colors.bg} rounded-sm
                 shadow-xl ${colors.shadow}
                 overflow-hidden
+                ${isDragging ? 'shadow-2xl scale-105' : ''}
+                transition-shadow
               `}
             >
-              {/* Tape effect at top */}
+              {/* Tape effect at top (also serves as drag handle indicator) */}
               <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-16 h-5 bg-white/40 rounded-sm" />
+
+              {/* Drag indicator */}
+              <div className={`absolute top-1 left-1/2 -translate-x-1/2 flex gap-0.5 ${colors.textMuted} opacity-40`}>
+                <div className="w-1 h-1 rounded-full bg-current" />
+                <div className="w-1 h-1 rounded-full bg-current" />
+                <div className="w-1 h-1 rounded-full bg-current" />
+              </div>
 
               {/* Close button */}
               <button
@@ -163,6 +218,7 @@ export function StickyNote({ config }: StickyNoteProps) {
                   flex items-center justify-center
                   opacity-60 hover:opacity-100 transition-opacity
                   focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1
+                  cursor-pointer
                 `}
                 aria-label="Hide note"
               >
@@ -172,7 +228,7 @@ export function StickyNote({ config }: StickyNoteProps) {
               </button>
 
               {/* Content */}
-              <div className="p-5 pt-6">
+              <div className="p-5 pt-6 select-none">
                 {/* Title */}
                 {config.title && (
                   <h3 className={`text-lg font-bold ${colors.text} mb-2`} style={{ fontFamily: 'system-ui' }}>

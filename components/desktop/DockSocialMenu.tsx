@@ -20,7 +20,7 @@ const SOCIAL_LINKS: SocialLink[] = [
   {
     id: 'linkedin',
     name: 'LinkedIn',
-    icon: '/themes/Yaru/apps/linkedin.png',
+    icon: '/themes/Yaru/apps/linkedin.svg',
     url: 'https://www.linkedin.com/in/tarikmoody/',
   },
   {
