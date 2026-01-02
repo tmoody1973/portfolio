@@ -10,10 +10,14 @@ interface DesktopProps {
   children?: ReactNode
   /** Top bar/navbar content */
   topBar?: ReactNode
-  /** Dock content */
-  dock?: ReactNode
+  /** Left sidebar dock content (Ubuntu-style) */
+  sidebarDock?: ReactNode
+  /** Bottom dock content (mobile fallback) */
+  bottomDock?: ReactNode
   /** Window layer content */
   windowLayer?: ReactNode
+  /** Whether a sidebar dock is present */
+  hasSidebarDock?: boolean
 }
 
 /**
@@ -21,16 +25,19 @@ interface DesktopProps {
  * Provides Ubuntu-styled desktop environment with:
  * - Full viewport wallpaper background
  * - Top bar area (reserved for navbar)
+ * - Left sidebar dock (Ubuntu 20.04 style)
  * - Icon grid area for shortcuts
- * - Dock area at bottom
+ * - Bottom dock area (mobile fallback)
  * - Window layer for application windows
  */
 export function Desktop({
   wallpaper = DEFAULT_WALLPAPER_KEY,
   children,
   topBar,
-  dock,
+  sidebarDock,
+  bottomDock,
   windowLayer,
+  hasSidebarDock = false,
 }: DesktopProps) {
   return (
     <div className="desktop">
@@ -42,17 +49,22 @@ export function Desktop({
         {topBar}
       </header>
 
+      {/* Left sidebar dock (Ubuntu style) */}
+      {sidebarDock}
+
       {/* Main content area - icon grid */}
-      <main className="desktop-content">
+      <main className={`desktop-content ${hasSidebarDock ? 'desktop-content-with-dock' : ''}`}>
         <div className="desktop-icon-grid">
           {children}
         </div>
       </main>
 
-      {/* Dock area */}
-      <footer className="desktop-dock">
-        {dock}
-      </footer>
+      {/* Bottom dock area (mobile fallback) */}
+      {bottomDock && (
+        <footer className="desktop-dock">
+          {bottomDock}
+        </footer>
+      )}
 
       {/* Window layer - sits above icons but below modals */}
       <div className="desktop-windows">

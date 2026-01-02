@@ -272,6 +272,40 @@ input[type=range].ubuntu-slider::-webkit-slider-thumb {
     pointer-events: auto;
 }
 
+/* Dock App Bounce Animation */
+@keyframes bounce-dock {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    20% {
+        transform: translateY(-8px);
+    }
+    40% {
+        transform: translateY(0);
+    }
+    60% {
+        transform: translateY(-4px);
+    }
+    80% {
+        transform: translateY(0);
+    }
+}
+
+.animate-bounce-dock {
+    animation: bounce-dock 600ms ease-in-out;
+}
+
+/* Left Dock Styles */
+.dock {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+/* Desktop with left dock - adjust content area */
+.desktop-content-with-dock {
+    padding-left: 60px; /* Dock width + small gap */
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .desktop-topbar {
@@ -288,6 +322,15 @@ input[type=range].ubuntu-slider::-webkit-slider-thumb {
     .desktop-dock {
         min-height: 64px;
         padding: 8px 0;
+    }
+
+    /* Hide left dock on mobile, show bottom dock */
+    .dock {
+        display: none;
+    }
+
+    .desktop-content-with-dock {
+        padding-left: 12px;
     }
 }
 

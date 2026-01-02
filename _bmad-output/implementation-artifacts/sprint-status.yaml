@@ -67,7 +67,7 @@ development_status:
   3-1-window-state-management: done
   3-2-desktop-layout-and-wallpaper: done
   3-3-desktop-shortcut-icons: done
-  3-4-dock-component-with-app-launchers: backlog
+  3-4-dock-component-with-app-launchers: done
   3-5-window-component-shell: backlog
   3-6-window-dragging: backlog
   epic-3-retrospective: optional
