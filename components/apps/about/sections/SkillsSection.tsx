@@ -1,47 +1,24 @@
 'use client'
 
-interface Skill {
-  name: string
-  level: number // 1-5
-}
+import { useEffect, useState } from 'react'
+import { getSkills, Skill } from '@/lib/sanity'
 
 interface SkillCategory {
   name: string
-  skills: Skill[]
+  skills: { name: string; level: number }[]
 }
 
-const SKILL_CATEGORIES: SkillCategory[] = [
-  {
-    name: 'Technical',
-    skills: [
-      { name: 'JavaScript/TypeScript', level: 4 },
-      { name: 'React/Next.js', level: 4 },
-      { name: 'HTML/CSS', level: 5 },
-      { name: 'Node.js', level: 3 },
-      { name: 'Audio Production', level: 4 },
-    ],
-  },
-  {
-    name: 'Creative',
-    skills: [
-      { name: 'Music Curation', level: 5 },
-      { name: 'Content Strategy', level: 5 },
-      { name: 'Brand Development', level: 4 },
-      { name: 'Visual Design', level: 3 },
-      { name: 'Storytelling', level: 5 },
-    ],
-  },
-  {
-    name: 'Leadership',
-    skills: [
-      { name: 'Team Management', level: 4 },
-      { name: 'Strategic Planning', level: 5 },
-      { name: 'Project Management', level: 4 },
-      { name: 'Community Building', level: 5 },
-      { name: 'Public Speaking', level: 4 },
-    ],
-  },
-]
+// Category display names
+const CATEGORY_LABELS: Record<string, string> = {
+  languages: 'Technical',
+  frameworks: 'Technical',
+  tools: 'Technical',
+  platforms: 'Technical',
+  databases: 'Technical',
+  design: 'Creative',
+  'soft-skills': 'Leadership',
+  other: 'Other',
+}
 
 interface SkillsSectionProps {
   className?: string
@@ -52,12 +29,52 @@ interface SkillsSectionProps {
  * Displays skills grouped by category with proficiency levels
  */
 export function SkillsSection({ className = '' }: SkillsSectionProps) {
+  const [categories, setCategories] = useState<SkillCategory[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    getSkills()
+      .then((skills) => {
+        // Group skills by display category
+        const grouped: Record<string, { name: string; level: number }[]> = {}
+        skills.forEach((skill) => {
+          const displayCategory = CATEGORY_LABELS[skill.category] || 'Other'
+          if (!grouped[displayCategory]) {
+            grouped[displayCategory] = []
+          }
+          grouped[displayCategory].push({
+            name: skill.name,
+            level: skill.proficiencyLevel,
+          })
+        })
+        // Convert to array
+        const cats = Object.entries(grouped).map(([name, skills]) => ({
+          name,
+          skills,
+        }))
+        setCategories(cats)
+      })
+      .catch(() => {
+        // Fallback to empty
+        setCategories([])
+      })
+      .finally(() => setLoading(false))
+  }, [])
+
+  if (loading) {
+    return (
+      <div className={`skills-section ${className}`}>
+        <div className="animate-pulse text-white/50">Loading skills...</div>
+      </div>
+    )
+  }
+
   return (
     <div className={`skills-section ${className}`}>
       <h3 className="text-lg font-medium text-white mb-4">Skills & Expertise</h3>
 
       <div className="space-y-6">
-        {SKILL_CATEGORIES.map((category) => (
+        {categories.map((category) => (
           <div key={category.name}>
             <h4 className="text-white/60 text-sm font-medium mb-3 uppercase tracking-wide">
               {category.name}

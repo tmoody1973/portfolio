@@ -1,5 +1,8 @@
 'use client'
 
+import { useEffect, useState } from 'react'
+import { getExperience, Experience } from '@/lib/sanity'
+
 interface TimelineItem {
   year: string
   title: string
@@ -8,37 +11,6 @@ interface TimelineItem {
   description: string
 }
 
-const JOURNEY_ITEMS: TimelineItem[] = [
-  {
-    year: '2024',
-    title: 'Director of Strategy & Innovation',
-    organization: '88Nine Radio Milwaukee',
-    location: 'Milwaukee, WI',
-    description: 'Leading digital strategy and innovation initiatives for public radio.',
-  },
-  {
-    year: '2019',
-    title: 'Creator, Rhythm Lab Radio',
-    organization: '88Nine Radio Milwaukee',
-    location: 'Milwaukee, WI',
-    description: 'Founded and continue to curate a weekly show exploring global sounds and underground music.',
-  },
-  {
-    year: '2010',
-    title: 'Digital Media Producer',
-    organization: '88Nine Radio Milwaukee',
-    location: 'Milwaukee, WI',
-    description: 'Pioneered digital content strategies and online engagement for the station.',
-  },
-  {
-    year: '1996',
-    title: 'Architecture Studies',
-    organization: 'Howard University',
-    location: 'Washington, D.C.',
-    description: 'Studied architecture, developing skills in design thinking and systematic problem-solving.',
-  },
-]
-
 interface JourneySectionProps {
   className?: string
 }
@@ -46,8 +18,39 @@ interface JourneySectionProps {
 /**
  * Journey section for the About app
  * Displays career timeline with visual connecting line
+ * Content is fetched from Sanity CMS
  */
 export function JourneySection({ className = '' }: JourneySectionProps) {
+  const [items, setItems] = useState<TimelineItem[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    getExperience()
+      .then((experiences) => {
+        const mapped = experiences.map((exp) => ({
+          year: new Date(exp.startDate).getFullYear().toString(),
+          title: exp.role,
+          organization: exp.company,
+          location: exp.location || '',
+          description: exp.highlights?.join(' ') || '',
+        }))
+        setItems(mapped)
+      })
+      .catch(() => {
+        setItems([])
+      })
+      .finally(() => setLoading(false))
+  }, [])
+
+  if (loading) {
+    return (
+      <div className={`journey-section ${className}`}>
+        <h3 className="text-lg font-medium text-white mb-4">Career Journey</h3>
+        <div className="animate-pulse text-white/50">Loading journey...</div>
+      </div>
+    )
+  }
+
   return (
     <div className={`journey-section ${className}`}>
       <h3 className="text-lg font-medium text-white mb-4">Career Journey</h3>
@@ -58,7 +61,7 @@ export function JourneySection({ className = '' }: JourneySectionProps) {
 
         {/* Timeline items */}
         <div className="space-y-6">
-          {JOURNEY_ITEMS.map((item, index) => (
+          {items.map((item, index) => (
             <div key={index} className="relative pl-6">
               {/* Timeline dot */}
               <div className="absolute left-0 top-1.5 w-4 h-4 rounded-full bg-ub-orange border-2 border-ub-grey" />

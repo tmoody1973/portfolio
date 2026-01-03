@@ -1,5 +1,9 @@
 'use client'
 
+import { useEffect, useState } from 'react'
+import { getBioSection, AboutSection } from '@/lib/sanity'
+import { PortableText } from '@portabletext/react'
+
 interface BioSectionProps {
   className?: string
 }
@@ -7,8 +11,31 @@ interface BioSectionProps {
 /**
  * Bio section for the About app
  * Displays personal introduction and background
+ * Content is fetched from Sanity CMS
  */
 export function BioSection({ className = '' }: BioSectionProps) {
+  const [bio, setBio] = useState<AboutSection | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    getBioSection()
+      .then((data) => {
+        setBio(data)
+      })
+      .catch(() => {
+        setBio(null)
+      })
+      .finally(() => setLoading(false))
+  }, [])
+
+  if (loading) {
+    return (
+      <div className={`bio-section space-y-4 ${className}`}>
+        <div className="animate-pulse text-white/50">Loading bio...</div>
+      </div>
+    )
+  }
+
   return (
     <div className={`bio-section space-y-4 ${className}`}>
       {/* Profile header */}
@@ -23,30 +50,21 @@ export function BioSection({ className = '' }: BioSectionProps) {
         </div>
       </div>
 
-      {/* Bio content */}
-      <div className="space-y-3 text-white/80 text-sm leading-relaxed">
-        <p>
-          I&apos;m a creative technologist and radio curator based in Milwaukee. As the creator of
-          Rhythm Lab Radio, I&apos;ve spent over two decades exploring the intersection of music,
-          technology, and community.
-        </p>
-        <p>
-          My work bridges the gap between traditional broadcasting and emerging digital platforms,
-          always with an eye toward how technology can amplify human connection and cultural expression.
-        </p>
-        <p>
-          When I&apos;m not building digital experiences or curating playlists, you&apos;ll find me
-          digging through record crates, exploring new sounds, and connecting with music communities
-          around the world.
-        </p>
+      {/* Bio content from Sanity */}
+      <div className="space-y-3 text-white/80 text-sm leading-relaxed bio-content">
+        {bio?.content ? (
+          <PortableText value={bio.content} />
+        ) : (
+          <p>Bio content loading...</p>
+        )}
       </div>
 
       {/* Quick links */}
       <div className="pt-2 flex flex-wrap gap-2">
         <span className="px-2 py-1 bg-white/10 rounded text-xs text-white/60">Radio</span>
-        <span className="px-2 py-1 bg-white/10 rounded text-xs text-white/60">Technology</span>
-        <span className="px-2 py-1 bg-white/10 rounded text-xs text-white/60">Music Curation</span>
-        <span className="px-2 py-1 bg-white/10 rounded text-xs text-white/60">Community</span>
+        <span className="px-2 py-1 bg-white/10 rounded text-xs text-white/60">Innovation</span>
+        <span className="px-2 py-1 bg-white/10 rounded text-xs text-white/60">HYFIN</span>
+        <span className="px-2 py-1 bg-white/10 rounded text-xs text-white/60">88Nine Labs</span>
       </div>
     </div>
   )

@@ -190,3 +190,100 @@ export async function getActiveWallpaper(): Promise<WallpaperConfig | null> {
 export async function getAllWallpapers(): Promise<WallpaperConfig[]> {
   return sanityClient.fetch(allWallpapersQuery)
 }
+
+// Skill types
+export interface Skill {
+  _id: string
+  name: string
+  category: string
+  proficiency: string
+  proficiencyLevel: number
+  description?: string
+  featured?: boolean
+  order?: number
+  enabled?: boolean
+}
+
+// GROQ query for skills
+export const skillsQuery = `*[_type == "skill" && enabled != false] | order(category asc, order asc) {
+  _id,
+  name,
+  category,
+  proficiency,
+  proficiencyLevel,
+  description,
+  featured,
+  order
+}`
+
+// Fetch skills
+export async function getSkills(): Promise<Skill[]> {
+  return sanityClient.fetch(skillsQuery)
+}
+
+// Experience types
+export interface Experience {
+  _id: string
+  company: string
+  role: string
+  startDate: string
+  endDate?: string
+  isCurrent?: boolean
+  location?: string
+  highlights?: string[]
+  order?: number
+  enabled?: boolean
+}
+
+// GROQ query for experience
+export const experienceQuery = `*[_type == "experience" && enabled != false] | order(order asc, startDate desc) {
+  _id,
+  company,
+  role,
+  startDate,
+  endDate,
+  isCurrent,
+  location,
+  highlights,
+  order
+}`
+
+// Fetch experience
+export async function getExperience(): Promise<Experience[]> {
+  return sanityClient.fetch(experienceQuery)
+}
+
+// About section types
+export interface AboutSection {
+  _id: string
+  title: string
+  sectionType: 'bio' | 'journey' | 'education' | 'skills'
+  content?: any[] // Portable Text blocks
+  order?: number
+  enabled?: boolean
+}
+
+// GROQ query for about sections
+export const aboutSectionsQuery = `*[_type == "aboutSection" && enabled != false] | order(order asc) {
+  _id,
+  title,
+  sectionType,
+  content,
+  order
+}`
+
+// Fetch about sections
+export async function getAboutSections(): Promise<AboutSection[]> {
+  return sanityClient.fetch(aboutSectionsQuery)
+}
+
+// Fetch bio section specifically
+export async function getBioSection(): Promise<AboutSection | null> {
+  return sanityClient.fetch(`*[_type == "aboutSection" && sectionType == "bio" && enabled != false][0] {
+    _id,
+    title,
+    sectionType,
+    content,
+    order
+  }`)
+}
