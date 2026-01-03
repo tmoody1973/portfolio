@@ -328,6 +328,8 @@ export interface Education {
   endYear?: number
   inProgress?: boolean
   details?: string
+  location?: string
+  highlights?: string[]
   order?: number
   enabled?: boolean
 }
@@ -342,10 +344,45 @@ export const educationQuery = `*[_type == "education" && enabled != false] | ord
   endYear,
   inProgress,
   details,
+  location,
+  highlights,
   order
 }`
 
 // Fetch education
 export async function getEducation(): Promise<Education[]> {
   return sanityClient.fetch(educationQuery)
+}
+
+// Project types
+export interface Project {
+  _id: string
+  title: string
+  slug: string
+  subtitle?: string
+  description?: string
+  technologies?: string[]
+  featured?: boolean
+  liveUrl?: string
+  repoUrl?: string
+  order?: number
+  enabled?: boolean
+}
+
+// GROQ query for projects
+export const projectsQuery = `*[_type == "project" && enabled != false] | order(featured desc, order asc) {
+  _id,
+  title,
+  "slug": slug.current,
+  subtitle,
+  technologies,
+  featured,
+  liveUrl,
+  repoUrl,
+  order
+}`
+
+// Fetch projects
+export async function getProjects(): Promise<Project[]> {
+  return sanityClient.fetch(projectsQuery)
 }

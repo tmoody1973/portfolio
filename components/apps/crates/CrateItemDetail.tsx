@@ -7,6 +7,157 @@ interface CrateItemDetailProps {
   onBack: () => void
 }
 
+interface MediaEmbedProps {
+  embedType?: string
+  embedUrl: string
+  title: string
+}
+
+/**
+ * Renders embedded media players for YouTube, Bandcamp, Spotify, SoundCloud
+ */
+function MediaEmbed({ embedType, embedUrl, title }: MediaEmbedProps) {
+  // Extract video/track IDs and build embed URLs
+  const getEmbedSrc = (): string | null => {
+    if (!embedUrl) return null
+
+    switch (embedType) {
+      case 'youtube': {
+        // Handle various YouTube URL formats
+        const youtubeRegex = /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]+)/
+        const match = embedUrl.match(youtubeRegex)
+        if (match) {
+          return `https://www.youtube.com/embed/${match[1]}`
+        }
+        return null
+      }
+      case 'spotify': {
+        // Handle Spotify URLs - convert to embed format
+        // https://open.spotify.com/album/xxx -> https://open.spotify.com/embed/album/xxx
+        if (embedUrl.includes('open.spotify.com')) {
+          return embedUrl.replace('open.spotify.com/', 'open.spotify.com/embed/')
+        }
+        return null
+      }
+      case 'bandcamp': {
+        // Bandcamp requires album/track ID - if URL provided, show iframe with link
+        // For proper embed, you'd need to get the album_id from Bandcamp
+        return null // Bandcamp embeds need special handling
+      }
+      case 'soundcloud': {
+        // SoundCloud uses their widget API
+        return `https://w.soundcloud.com/player/?url=${encodeURIComponent(embedUrl)}&color=%23e69500&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false`
+      }
+      case 'mixcloud': {
+        // Mixcloud widget - extract the path from URL
+        // https://www.mixcloud.com/RhythmLabRadio/show-name/ -> /RhythmLabRadio/show-name/
+        const mixcloudMatch = embedUrl.match(/mixcloud\.com(\/[^?]+)/)
+        if (mixcloudMatch) {
+          const feedPath = encodeURIComponent(mixcloudMatch[1])
+          return `https://player-widget.mixcloud.com/widget/iframe/?hide_cover=1&light=1&feed=${feedPath}`
+        }
+        return null
+      }
+      default:
+        return null
+    }
+  }
+
+  const embedSrc = getEmbedSrc()
+
+  // YouTube embed
+  if (embedType === 'youtube' && embedSrc) {
+    return (
+      <div className="bg-amber-950/30 rounded-xl overflow-hidden border border-amber-900/30">
+        <div className="aspect-video">
+          <iframe
+            src={embedSrc}
+            title={title}
+            className="w-full h-full"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
+      </div>
+    )
+  }
+
+  // Spotify embed
+  if (embedType === 'spotify' && embedSrc) {
+    return (
+      <div className="bg-amber-950/30 rounded-xl overflow-hidden border border-amber-900/30">
+        <iframe
+          src={embedSrc}
+          title={title}
+          className="w-full"
+          style={{ height: '352px' }}
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          loading="lazy"
+        />
+      </div>
+    )
+  }
+
+  // SoundCloud embed
+  if (embedType === 'soundcloud' && embedSrc) {
+    return (
+      <div className="bg-amber-950/30 rounded-xl overflow-hidden border border-amber-900/30">
+        <iframe
+          src={embedSrc}
+          title={title}
+          className="w-full"
+          style={{ height: '166px' }}
+          allow="autoplay"
+          scrolling="no"
+        />
+      </div>
+    )
+  }
+
+  // Mixcloud embed
+  if (embedType === 'mixcloud' && embedSrc) {
+    return (
+      <div className="bg-amber-950/30 rounded-xl overflow-hidden border border-amber-900/30">
+        <iframe
+          src={embedSrc}
+          title={title}
+          className="w-full"
+          style={{ height: '120px' }}
+          allow="autoplay"
+        />
+      </div>
+    )
+  }
+
+  // Bandcamp - show a styled link since embeds need album IDs
+  if (embedType === 'bandcamp') {
+    return (
+      <div className="bg-amber-950/30 rounded-xl p-4 border border-amber-900/30">
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 bg-[#1da0c3] rounded flex items-center justify-center">
+            <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M0 18.75l7.437-13.5H24l-7.438 13.5H0z"/>
+            </svg>
+          </div>
+          <div className="flex-1">
+            <p className="text-amber-200/70 text-sm mb-1">Listen on Bandcamp</p>
+            <a
+              href={embedUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-amber-400 hover:text-amber-300 font-medium"
+            >
+              Open in Bandcamp →
+            </a>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  return null
+}
+
 // Type icons mapping
 const TYPE_ICONS: Record<string, string> = {
   music: '🎵',
@@ -190,6 +341,13 @@ export function CrateItemDetail({ item, onBack }: CrateItemDetailProps) {
           </div>
         </div>
       </div>
+
+      {/* Media Embed Section */}
+      {item.itemType === 'music' && item.embedUrl && (
+        <div className="mb-8">
+          <MediaEmbed embedType={item.embedType} embedUrl={item.embedUrl} title={item.title} />
+        </div>
+      )}
 
       {/* Curator Notes Section */}
       {item.curatorNotes && (

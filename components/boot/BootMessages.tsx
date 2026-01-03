@@ -5,15 +5,17 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { BootMessage } from './BootMessage'
 
 // Default boot messages reflecting Tarik's professional journey
+// NOTE: These are fallback defaults - actual messages should be fetched from Sanity
 export const DEFAULT_BOOT_MESSAGES = [
   { text: 'Initializing system...', delay: 0 },
   { text: 'Loading architecture blueprints... Howard \'96', delay: 200 },
-  { text: 'Mounting design systems... RISD certified', delay: 200 },
-  { text: 'Connecting to creative networks... NYC → LA → ATL', delay: 200 },
-  { text: 'Loading radio frequencies... KCRW → Vocalo → WRIR', delay: 200 },
-  { text: 'Initializing 88Nine Labs protocols...', delay: 200 },
-  { text: 'Compiling 25+ years of curiosity...', delay: 200 },
-  { text: 'System ready. Welcome.', delay: 300 },
+  { text: 'Mounting design practices... Detroit → Minneapolis', delay: 200 },
+  { text: 'Initializing radio protocols... 88Nine Radio Milwaukee', delay: 200 },
+  { text: 'Loading Rhythm Lab Radio... nationally syndicated', delay: 200 },
+  { text: 'Connecting HYFIN streams... urban alternative since 2022', delay: 200 },
+  { text: 'Starting 88Nine Labs... innovation for all', delay: 200 },
+  { text: 'Compiling curiosity... music + tech + community', delay: 200 },
+  { text: 'System ready. Welcome to The Intersection.', delay: 300 },
 ]
 
 export interface BootMessageItem {

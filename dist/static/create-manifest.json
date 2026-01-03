@@ -1,18 +1,18 @@
 {
   "version": 3,
-  "createdAt": "2026-01-02T15:24:01.692Z",
+  "createdAt": "2026-01-03T10:58:08.379Z",
   "workspaces": [
     {
       "name": "ubuntu-portfolio",
       "title": "Ubuntu Portfolio",
-      "basePath": "/",
+      "basePath": "/studio",
       "projectId": "zb08xdlz",
       "dataset": "production",
       "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 32 32\"><rect width=\"32\" height=\"32\" rx=\"2\" fill=\"#04b8be\"></rect><text x=\"50%\" y=\"50%\" text-anchor=\"middle\" alignment-baseline=\"middle\" fill=\"hsla(182, 96%, 0%, 1)\" style=\"font-family:Inter, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, &quot;Liberation Sans&quot;, Helvetica, Arial, system-ui, sans-serif;font-weight:500;font-size:13px;transform:translateY(1px)\">UP</text></svg>",
       "mediaLibrary": {
         "enabled": false
       },
-      "schema": "104f8d33.create-schema.json",
+      "schema": "42a1405c.create-schema.json",
       "tools": "ba47da56.create-tools.json"
     }
   ],

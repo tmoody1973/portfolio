@@ -1,16 +1,17 @@
 'use client'
 
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { BrowserToolbar } from './BrowserToolbar'
 import { ProjectList, Project } from './ProjectList'
 import { CaseStudy } from './CaseStudy'
+import { getProjects, Project as SanityProject } from '@/lib/sanity'
 
-// Sample projects data (would come from Sanity in production)
-const SAMPLE_PROJECTS: Project[] = [
+// Default fallback projects if Sanity fails
+const DEFAULT_PROJECTS: Project[] = [
   {
     id: '1',
-    slug: '88ninelabs',
-    title: '88ninelabs',
+    slug: '88nine-labs',
+    title: '88Nine Labs',
     description: 'A creative technology lab exploring the intersection of AI, music, and culture. Building tools for creators.',
     tags: ['AI', 'Music Tech', 'Open Source'],
     featured: true,
@@ -25,18 +26,18 @@ const SAMPLE_PROJECTS: Project[] = [
   },
   {
     id: '3',
+    slug: 'hyfin',
+    title: 'HYFIN',
+    description: 'Urban alternative digital radio platform showcasing diverse voices and sounds.',
+    tags: ['Audio Streaming', 'Digital Media', 'Community'],
+    featured: true,
+  },
+  {
+    id: '4',
     slug: 'ubuntu-portfolio',
     title: 'Ubuntu Portfolio',
     description: 'This portfolio site! A Linux desktop experience built with Next.js, TypeScript, and Sanity CMS.',
     tags: ['Next.js', 'TypeScript', 'Sanity'],
-    featured: false,
-  },
-  {
-    id: '4',
-    slug: 'vinyl-discovery',
-    title: 'Vinyl Discovery',
-    description: 'An AI-powered tool helping vinyl collectors find hidden gems based on their listening history.',
-    tags: ['AI/ML', 'Discogs API', 'Python'],
     featured: false,
   },
 ]
@@ -54,12 +55,37 @@ interface HistoryEntry {
 
 /**
  * Chrome-styled browser app for viewing projects/case studies
+ * Content is fetched from Sanity CMS
  */
 export function ChromeApp({ className = '' }: ChromeAppProps) {
   const [view, setView] = useState<View>('list')
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
   const [history, setHistory] = useState<HistoryEntry[]>([{ view: 'list' }])
   const [historyIndex, setHistoryIndex] = useState(0)
+  const [projects, setProjects] = useState<Project[]>(DEFAULT_PROJECTS)
+  const [loading, setLoading] = useState(true)
+
+  // Fetch projects from Sanity on mount
+  useEffect(() => {
+    getProjects()
+      .then((sanityProjects) => {
+        if (sanityProjects && sanityProjects.length > 0) {
+          const mapped = sanityProjects.map((p) => ({
+            id: p._id,
+            slug: p.slug,
+            title: p.title,
+            description: p.subtitle || '',
+            tags: p.technologies || [],
+            featured: p.featured || false,
+          }))
+          setProjects(mapped)
+        }
+      })
+      .catch(() => {
+        // Keep using DEFAULT_PROJECTS as fallback
+      })
+      .finally(() => setLoading(false))
+  }, [])
 
   // Get current path for address bar
   const currentPath = view === 'list' ? '/projects' : `/projects/${selectedProject?.slug || ''}`
@@ -78,13 +104,13 @@ export function ChromeApp({ className = '' }: ChromeAppProps) {
       setView('list')
       setSelectedProject(null)
     } else if (entry.view === 'detail' && entry.projectId) {
-      const project = SAMPLE_PROJECTS.find((p) => p.id === entry.projectId)
+      const project = projects.find((p) => p.id === entry.projectId)
       if (project) {
         setView('detail')
         setSelectedProject(project)
       }
     }
-  }, [history, historyIndex])
+  }, [history, historyIndex, projects])
 
   const goBack = useCallback(() => {
     if (canGoBack) {
@@ -96,14 +122,14 @@ export function ChromeApp({ className = '' }: ChromeAppProps) {
         setView('list')
         setSelectedProject(null)
       } else if (entry.view === 'detail' && entry.projectId) {
-        const project = SAMPLE_PROJECTS.find((p) => p.id === entry.projectId)
+        const project = projects.find((p) => p.id === entry.projectId)
         if (project) {
           setView('detail')
           setSelectedProject(project)
         }
       }
     }
-  }, [canGoBack, history, historyIndex])
+  }, [canGoBack, history, historyIndex, projects])
 
   const goForward = useCallback(() => {
     if (canGoForward) {
@@ -115,14 +141,14 @@ export function ChromeApp({ className = '' }: ChromeAppProps) {
         setView('list')
         setSelectedProject(null)
       } else if (entry.view === 'detail' && entry.projectId) {
-        const project = SAMPLE_PROJECTS.find((p) => p.id === entry.projectId)
+        const project = projects.find((p) => p.id === entry.projectId)
         if (project) {
           setView('detail')
           setSelectedProject(project)
         }
       }
     }
-  }, [canGoForward, history, historyIndex])
+  }, [canGoForward, history, historyIndex, projects])
 
   const goHome = useCallback(() => {
     navigateTo({ view: 'list' })
@@ -139,18 +165,18 @@ export function ChromeApp({ className = '' }: ChromeAppProps) {
 
   // Project navigation
   const projectIndex = selectedProject
-    ? SAMPLE_PROJECTS.findIndex((p) => p.id === selectedProject.id)
+    ? projects.findIndex((p) => p.id === selectedProject.id)
     : 0
 
   const goToPreviousProject = useCallback(() => {
-    const newIndex = (projectIndex - 1 + SAMPLE_PROJECTS.length) % SAMPLE_PROJECTS.length
-    handleSelectProject(SAMPLE_PROJECTS[newIndex])
-  }, [projectIndex, handleSelectProject])
+    const newIndex = (projectIndex - 1 + projects.length) % projects.length
+    handleSelectProject(projects[newIndex])
+  }, [projectIndex, handleSelectProject, projects])
 
   const goToNextProject = useCallback(() => {
-    const newIndex = (projectIndex + 1) % SAMPLE_PROJECTS.length
-    handleSelectProject(SAMPLE_PROJECTS[newIndex])
-  }, [projectIndex, handleSelectProject])
+    const newIndex = (projectIndex + 1) % projects.length
+    handleSelectProject(projects[newIndex])
+  }, [projectIndex, handleSelectProject, projects])
 
   return (
     <div className={`chrome-app h-full flex flex-col bg-[#1e1e1e] ${className}`}>
@@ -167,25 +193,27 @@ export function ChromeApp({ className = '' }: ChromeAppProps) {
 
       {/* Content area */}
       <div className="flex-1 overflow-hidden">
-        {view === 'list' && (
+        {loading ? (
+          <div className="h-full flex items-center justify-center">
+            <div className="text-white/50 animate-pulse">Loading projects...</div>
+          </div>
+        ) : view === 'list' ? (
           <div className="h-full overflow-y-auto">
             <ProjectList
-              projects={SAMPLE_PROJECTS}
+              projects={projects}
               onSelectProject={handleSelectProject}
             />
           </div>
-        )}
-
-        {view === 'detail' && selectedProject && (
+        ) : view === 'detail' && selectedProject ? (
           <CaseStudy
             project={selectedProject}
             projectIndex={projectIndex}
-            totalProjects={SAMPLE_PROJECTS.length}
+            totalProjects={projects.length}
             onPrevious={goToPreviousProject}
             onNext={goToNextProject}
             onBack={goHome}
           />
-        )}
+        ) : null}
       </div>
     </div>
   )

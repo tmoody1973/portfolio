@@ -9,7 +9,8 @@ interface ClockProps {
 
 interface ClockState {
   hour_12: boolean
-  current_time: Date
+  current_time: Date | null
+  isMounted: boolean
 }
 
 export default class Clock extends Component<ClockProps, ClockState> {
@@ -19,13 +20,17 @@ export default class Clock extends Component<ClockProps, ClockState> {
 
   constructor(props: ClockProps) {
     super(props)
+    // Initialize with null to avoid hydration mismatch
     this.state = {
       hour_12: true,
-      current_time: new Date()
+      current_time: null,
+      isMounted: false
     }
   }
 
   componentDidMount() {
+    // Set time only after mounting to avoid hydration mismatch
+    this.setState({ current_time: new Date(), isMounted: true })
     this.update_time = setInterval(() => {
       this.setState({ current_time: new Date() })
     }, 10 * 1000)
@@ -38,7 +43,12 @@ export default class Clock extends Component<ClockProps, ClockState> {
   }
 
   render() {
-    const { current_time } = this.state
+    const { current_time, isMounted } = this.state
+
+    // Show placeholder during SSR to avoid hydration mismatch
+    if (!isMounted || !current_time) {
+      return <span>--:-- --</span>
+    }
 
     const day = this.day_list[current_time.getDay()]
     let hour = current_time.getHours()

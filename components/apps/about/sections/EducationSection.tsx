@@ -1,5 +1,8 @@
 'use client'
 
+import { useEffect, useState } from 'react'
+import { getEducation, Education } from '@/lib/sanity'
+
 interface EducationItem {
   institution: string
   degree: string
@@ -9,7 +12,8 @@ interface EducationItem {
   highlights?: string[]
 }
 
-const EDUCATION_ITEMS: EducationItem[] = [
+// Default fallback if Sanity fails
+const DEFAULT_EDUCATION: EducationItem[] = [
   {
     institution: 'Howard University',
     degree: 'Bachelor of Architecture',
@@ -31,14 +35,54 @@ interface EducationSectionProps {
 /**
  * Education section for the About app
  * Displays educational background and credentials
+ * Content is fetched from Sanity CMS
  */
 export function EducationSection({ className = '' }: EducationSectionProps) {
+  const [items, setItems] = useState<EducationItem[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    getEducation()
+      .then((educations) => {
+        if (educations && educations.length > 0) {
+          const mapped = educations.map((edu) => ({
+            institution: edu.institution,
+            degree: edu.degree,
+            field: edu.fieldOfStudy || '',
+            years: edu.startYear && edu.endYear
+              ? `${edu.startYear} - ${edu.endYear}`
+              : edu.startYear
+                ? `${edu.startYear} - Present`
+                : '',
+            location: edu.location || '',
+            highlights: edu.highlights || [],
+          }))
+          setItems(mapped)
+        } else {
+          setItems(DEFAULT_EDUCATION)
+        }
+      })
+      .catch(() => {
+        setItems(DEFAULT_EDUCATION)
+      })
+      .finally(() => setLoading(false))
+  }, [])
+
+  if (loading) {
+    return (
+      <div className={`education-section ${className}`}>
+        <h3 className="text-lg font-medium text-white mb-4">Education</h3>
+        <div className="animate-pulse text-white/50">Loading education...</div>
+      </div>
+    )
+  }
+
   return (
     <div className={`education-section ${className}`}>
       <h3 className="text-lg font-medium text-white mb-4">Education</h3>
 
       <div className="space-y-4">
-        {EDUCATION_ITEMS.map((item, index) => (
+        {items.map((item, index) => (
           <div
             key={index}
             className="bg-white/5 rounded-lg p-4 border border-white/10"

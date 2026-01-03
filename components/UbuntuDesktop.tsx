@@ -14,6 +14,7 @@ import { PlayerApp } from './apps/player/PlayerApp'
 import { ChromeApp } from './apps/chrome/ChromeApp'
 import { ContactApp } from './apps/contact'
 import { CratesApp } from './apps/crates'
+import { MixcloudApp } from './apps/mixcloud'
 import { SettingsApp } from './apps/settings/SettingsApp'
 import Navbar from './screen/navbar'
 
@@ -55,6 +56,7 @@ const APP_CONFIGS: Record<string, { title: string; icon: string; appType: string
   trash: { title: 'Trash', icon: '/themes/Yaru/apps/trash.svg', appType: 'trash' },
   files: { title: 'Files', icon: '/themes/Yaru/apps/filemanager.svg', appType: 'files' },
   player: { title: 'Music', icon: '/themes/Yaru/apps/music-player.png', appType: 'player' },
+  mixcloud: { title: 'Rhythm Lab Shows', icon: '/themes/Yaru/apps/music-player.png', appType: 'mixcloud' },
   crates: { title: 'Crates', icon: '/themes/Yaru/apps/crates.svg', appType: 'crates' },
   contact: { title: 'Contact', icon: '/themes/Yaru/apps/email.svg', appType: 'contact' },
   settings: { title: 'Settings', icon: '/themes/Yaru/apps/gnome-control-center.png', appType: 'settings' },
@@ -89,6 +91,7 @@ export function UbuntuDesktop() {
   const [mobileActiveApp, setMobileActiveApp] = useState<string | null>(null)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [bootConfig, setBootConfig] = useState<BootSequenceConfig | null>(null)
+  const [bootConfigLoaded, setBootConfigLoaded] = useState(false)
   const [stickyNoteConfig, setStickyNoteConfig] = useState<StickyNoteConfig | null>(null)
 
   // Viewport detection
@@ -111,10 +114,12 @@ export function UbuntuDesktop() {
     // Fetch boot config
     getBootSequenceConfig().then((config) => {
       setBootConfig(config)
-      // Start boot after config is loaded (or immediately if no config)
-      startBoot()
+      setBootConfigLoaded(true)
+      // Start boot after config is loaded
+      setTimeout(() => startBoot(), 50) // Small delay to ensure state is updated
     }).catch(() => {
       // On error, start with defaults
+      setBootConfigLoaded(true)
       startBoot()
     })
 
@@ -215,7 +220,7 @@ export function UbuntuDesktop() {
   }, [])
 
   // Render boot sequence
-  if (screenState === 'boot' && isBooting) {
+  if (screenState === 'boot' && isBooting && bootConfigLoaded) {
     // Transform Sanity boot messages to component format
     const bootMessages = bootConfig?.bootMessages?.map((msg) => ({
       text: msg.message,
@@ -231,6 +236,15 @@ export function UbuntuDesktop() {
         messages={bootMessages}
         asciiDuration={bootConfig?.asciiAnimationSpeed ? bootConfig.asciiAnimationSpeed * 80 : undefined}
       />
+    )
+  }
+
+  // Show loading state while waiting for boot config
+  if (screenState === 'boot' && !bootConfigLoaded) {
+    return (
+      <div className="fixed inset-0 bg-black flex items-center justify-center">
+        <div className="text-white/50 font-mono text-sm">Loading...</div>
+      </div>
     )
   }
 
@@ -521,6 +535,8 @@ function AppContent({ appType, windowId }: { appType: string; windowId: string }
       return <ContactApp />
     case 'crates':
       return <CratesApp />
+    case 'mixcloud':
+      return <MixcloudApp />
     case 'settings':
       return <SettingsApp />
     default:

@@ -104,25 +104,24 @@ export function SkillsSection({ className = '' }: SkillsSectionProps) {
         ))}
       </div>
 
-      {/* Tools section */}
-      <div className="mt-6 pt-6 border-t border-white/10">
-        <h4 className="text-white/60 text-sm font-medium mb-3 uppercase tracking-wide">
-          Tools & Platforms
-        </h4>
-        <div className="flex flex-wrap gap-2">
-          {[
-            'VS Code', 'Figma', 'Ableton Live', 'Pro Tools',
-            'Git', 'Sanity CMS', 'Vercel', 'AWS',
-          ].map((tool) => (
-            <span
-              key={tool}
-              className="px-3 py-1.5 bg-white/5 border border-white/10 rounded text-xs text-white/70"
-            >
-              {tool}
-            </span>
-          ))}
+      {/* Tools section - fetched from Sanity (tools/platforms categories) */}
+      {categories.find(c => c.name === 'Other') && (
+        <div className="mt-6 pt-6 border-t border-white/10">
+          <h4 className="text-white/60 text-sm font-medium mb-3 uppercase tracking-wide">
+            Tools & Platforms
+          </h4>
+          <div className="flex flex-wrap gap-2">
+            {categories.find(c => c.name === 'Other')?.skills.map((skill) => (
+              <span
+                key={skill.name}
+                className="px-3 py-1.5 bg-white/5 border border-white/10 rounded text-xs text-white/70"
+              >
+                {skill.name}
+              </span>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }

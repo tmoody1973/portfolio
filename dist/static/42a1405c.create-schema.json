@@ -1,0 +1,3508 @@
+[
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "The main title of the portfolio site",
+        "name": "siteTitle",
+        "type": "string"
+      },
+      {
+        "rows": 3,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "max",
+                "constraint": 160
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Meta description for SEO",
+        "name": "siteDescription",
+        "type": "text"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Your full name",
+        "name": "authorName",
+        "type": "string"
+      },
+      {
+        "description": "e.g., \"Developer & Radio Curator\"",
+        "name": "authorTitle",
+        "type": "string",
+        "title": "Author Title/Tagline"
+      },
+      {
+        "name": "contactEmail",
+        "type": "string"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "options": {
+                  "list": [
+                    {
+                      "title": "GitHub",
+                      "value": "github"
+                    },
+                    {
+                      "title": "LinkedIn",
+                      "value": "linkedin"
+                    },
+                    {
+                      "title": "Twitter/X",
+                      "value": "twitter"
+                    },
+                    {
+                      "title": "Substack",
+                      "value": "substack"
+                    },
+                    {
+                      "title": "Buy Me a Coffee",
+                      "value": "buymeacoffee"
+                    },
+                    {
+                      "title": "Instagram",
+                      "value": "instagram"
+                    },
+                    {
+                      "title": "YouTube",
+                      "value": "youtube"
+                    },
+                    {
+                      "title": "Other",
+                      "value": "other"
+                    }
+                  ]
+                },
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "valid",
+                        "constraint": [
+                          "github",
+                          "linkedin",
+                          "twitter",
+                          "substack",
+                          "buymeacoffee",
+                          "instagram",
+                          "youtube",
+                          "other"
+                        ]
+                      },
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "platform",
+                "type": "string"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "uri",
+                        "constraint": {
+                          "options": {
+                            "scheme": [
+                              "/^http$/",
+                              "/^https$/"
+                            ],
+                            "allowRelative": false,
+                            "relativeOnly": false,
+                            "allowCredentials": false
+                          }
+                        }
+                      },
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "url",
+                "type": "url",
+                "title": "URL"
+              },
+              {
+                "description": "Custom label for \"Other\" platforms",
+                "name": "label",
+                "type": "string",
+                "title": "Label (optional)"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "socialLinks",
+        "type": "array"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "description": "Default image for social sharing (Open Graph)",
+        "name": "seoImage",
+        "type": "image",
+        "title": "Default SEO Image"
+      }
+    ],
+    "name": "siteSettings",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "initialValue": true,
+        "description": "Toggle the boot sequence on/off",
+        "name": "enabled",
+        "type": "boolean",
+        "title": "Boot Sequence Enabled"
+      },
+      {
+        "rows": 15,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "ASCII art displayed during boot (e.g., your name in ASCII)",
+        "name": "asciiArt",
+        "type": "text",
+        "title": "ASCII Art"
+      },
+      {
+        "initialValue": 50,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 10
+              },
+              {
+                "flag": "max",
+                "constraint": 200
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Milliseconds per character for typing effect",
+        "name": "asciiAnimationSpeed",
+        "type": "number",
+        "title": "ASCII Animation Speed (ms)"
+      },
+      {
+        "description": "Messages that appear during boot sequence",
+        "of": [
+          {
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "e.g., \"Loading architecture blueprints... Howard '96\"",
+                "name": "message",
+                "type": "string"
+              },
+              {
+                "initialValue": 500,
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "min",
+                        "constraint": 100
+                      },
+                      {
+                        "flag": "max",
+                        "constraint": 3000
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "Milliseconds to wait after showing this message",
+                "name": "delay",
+                "type": "number",
+                "title": "Delay After (ms)"
+              },
+              {
+                "initialValue": true,
+                "description": "Display with success styling (green checkmark)",
+                "name": "isSuccess",
+                "type": "boolean",
+                "title": "Show as Success"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "bootMessages",
+        "type": "array"
+      },
+      {
+        "initialValue": 5000,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 2000
+              },
+              {
+                "flag": "max",
+                "constraint": 10000
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Maximum time for entire boot sequence before auto-completing",
+        "name": "totalDuration",
+        "type": "number",
+        "title": "Maximum Total Duration (ms)"
+      },
+      {
+        "initialValue": true,
+        "description": "Allow users to skip the boot sequence",
+        "name": "allowSkip",
+        "type": "boolean"
+      },
+      {
+        "initialValue": "Skip",
+        "description": "Text for the skip button",
+        "name": "skipButtonText",
+        "type": "string"
+      },
+      {
+        "initialValue": true,
+        "description": "Auto-skip for returning visitors who previously skipped",
+        "name": "rememberSkipPreference",
+        "type": "boolean"
+      }
+    ],
+    "name": "bootSequence",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "initialValue": true,
+        "description": "Toggle the audio player on/off",
+        "name": "enabled",
+        "type": "boolean",
+        "title": "Audio Player Enabled"
+      },
+      {
+        "description": "The stream that plays by default when player opens",
+        "to": [
+          {
+            "type": "radioStream"
+          }
+        ],
+        "name": "defaultStream",
+        "type": "reference"
+      },
+      {
+        "initialValue": 75,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              },
+              {
+                "flag": "max",
+                "constraint": 100
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Default volume level (0-100)",
+        "name": "defaultVolume",
+        "type": "number"
+      },
+      {
+        "initialValue": false,
+        "description": "Automatically start playing when player opens",
+        "name": "autoplay",
+        "type": "boolean"
+      },
+      {
+        "initialValue": true,
+        "description": "Display current track information from Spinitron",
+        "name": "showNowPlaying",
+        "type": "boolean"
+      },
+      {
+        "initialValue": true,
+        "description": "Display recently played tracks list",
+        "name": "showRecentTracks",
+        "type": "boolean"
+      },
+      {
+        "initialValue": 5,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 3
+              },
+              {
+                "flag": "max",
+                "constraint": 15
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Number of recent tracks to display",
+        "name": "recentTracksCount",
+        "type": "number"
+      },
+      {
+        "initialValue": true,
+        "description": "Display link to Mixcloud show archives",
+        "name": "showMixcloudArchives",
+        "type": "boolean"
+      },
+      {
+        "description": "Your Mixcloud username for fetching archives",
+        "name": "mixcloudUsername",
+        "type": "string"
+      },
+      {
+        "description": "URL to custom Webamp skin (.wsz file)",
+        "name": "webampSkin",
+        "type": "string"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": 100,
+            "name": "x",
+            "type": "number",
+            "title": "X Position"
+          },
+          {
+            "initialValue": 100,
+            "name": "y",
+            "type": "number",
+            "title": "Y Position"
+          }
+        ],
+        "name": "playerPosition",
+        "type": "object",
+        "title": "Default Player Position"
+      }
+    ],
+    "name": "playerConfig",
+    "type": "document",
+    "title": "Player Configuration"
+  },
+  {
+    "fields": [
+      {
+        "description": "The currently active desktop wallpaper",
+        "to": [
+          {
+            "type": "wallpaper"
+          }
+        ],
+        "name": "activeWallpaper",
+        "type": "reference"
+      },
+      {
+        "initialValue": "#2C001E",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "regex",
+                "constraint": {
+                  "pattern": "/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/",
+                  "name": "hex color",
+                  "invert": false
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Hex color to use if wallpaper fails to load",
+        "name": "fallbackWallpaperColor",
+        "type": "string"
+      },
+      {
+        "initialValue": "#E95420",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "regex",
+                "constraint": {
+                  "pattern": "/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/",
+                  "name": "hex color",
+                  "invert": false
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Primary accent color (Ubuntu orange by default)",
+        "name": "accentColor",
+        "type": "string"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Ubuntu (Default)",
+              "value": "ubuntu"
+            },
+            {
+              "title": "macOS",
+              "value": "macos"
+            },
+            {
+              "title": "Windows",
+              "value": "windows"
+            }
+          ]
+        },
+        "initialValue": "ubuntu",
+        "name": "windowStyle",
+        "type": "string"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Left",
+              "value": "left"
+            },
+            {
+              "title": "Bottom",
+              "value": "bottom"
+            }
+          ]
+        },
+        "initialValue": "left",
+        "name": "dockPosition",
+        "type": "string"
+      },
+      {
+        "initialValue": false,
+        "description": "Automatically hide dock when not in use",
+        "name": "dockAutoHide",
+        "type": "boolean",
+        "title": "Auto-hide Dock"
+      },
+      {
+        "initialValue": true,
+        "description": "Display shortcut icons on the desktop",
+        "name": "showDesktopIcons",
+        "type": "boolean"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Small",
+              "value": "small"
+            },
+            {
+              "title": "Medium",
+              "value": "medium"
+            },
+            {
+              "title": "Large",
+              "value": "large"
+            }
+          ]
+        },
+        "initialValue": "medium",
+        "name": "iconSize",
+        "type": "string",
+        "title": "Desktop Icon Size"
+      },
+      {
+        "initialValue": "Ubuntu, sans-serif",
+        "description": "Font family for the desktop UI",
+        "name": "fontFamily",
+        "type": "string",
+        "title": "System Font"
+      }
+    ],
+    "name": "themeSettings",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "regex",
+                "constraint": {
+                  "pattern": "/^[a-z-]+$/",
+                  "name": "lowercase-kebab",
+                  "invert": false
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Unique identifier for the app (e.g., \"about\", \"terminal\", \"chrome\", \"player\", \"crates\")",
+        "name": "appId",
+        "type": "string",
+        "title": "App ID"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Display name shown in window title bar",
+        "name": "title",
+        "type": "string",
+        "title": "App Title"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "description": "Icon displayed in dock and window title bar",
+        "name": "icon",
+        "type": "image",
+        "title": "App Icon"
+      },
+      {
+        "description": "Use a predefined icon name instead of custom image (e.g., \"terminal\", \"chrome\", \"folder\")",
+        "name": "iconName",
+        "type": "string",
+        "title": "Icon Name (Alternative)"
+      },
+      {
+        "initialValue": true,
+        "description": "Show this app in the dock",
+        "name": "enabled",
+        "type": "boolean"
+      },
+      {
+        "initialValue": true,
+        "description": "Display this app in the dock launcher",
+        "name": "showInDock",
+        "type": "boolean",
+        "title": "Show in Dock"
+      },
+      {
+        "initialValue": 0,
+        "description": "Position in the dock (lower numbers appear first)",
+        "name": "dockOrder",
+        "type": "number"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": 800,
+            "description": "Default window width in pixels",
+            "name": "width",
+            "type": "number",
+            "title": "Default Width"
+          },
+          {
+            "initialValue": 600,
+            "description": "Default window height in pixels",
+            "name": "height",
+            "type": "number",
+            "title": "Default Height"
+          },
+          {
+            "initialValue": 100,
+            "description": "Default horizontal position",
+            "name": "x",
+            "type": "number",
+            "title": "Default X Position"
+          },
+          {
+            "initialValue": 50,
+            "description": "Default vertical position",
+            "name": "y",
+            "type": "number",
+            "title": "Default Y Position"
+          },
+          {
+            "initialValue": true,
+            "description": "Allow window resizing",
+            "name": "resizable",
+            "type": "boolean"
+          },
+          {
+            "initialValue": true,
+            "description": "Allow window minimizing",
+            "name": "minimizable",
+            "type": "boolean"
+          },
+          {
+            "initialValue": true,
+            "description": "Allow window maximizing",
+            "name": "maximizable",
+            "type": "boolean"
+          }
+        ],
+        "name": "defaultWindowConfig",
+        "type": "object",
+        "title": "Default Window Configuration"
+      }
+    ],
+    "name": "desktopApp",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Label displayed under the icon",
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "External URL to open when clicked",
+        "name": "url",
+        "type": "url",
+        "title": "URL"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "description": "Custom icon image for this shortcut",
+        "name": "icon",
+        "type": "image",
+        "title": "Custom Icon"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Custom Image",
+              "value": "custom"
+            },
+            {
+              "title": "GitHub",
+              "value": "github"
+            },
+            {
+              "title": "LinkedIn",
+              "value": "linkedin"
+            },
+            {
+              "title": "Twitter/X",
+              "value": "twitter"
+            },
+            {
+              "title": "Substack",
+              "value": "substack"
+            },
+            {
+              "title": "Buy Me a Coffee",
+              "value": "buymeacoffee"
+            },
+            {
+              "title": "Instagram",
+              "value": "instagram"
+            },
+            {
+              "title": "YouTube",
+              "value": "youtube"
+            },
+            {
+              "title": "Email",
+              "value": "email"
+            },
+            {
+              "title": "Website",
+              "value": "website"
+            },
+            {
+              "title": "Folder",
+              "value": "folder"
+            },
+            {
+              "title": "File",
+              "value": "file"
+            }
+          ]
+        },
+        "initialValue": "custom",
+        "description": "Use a predefined platform icon instead of custom image",
+        "name": "iconType",
+        "type": "string"
+      },
+      {
+        "initialValue": 0,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Position on desktop (lower numbers appear first, left to right, top to bottom)",
+        "name": "order",
+        "type": "number",
+        "title": "Display Order"
+      },
+      {
+        "initialValue": true,
+        "description": "Show this shortcut on the desktop",
+        "name": "enabled",
+        "type": "boolean"
+      },
+      {
+        "initialValue": true,
+        "description": "Open link in a new browser tab",
+        "name": "openInNewTab",
+        "type": "boolean",
+        "title": "Open in New Tab"
+      },
+      {
+        "description": "Tooltip text shown on hover",
+        "name": "description",
+        "type": "string"
+      }
+    ],
+    "name": "desktopShortcut",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Title displayed on the tab (e.g., \"Bio\", \"Journey\", \"Education\", \"Skills\")",
+        "name": "title",
+        "type": "string",
+        "title": "Tab Title"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Bio / Introduction",
+              "value": "bio"
+            },
+            {
+              "title": "Journey / Experience",
+              "value": "journey"
+            },
+            {
+              "title": "Education",
+              "value": "education"
+            },
+            {
+              "title": "Skills",
+              "value": "skills"
+            }
+          ],
+          "layout": "radio"
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "valid",
+                "constraint": [
+                  "bio",
+                  "journey",
+                  "education",
+                  "skills"
+                ]
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Type of content this section displays",
+        "name": "sectionType",
+        "type": "string"
+      },
+      {
+        "description": "Rich text content for this section (used for Bio type)",
+        "of": [
+          {
+            "marks": {
+              "annotations": [
+                {
+                  "fields": [
+                    {
+                      "validation": [
+                        {
+                          "rules": [
+                            {
+                              "flag": "uri",
+                              "constraint": {
+                                "options": {
+                                  "scheme": [
+                                    "/^http$/",
+                                    "/^https$/"
+                                  ],
+                                  "allowRelative": false,
+                                  "relativeOnly": false,
+                                  "allowCredentials": false
+                                }
+                              }
+                            }
+                          ],
+                          "level": "error"
+                        }
+                      ],
+                      "name": "href",
+                      "type": "url",
+                      "title": "URL"
+                    }
+                  ],
+                  "name": "link",
+                  "type": "object"
+                }
+              ],
+              "decorators": [
+                {
+                  "value": "strong",
+                  "title": "Bold"
+                },
+                {
+                  "value": "em",
+                  "title": "Italic"
+                },
+                {
+                  "value": "code",
+                  "title": "Code"
+                }
+              ]
+            },
+            "lists": [
+              {
+                "value": "bullet",
+                "title": "Bulleted list"
+              },
+              {
+                "value": "number",
+                "title": "Numbered list"
+              }
+            ],
+            "styles": [
+              {
+                "value": "normal",
+                "title": "Normal"
+              },
+              {
+                "value": "h2",
+                "title": "H2"
+              },
+              {
+                "value": "h3",
+                "title": "H3"
+              },
+              {
+                "value": "blockquote",
+                "title": "Quote"
+              }
+            ],
+            "of": [],
+            "type": "block"
+          },
+          {
+            "options": {
+              "hotspot": true
+            },
+            "type": "image"
+          }
+        ],
+        "name": "content",
+        "type": "array"
+      },
+      {
+        "initialValue": 0,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Order of this tab in the navigation (lower numbers appear first)",
+        "name": "order",
+        "type": "number",
+        "title": "Tab Order"
+      },
+      {
+        "initialValue": true,
+        "description": "Show this section in the About app",
+        "name": "enabled",
+        "type": "boolean"
+      }
+    ],
+    "name": "aboutSection",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Name of the company or organization",
+        "name": "company",
+        "type": "string",
+        "title": "Company / Organization"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Your job title or role",
+        "name": "role",
+        "type": "string",
+        "title": "Role / Title"
+      },
+      {
+        "options": {
+          "dateFormat": "MMMM YYYY"
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "When you started this role",
+        "name": "startDate",
+        "type": "date"
+      },
+      {
+        "options": {
+          "dateFormat": "MMMM YYYY"
+        },
+        "description": "When you ended this role (leave empty if current)",
+        "name": "endDate",
+        "type": "date"
+      },
+      {
+        "initialValue": false,
+        "description": "Check if this is your current role",
+        "name": "isCurrent",
+        "type": "boolean",
+        "title": "Current Role"
+      },
+      {
+        "description": "Describe your responsibilities and achievements",
+        "of": [
+          {
+            "marks": {
+              "annotations": [
+                {
+                  "i18nTitleKey": "inputs.portable-text.annotation.link",
+                  "options": {
+                    "modal": {
+                      "type": "popover"
+                    }
+                  },
+                  "fields": [
+                    {
+                      "validation": [
+                        {
+                          "rules": [
+                            {
+                              "flag": "uri",
+                              "constraint": {
+                                "options": {
+                                  "scheme": [
+                                    "/^http$/",
+                                    "/^https$/",
+                                    "/^tel$/",
+                                    "/^mailto$/"
+                                  ],
+                                  "allowRelative": true,
+                                  "relativeOnly": false,
+                                  "allowCredentials": false
+                                }
+                              }
+                            }
+                          ],
+                          "level": "error"
+                        }
+                      ],
+                      "description": "A valid web, email, phone, or relative link.",
+                      "name": "href",
+                      "type": "url",
+                      "title": "Link"
+                    }
+                  ],
+                  "name": "link",
+                  "type": "object"
+                }
+              ],
+              "decorators": [
+                {
+                  "value": "strong",
+                  "title": "Bold"
+                },
+                {
+                  "value": "em",
+                  "title": "Italic"
+                }
+              ]
+            },
+            "lists": [
+              {
+                "value": "bullet",
+                "title": "Bullet"
+              },
+              {
+                "value": "number",
+                "title": "Numbered"
+              }
+            ],
+            "styles": [
+              {
+                "value": "normal",
+                "title": "Normal"
+              }
+            ],
+            "of": [],
+            "type": "block"
+          }
+        ],
+        "name": "description",
+        "type": "array"
+      },
+      {
+        "description": "Bullet points of key achievements (alternative to full description)",
+        "of": [
+          {
+            "type": "string"
+          }
+        ],
+        "name": "highlights",
+        "type": "array",
+        "title": "Key Highlights"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "description": "Logo of the company or organization",
+        "name": "logo",
+        "type": "image",
+        "title": "Company Logo"
+      },
+      {
+        "description": "City, State or Remote",
+        "name": "location",
+        "type": "string"
+      },
+      {
+        "initialValue": 0,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Order in the timeline (lower numbers appear first, typically most recent first)",
+        "name": "order",
+        "type": "number",
+        "title": "Display Order"
+      },
+      {
+        "initialValue": true,
+        "description": "Show this experience in the journey section",
+        "name": "enabled",
+        "type": "boolean"
+      }
+    ],
+    "name": "experience",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Name of the school, university, or institution",
+        "name": "institution",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Type of degree or certificate earned (e.g., \"Bachelor of Science\", \"AWS Certified\")",
+        "name": "degree",
+        "type": "string",
+        "title": "Degree / Certificate"
+      },
+      {
+        "description": "Major, concentration, or focus area (e.g., \"Computer Science\")",
+        "name": "fieldOfStudy",
+        "type": "string",
+        "title": "Field of Study"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 1950
+              },
+              {
+                "flag": "max",
+                "constraint": 2100
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Year you started",
+        "name": "startYear",
+        "type": "number"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 1950
+              },
+              {
+                "flag": "max",
+                "constraint": 2100
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Year you completed (or expected completion)",
+        "name": "endYear",
+        "type": "number"
+      },
+      {
+        "initialValue": false,
+        "description": "Check if currently pursuing this education",
+        "name": "inProgress",
+        "type": "boolean"
+      },
+      {
+        "rows": 3,
+        "description": "Additional details, honors, or relevant coursework",
+        "name": "details",
+        "type": "text"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Link to verify credential (for certifications)",
+        "name": "credentialUrl",
+        "type": "url",
+        "title": "Credential URL"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "description": "Logo or badge of the institution",
+        "name": "logo",
+        "type": "image",
+        "title": "Institution Logo"
+      },
+      {
+        "initialValue": 0,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Order in the education list (lower numbers appear first)",
+        "name": "order",
+        "type": "number",
+        "title": "Display Order"
+      },
+      {
+        "initialValue": true,
+        "description": "Show this education entry",
+        "name": "enabled",
+        "type": "boolean"
+      }
+    ],
+    "name": "education",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Name of the skill (e.g., \"TypeScript\", \"React\", \"AWS\")",
+        "name": "name",
+        "type": "string",
+        "title": "Skill Name"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Languages",
+              "value": "languages"
+            },
+            {
+              "title": "Frameworks",
+              "value": "frameworks"
+            },
+            {
+              "title": "Tools",
+              "value": "tools"
+            },
+            {
+              "title": "Platforms",
+              "value": "platforms"
+            },
+            {
+              "title": "Databases",
+              "value": "databases"
+            },
+            {
+              "title": "Design",
+              "value": "design"
+            },
+            {
+              "title": "Soft Skills",
+              "value": "soft-skills"
+            },
+            {
+              "title": "Other",
+              "value": "other"
+            }
+          ]
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "valid",
+                "constraint": [
+                  "languages",
+                  "frameworks",
+                  "tools",
+                  "platforms",
+                  "databases",
+                  "design",
+                  "soft-skills",
+                  "other"
+                ]
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Category this skill belongs to",
+        "name": "category",
+        "type": "string"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Beginner",
+              "value": "beginner"
+            },
+            {
+              "title": "Intermediate",
+              "value": "intermediate"
+            },
+            {
+              "title": "Advanced",
+              "value": "advanced"
+            },
+            {
+              "title": "Expert",
+              "value": "expert"
+            }
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "intermediate",
+        "description": "Your proficiency level with this skill",
+        "name": "proficiency",
+        "type": "string",
+        "title": "Proficiency Level"
+      },
+      {
+        "initialValue": 3,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 1
+              },
+              {
+                "flag": "max",
+                "constraint": 5
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Numeric proficiency level (1 = beginner, 5 = expert)",
+        "name": "proficiencyLevel",
+        "type": "number",
+        "title": "Proficiency (1-5)"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              },
+              {
+                "flag": "max",
+                "constraint": 50
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "How many years you have used this skill",
+        "name": "yearsOfExperience",
+        "type": "number",
+        "title": "Years of Experience"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "description": "Icon or logo for this skill",
+        "name": "icon",
+        "type": "image"
+      },
+      {
+        "description": "Use a predefined icon name instead of custom image (e.g., \"react\", \"typescript\", \"nodejs\")",
+        "name": "iconName",
+        "type": "string",
+        "title": "Icon Name (Alternative)"
+      },
+      {
+        "rows": 2,
+        "description": "Brief description of your experience with this skill",
+        "name": "description",
+        "type": "text"
+      },
+      {
+        "initialValue": false,
+        "description": "Highlight this skill prominently",
+        "name": "featured",
+        "type": "boolean"
+      },
+      {
+        "initialValue": 0,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Order within category (lower numbers appear first)",
+        "name": "order",
+        "type": "number",
+        "title": "Display Order"
+      },
+      {
+        "initialValue": true,
+        "description": "Show this skill in the skills section",
+        "name": "enabled",
+        "type": "boolean"
+      }
+    ],
+    "name": "skill",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Name of the project or case study",
+        "name": "title",
+        "type": "string",
+        "title": "Project Title"
+      },
+      {
+        "options": {
+          "source": "title",
+          "maxLength": 96
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "URL-friendly identifier for the project",
+        "name": "slug",
+        "type": "slug"
+      },
+      {
+        "description": "Brief tagline or description",
+        "name": "subtitle",
+        "type": "string"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "description": "Main image displayed in project list and header",
+        "name": "featuredImage",
+        "type": "image"
+      },
+      {
+        "description": "Background and problem statement - Why did this project exist?",
+        "of": [
+          {
+            "marks": {
+              "annotations": [
+                {
+                  "i18nTitleKey": "inputs.portable-text.annotation.link",
+                  "options": {
+                    "modal": {
+                      "type": "popover"
+                    }
+                  },
+                  "fields": [
+                    {
+                      "validation": [
+                        {
+                          "rules": [
+                            {
+                              "flag": "uri",
+                              "constraint": {
+                                "options": {
+                                  "scheme": [
+                                    "/^http$/",
+                                    "/^https$/",
+                                    "/^tel$/",
+                                    "/^mailto$/"
+                                  ],
+                                  "allowRelative": true,
+                                  "relativeOnly": false,
+                                  "allowCredentials": false
+                                }
+                              }
+                            }
+                          ],
+                          "level": "error"
+                        }
+                      ],
+                      "description": "A valid web, email, phone, or relative link.",
+                      "name": "href",
+                      "type": "url",
+                      "title": "Link"
+                    }
+                  ],
+                  "name": "link",
+                  "type": "object"
+                }
+              ],
+              "decorators": [
+                {
+                  "value": "strong",
+                  "title": "Bold"
+                },
+                {
+                  "value": "em",
+                  "title": "Italic"
+                },
+                {
+                  "value": "code",
+                  "title": "Code"
+                }
+              ]
+            },
+            "lists": [
+              {
+                "value": "bullet",
+                "title": "Bulleted list"
+              },
+              {
+                "value": "number",
+                "title": "Numbered list"
+              }
+            ],
+            "styles": [
+              {
+                "value": "normal",
+                "title": "Normal"
+              },
+              {
+                "value": "h3",
+                "title": "H3"
+              }
+            ],
+            "of": [],
+            "type": "block"
+          }
+        ],
+        "name": "context",
+        "type": "array"
+      },
+      {
+        "description": "Initial ideas and approach - What was the vision?",
+        "of": [
+          {
+            "marks": {
+              "annotations": [
+                {
+                  "i18nTitleKey": "inputs.portable-text.annotation.link",
+                  "options": {
+                    "modal": {
+                      "type": "popover"
+                    }
+                  },
+                  "fields": [
+                    {
+                      "validation": [
+                        {
+                          "rules": [
+                            {
+                              "flag": "uri",
+                              "constraint": {
+                                "options": {
+                                  "scheme": [
+                                    "/^http$/",
+                                    "/^https$/",
+                                    "/^tel$/",
+                                    "/^mailto$/"
+                                  ],
+                                  "allowRelative": true,
+                                  "relativeOnly": false,
+                                  "allowCredentials": false
+                                }
+                              }
+                            }
+                          ],
+                          "level": "error"
+                        }
+                      ],
+                      "description": "A valid web, email, phone, or relative link.",
+                      "name": "href",
+                      "type": "url",
+                      "title": "Link"
+                    }
+                  ],
+                  "name": "link",
+                  "type": "object"
+                }
+              ],
+              "decorators": [
+                {
+                  "value": "strong",
+                  "title": "Bold"
+                },
+                {
+                  "value": "em",
+                  "title": "Italic"
+                },
+                {
+                  "value": "code",
+                  "title": "Code"
+                }
+              ]
+            },
+            "lists": [
+              {
+                "value": "bullet",
+                "title": "Bulleted list"
+              },
+              {
+                "value": "number",
+                "title": "Numbered list"
+              }
+            ],
+            "styles": [
+              {
+                "value": "normal",
+                "title": "Normal"
+              },
+              {
+                "value": "h3",
+                "title": "H3"
+              }
+            ],
+            "of": [],
+            "type": "block"
+          }
+        ],
+        "name": "concept",
+        "type": "array"
+      },
+      {
+        "description": "How the work was done - methodology, iterations, decisions",
+        "of": [
+          {
+            "marks": {
+              "annotations": [
+                {
+                  "i18nTitleKey": "inputs.portable-text.annotation.link",
+                  "options": {
+                    "modal": {
+                      "type": "popover"
+                    }
+                  },
+                  "fields": [
+                    {
+                      "validation": [
+                        {
+                          "rules": [
+                            {
+                              "flag": "uri",
+                              "constraint": {
+                                "options": {
+                                  "scheme": [
+                                    "/^http$/",
+                                    "/^https$/",
+                                    "/^tel$/",
+                                    "/^mailto$/"
+                                  ],
+                                  "allowRelative": true,
+                                  "relativeOnly": false,
+                                  "allowCredentials": false
+                                }
+                              }
+                            }
+                          ],
+                          "level": "error"
+                        }
+                      ],
+                      "description": "A valid web, email, phone, or relative link.",
+                      "name": "href",
+                      "type": "url",
+                      "title": "Link"
+                    }
+                  ],
+                  "name": "link",
+                  "type": "object"
+                }
+              ],
+              "decorators": [
+                {
+                  "value": "strong",
+                  "title": "Bold"
+                },
+                {
+                  "value": "em",
+                  "title": "Italic"
+                },
+                {
+                  "value": "code",
+                  "title": "Code"
+                }
+              ]
+            },
+            "lists": [
+              {
+                "value": "bullet",
+                "title": "Bullet"
+              },
+              {
+                "value": "number",
+                "title": "Numbered"
+              }
+            ],
+            "styles": [
+              {
+                "value": "normal",
+                "title": "Normal"
+              },
+              {
+                "value": "h3",
+                "title": "H3"
+              }
+            ],
+            "of": [],
+            "type": "block"
+          }
+        ],
+        "name": "process",
+        "type": "array"
+      },
+      {
+        "description": "Technical implementation details - How was it built?",
+        "of": [
+          {
+            "marks": {
+              "annotations": [
+                {
+                  "i18nTitleKey": "inputs.portable-text.annotation.link",
+                  "options": {
+                    "modal": {
+                      "type": "popover"
+                    }
+                  },
+                  "fields": [
+                    {
+                      "validation": [
+                        {
+                          "rules": [
+                            {
+                              "flag": "uri",
+                              "constraint": {
+                                "options": {
+                                  "scheme": [
+                                    "/^http$/",
+                                    "/^https$/",
+                                    "/^tel$/",
+                                    "/^mailto$/"
+                                  ],
+                                  "allowRelative": true,
+                                  "relativeOnly": false,
+                                  "allowCredentials": false
+                                }
+                              }
+                            }
+                          ],
+                          "level": "error"
+                        }
+                      ],
+                      "description": "A valid web, email, phone, or relative link.",
+                      "name": "href",
+                      "type": "url",
+                      "title": "Link"
+                    }
+                  ],
+                  "name": "link",
+                  "type": "object"
+                }
+              ],
+              "decorators": [
+                {
+                  "value": "strong",
+                  "title": "Bold"
+                },
+                {
+                  "value": "em",
+                  "title": "Italic"
+                },
+                {
+                  "value": "code",
+                  "title": "Code"
+                }
+              ]
+            },
+            "lists": [
+              {
+                "value": "bullet",
+                "title": "Bullet"
+              },
+              {
+                "value": "number",
+                "title": "Numbered"
+              }
+            ],
+            "styles": [
+              {
+                "value": "normal",
+                "title": "Normal"
+              },
+              {
+                "value": "h3",
+                "title": "H3"
+              }
+            ],
+            "of": [],
+            "type": "block"
+          }
+        ],
+        "name": "execution",
+        "type": "array"
+      },
+      {
+        "description": "Outcomes and impact - What was achieved?",
+        "of": [
+          {
+            "marks": {
+              "annotations": [
+                {
+                  "i18nTitleKey": "inputs.portable-text.annotation.link",
+                  "options": {
+                    "modal": {
+                      "type": "popover"
+                    }
+                  },
+                  "fields": [
+                    {
+                      "validation": [
+                        {
+                          "rules": [
+                            {
+                              "flag": "uri",
+                              "constraint": {
+                                "options": {
+                                  "scheme": [
+                                    "/^http$/",
+                                    "/^https$/",
+                                    "/^tel$/",
+                                    "/^mailto$/"
+                                  ],
+                                  "allowRelative": true,
+                                  "relativeOnly": false,
+                                  "allowCredentials": false
+                                }
+                              }
+                            }
+                          ],
+                          "level": "error"
+                        }
+                      ],
+                      "description": "A valid web, email, phone, or relative link.",
+                      "name": "href",
+                      "type": "url",
+                      "title": "Link"
+                    }
+                  ],
+                  "name": "link",
+                  "type": "object"
+                }
+              ],
+              "decorators": [
+                {
+                  "value": "strong",
+                  "title": "Bold"
+                },
+                {
+                  "value": "em",
+                  "title": "Italic"
+                }
+              ]
+            },
+            "lists": [
+              {
+                "value": "bullet",
+                "title": "Bullet"
+              }
+            ],
+            "styles": [
+              {
+                "value": "normal",
+                "title": "Normal"
+              },
+              {
+                "value": "h3",
+                "title": "H3"
+              }
+            ],
+            "of": [],
+            "type": "block"
+          }
+        ],
+        "name": "result",
+        "type": "array"
+      },
+      {
+        "description": "Lessons learned and retrospective - What would you do differently?",
+        "of": [
+          {
+            "marks": {
+              "annotations": [
+                {
+                  "i18nTitleKey": "inputs.portable-text.annotation.link",
+                  "options": {
+                    "modal": {
+                      "type": "popover"
+                    }
+                  },
+                  "fields": [
+                    {
+                      "validation": [
+                        {
+                          "rules": [
+                            {
+                              "flag": "uri",
+                              "constraint": {
+                                "options": {
+                                  "scheme": [
+                                    "/^http$/",
+                                    "/^https$/",
+                                    "/^tel$/",
+                                    "/^mailto$/"
+                                  ],
+                                  "allowRelative": true,
+                                  "relativeOnly": false,
+                                  "allowCredentials": false
+                                }
+                              }
+                            }
+                          ],
+                          "level": "error"
+                        }
+                      ],
+                      "description": "A valid web, email, phone, or relative link.",
+                      "name": "href",
+                      "type": "url",
+                      "title": "Link"
+                    }
+                  ],
+                  "name": "link",
+                  "type": "object"
+                }
+              ],
+              "decorators": [
+                {
+                  "value": "strong",
+                  "title": "Bold"
+                },
+                {
+                  "value": "em",
+                  "title": "Italic"
+                }
+              ]
+            },
+            "lists": [
+              {
+                "value": "bullet",
+                "title": "Bulleted list"
+              },
+              {
+                "value": "number",
+                "title": "Numbered list"
+              }
+            ],
+            "styles": [
+              {
+                "value": "normal",
+                "title": "Normal"
+              },
+              {
+                "value": "h3",
+                "title": "H3"
+              }
+            ],
+            "of": [],
+            "type": "block"
+          }
+        ],
+        "name": "reflection",
+        "type": "array"
+      },
+      {
+        "description": "Gallery of project screenshots",
+        "of": [
+          {
+            "options": {
+              "hotspot": true
+            },
+            "fields": [
+              {
+                "name": "caption",
+                "type": "string"
+              },
+              {
+                "name": "alt",
+                "type": "string",
+                "title": "Alt Text"
+              }
+            ],
+            "type": "image"
+          }
+        ],
+        "name": "screenshots",
+        "type": "array"
+      },
+      {
+        "description": "Who was this project for?",
+        "name": "client",
+        "type": "string",
+        "title": "Client / Company"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 2000
+              },
+              {
+                "flag": "max",
+                "constraint": 2100
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "When was this project completed?",
+        "name": "year",
+        "type": "number"
+      },
+      {
+        "description": "How long did the project take? (e.g., \"3 months\", \"6 weeks\")",
+        "name": "duration",
+        "type": "string"
+      },
+      {
+        "description": "What was your role on this project?",
+        "name": "role",
+        "type": "string",
+        "title": "Your Role"
+      },
+      {
+        "options": {
+          "layout": "tags"
+        },
+        "description": "Tech stack and tools used",
+        "of": [
+          {
+            "type": "string"
+          }
+        ],
+        "name": "technologies",
+        "type": "array",
+        "title": "Technologies Used"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Link to live project",
+        "name": "liveUrl",
+        "type": "url",
+        "title": "Live URL"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Link to source code",
+        "name": "repoUrl",
+        "type": "url",
+        "title": "Repository URL"
+      },
+      {
+        "initialValue": false,
+        "description": "Highlight this project prominently",
+        "name": "featured",
+        "type": "boolean"
+      },
+      {
+        "initialValue": 0,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Order in project list (lower numbers appear first)",
+        "name": "order",
+        "type": "number",
+        "title": "Display Order"
+      },
+      {
+        "initialValue": true,
+        "description": "Show this project in the portfolio",
+        "name": "enabled",
+        "type": "boolean"
+      }
+    ],
+    "name": "project",
+    "type": "document",
+    "title": "Project / Case Study"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "regex",
+                "constraint": {
+                  "pattern": "/^[a-z0-9_-]+$/i",
+                  "name": "command-format",
+                  "invert": false
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "The command name (e.g., \"whoami\", \"help\", \"ls\")",
+        "name": "command",
+        "type": "string"
+      },
+      {
+        "options": {
+          "layout": "tags"
+        },
+        "description": "Alternative command names that trigger the same response",
+        "of": [
+          {
+            "type": "string"
+          }
+        ],
+        "name": "aliases",
+        "type": "array"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Information",
+              "value": "info"
+            },
+            {
+              "title": "Navigation",
+              "value": "navigation"
+            },
+            {
+              "title": "System",
+              "value": "system"
+            },
+            {
+              "title": "Fun / Easter Egg",
+              "value": "fun"
+            },
+            {
+              "title": "Social",
+              "value": "social"
+            },
+            {
+              "title": "Help",
+              "value": "help"
+            }
+          ]
+        },
+        "initialValue": "info",
+        "description": "Type of command for organization",
+        "name": "category",
+        "type": "string"
+      },
+      {
+        "description": "Brief description shown in help command",
+        "name": "description",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "The output displayed when this command is run",
+        "of": [
+          {
+            "marks": {
+              "annotations": [
+                {
+                  "fields": [
+                    {
+                      "validation": [
+                        {
+                          "rules": [
+                            {
+                              "flag": "uri",
+                              "constraint": {
+                                "options": {
+                                  "scheme": [
+                                    "/^http$/",
+                                    "/^https$/"
+                                  ],
+                                  "allowRelative": false,
+                                  "relativeOnly": false,
+                                  "allowCredentials": false
+                                }
+                              }
+                            }
+                          ],
+                          "level": "error"
+                        }
+                      ],
+                      "name": "href",
+                      "type": "url",
+                      "title": "URL"
+                    }
+                  ],
+                  "name": "link",
+                  "type": "object"
+                },
+                {
+                  "fields": [
+                    {
+                      "options": {
+                        "list": [
+                          {
+                            "title": "Green (Success)",
+                            "value": "green"
+                          },
+                          {
+                            "title": "Red (Error)",
+                            "value": "red"
+                          },
+                          {
+                            "title": "Yellow (Warning)",
+                            "value": "yellow"
+                          },
+                          {
+                            "title": "Blue (Info)",
+                            "value": "blue"
+                          },
+                          {
+                            "title": "Cyan",
+                            "value": "cyan"
+                          },
+                          {
+                            "title": "Magenta",
+                            "value": "magenta"
+                          }
+                        ]
+                      },
+                      "name": "value",
+                      "type": "string",
+                      "title": "Color"
+                    }
+                  ],
+                  "name": "color",
+                  "type": "object"
+                }
+              ],
+              "decorators": [
+                {
+                  "value": "strong",
+                  "title": "Bold"
+                },
+                {
+                  "value": "em",
+                  "title": "Italic"
+                },
+                {
+                  "value": "code",
+                  "title": "Code"
+                }
+              ]
+            },
+            "lists": [
+              {
+                "value": "bullet",
+                "title": "Bulleted list"
+              },
+              {
+                "value": "number",
+                "title": "Numbered list"
+              }
+            ],
+            "styles": [
+              {
+                "value": "normal",
+                "title": "Normal"
+              },
+              {
+                "value": "code",
+                "title": "Code Block"
+              }
+            ],
+            "of": [],
+            "type": "block"
+          }
+        ],
+        "name": "response",
+        "type": "array"
+      },
+      {
+        "rows": 6,
+        "description": "Simple text response if you prefer not to use rich text",
+        "name": "plainTextResponse",
+        "type": "text",
+        "title": "Plain Text Response (Alternative)"
+      },
+      {
+        "initialValue": false,
+        "description": "Check if response contains ASCII art that needs monospace formatting",
+        "name": "isAsciiArt",
+        "type": "boolean",
+        "title": "Contains ASCII Art"
+      },
+      {
+        "initialValue": false,
+        "description": "Clear the terminal before showing response",
+        "name": "clearScreen",
+        "type": "boolean",
+        "title": "Clear Screen First"
+      },
+      {
+        "initialValue": true,
+        "description": "Include this command in the help command output",
+        "name": "showInHelp",
+        "type": "boolean",
+        "title": "Show in Help"
+      },
+      {
+        "initialValue": 0,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Order in help command list",
+        "name": "order",
+        "type": "number",
+        "title": "Help Order"
+      },
+      {
+        "initialValue": true,
+        "description": "Allow this command to be executed",
+        "name": "enabled",
+        "type": "boolean"
+      }
+    ],
+    "name": "terminalCommand",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Display name for the radio stream",
+        "name": "name",
+        "type": "string",
+        "title": "Stream Name"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Direct URL to the audio stream (e.g., Icecast/Shoutcast URL)",
+        "name": "streamUrl",
+        "type": "url",
+        "title": "Stream URL"
+      },
+      {
+        "rows": 2,
+        "description": "Brief description of the stream or station",
+        "name": "description",
+        "type": "text"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "description": "Logo or artwork for the stream (displayed in player)",
+        "name": "artwork",
+        "type": "image",
+        "title": "Stream Artwork"
+      },
+      {
+        "description": "Spinitron station identifier for now-playing data (e.g., \"wfmu\")",
+        "name": "spinitronStationId",
+        "type": "string",
+        "title": "Spinitron Station ID"
+      },
+      {
+        "description": "API key for Spinitron access (optional, can use env var instead)",
+        "name": "spinitronApiKey",
+        "type": "string",
+        "title": "Spinitron API Key"
+      },
+      {
+        "description": "Mixcloud username for archive access",
+        "name": "mixcloudUsername",
+        "type": "string"
+      },
+      {
+        "description": "Specific show slug on Mixcloud (optional)",
+        "name": "mixcloudShowSlug",
+        "type": "string"
+      },
+      {
+        "description": "Primary genre or style",
+        "name": "genre",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Link to the station website",
+        "name": "websiteUrl",
+        "type": "url",
+        "title": "Website URL"
+      },
+      {
+        "initialValue": false,
+        "description": "Auto-play this stream when the player opens",
+        "name": "isDefault",
+        "type": "boolean",
+        "title": "Default Stream"
+      },
+      {
+        "initialValue": 0,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Order in stream list (lower numbers appear first)",
+        "name": "order",
+        "type": "number",
+        "title": "Display Order"
+      },
+      {
+        "initialValue": true,
+        "description": "Show this stream in the player",
+        "name": "enabled",
+        "type": "boolean"
+      }
+    ],
+    "name": "radioStream",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Display name for the wallpaper",
+        "name": "name",
+        "type": "string",
+        "title": "Wallpaper Name"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "The wallpaper image (recommended: 1920x1080 or higher)",
+        "name": "image",
+        "type": "image",
+        "title": "Wallpaper Image"
+      },
+      {
+        "rows": 2,
+        "description": "Brief description of the wallpaper",
+        "name": "description",
+        "type": "text"
+      },
+      {
+        "description": "Photo credit or attribution (e.g., \"Photo by John Doe\")",
+        "name": "credit",
+        "type": "string",
+        "title": "Credit / Attribution"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Link to original source or photographer",
+        "name": "creditUrl",
+        "type": "url",
+        "title": "Credit URL"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Default Ubuntu",
+              "value": "ubuntu"
+            },
+            {
+              "title": "Nature",
+              "value": "nature"
+            },
+            {
+              "title": "Abstract",
+              "value": "abstract"
+            },
+            {
+              "title": "City",
+              "value": "city"
+            },
+            {
+              "title": "Space",
+              "value": "space"
+            },
+            {
+              "title": "Minimal",
+              "value": "minimal"
+            },
+            {
+              "title": "Custom",
+              "value": "custom"
+            }
+          ]
+        },
+        "initialValue": "ubuntu",
+        "description": "Wallpaper category or theme",
+        "name": "category",
+        "type": "string"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Dark",
+              "value": "dark"
+            },
+            {
+              "title": "Light",
+              "value": "light"
+            },
+            {
+              "title": "Warm",
+              "value": "warm"
+            },
+            {
+              "title": "Cool",
+              "value": "cool"
+            }
+          ]
+        },
+        "description": "Dominant color scheme for UI theming",
+        "name": "colorScheme",
+        "type": "string"
+      },
+      {
+        "initialValue": false,
+        "description": "Set as the currently active wallpaper",
+        "name": "isActive",
+        "type": "boolean",
+        "title": "Active"
+      },
+      {
+        "initialValue": 0,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Order in wallpaper gallery (lower numbers appear first)",
+        "name": "order",
+        "type": "number",
+        "title": "Display Order"
+      },
+      {
+        "initialValue": true,
+        "description": "Show this wallpaper in the gallery",
+        "name": "enabled",
+        "type": "boolean"
+      }
+    ],
+    "name": "wallpaper",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Name of the item (song, book, article, tool)",
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Music",
+              "value": "music"
+            },
+            {
+              "title": "Book",
+              "value": "book"
+            },
+            {
+              "title": "Link",
+              "value": "link"
+            },
+            {
+              "title": "Tool",
+              "value": "tool"
+            }
+          ],
+          "layout": "radio"
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "valid",
+                "constraint": [
+                  "music",
+                  "book",
+                  "link",
+                  "tool"
+                ]
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "What kind of item is this?",
+        "name": "itemType",
+        "type": "string"
+      },
+      {
+        "description": "Artist, author, or creator name",
+        "name": "creator",
+        "type": "string",
+        "title": "Creator / Author"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "description": "Album art, book cover, or preview image",
+        "name": "coverImage",
+        "type": "image"
+      },
+      {
+        "description": "Why did you select this item? Your personal take.",
+        "of": [
+          {
+            "marks": {
+              "annotations": [
+                {
+                  "fields": [
+                    {
+                      "validation": [
+                        {
+                          "rules": [
+                            {
+                              "flag": "uri",
+                              "constraint": {
+                                "options": {
+                                  "scheme": [
+                                    "/^http$/",
+                                    "/^https$/"
+                                  ],
+                                  "allowRelative": false,
+                                  "relativeOnly": false,
+                                  "allowCredentials": false
+                                }
+                              }
+                            }
+                          ],
+                          "level": "error"
+                        }
+                      ],
+                      "name": "href",
+                      "type": "url",
+                      "title": "URL"
+                    }
+                  ],
+                  "name": "link",
+                  "type": "object"
+                }
+              ],
+              "decorators": [
+                {
+                  "value": "strong",
+                  "title": "Bold"
+                },
+                {
+                  "value": "em",
+                  "title": "Italic"
+                }
+              ]
+            },
+            "lists": [
+              {
+                "value": "bullet",
+                "title": "Bulleted list"
+              },
+              {
+                "value": "number",
+                "title": "Numbered list"
+              }
+            ],
+            "styles": [
+              {
+                "value": "normal",
+                "title": "Normal"
+              },
+              {
+                "value": "blockquote",
+                "title": "Quote"
+              }
+            ],
+            "of": [],
+            "type": "block"
+          }
+        ],
+        "name": "curatorNotes",
+        "type": "array"
+      },
+      {
+        "description": "When did you discover this?",
+        "name": "discoveryDate",
+        "type": "date"
+      },
+      {
+        "options": {
+          "layout": "tags"
+        },
+        "description": "Genre tags, categories, or keywords",
+        "of": [
+          {
+            "type": "string"
+          }
+        ],
+        "name": "tags",
+        "type": "array"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "YouTube",
+              "value": "youtube"
+            },
+            {
+              "title": "Bandcamp",
+              "value": "bandcamp"
+            },
+            {
+              "title": "Spotify",
+              "value": "spotify"
+            },
+            {
+              "title": "SoundCloud",
+              "value": "soundcloud"
+            }
+          ]
+        },
+        "description": "What platform is the music on?",
+        "hidden": "conditional",
+        "name": "embedType",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "URL for embedding the music player",
+        "hidden": "conditional",
+        "name": "embedUrl",
+        "type": "url",
+        "title": "Embed URL"
+      },
+      {
+        "description": "Music genre (Jazz, Electronic, Hip-Hop, etc.)",
+        "hidden": "conditional",
+        "name": "genre",
+        "type": "string"
+      },
+      {
+        "description": "Book author",
+        "hidden": "conditional",
+        "name": "author",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Link to buy the book (Amazon, Bookshop.org, etc.)",
+        "hidden": "conditional",
+        "name": "purchaseUrl",
+        "type": "url",
+        "title": "Purchase URL"
+      },
+      {
+        "description": "Book ISBN for lookup",
+        "hidden": "conditional",
+        "name": "isbn",
+        "type": "string",
+        "title": "ISBN"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Link to the resource",
+        "hidden": "conditional",
+        "name": "url",
+        "type": "url",
+        "title": "URL"
+      },
+      {
+        "rows": 3,
+        "description": "Brief description of the link/tool",
+        "hidden": "conditional",
+        "name": "description",
+        "type": "text"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Article",
+              "value": "article"
+            },
+            {
+              "title": "Resource",
+              "value": "resource"
+            },
+            {
+              "title": "Tool",
+              "value": "tool"
+            },
+            {
+              "title": "Reference",
+              "value": "reference"
+            },
+            {
+              "title": "Tutorial",
+              "value": "tutorial"
+            },
+            {
+              "title": "Inspiration",
+              "value": "inspiration"
+            }
+          ]
+        },
+        "description": "Link category (article, resource, tool, reference, etc.)",
+        "hidden": "conditional",
+        "name": "category",
+        "type": "string"
+      },
+      {
+        "initialValue": false,
+        "description": "Highlight as a top pick",
+        "name": "featured",
+        "type": "boolean"
+      },
+      {
+        "initialValue": 0,
+        "description": "Order within its category (lower = first)",
+        "name": "order",
+        "type": "number",
+        "title": "Display Order"
+      },
+      {
+        "initialValue": true,
+        "description": "Show this item in the Crates app",
+        "name": "enabled",
+        "type": "boolean"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Link to a Substack post about this discovery",
+        "name": "substackUrl",
+        "type": "url",
+        "title": "Related Substack Article"
+      }
+    ],
+    "name": "curatedItem",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "initialValue": true,
+        "description": "Toggle the sticky note on/off",
+        "name": "enabled",
+        "type": "boolean",
+        "title": "Show Sticky Note"
+      },
+      {
+        "initialValue": "Hey! 👋",
+        "description": "Optional title at the top (e.g., \"Hey! 👋\")",
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "rows": 6,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "max",
+                "constraint": 300
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "The main message on the sticky note",
+        "name": "message",
+        "type": "text"
+      },
+      {
+        "initialValue": "— Tarik",
+        "description": "Your signature at the bottom (e.g., \"— Tarik\")",
+        "name": "signature",
+        "type": "string"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Yellow (Classic)",
+              "value": "yellow"
+            },
+            {
+              "title": "Blue",
+              "value": "blue"
+            },
+            {
+              "title": "Green",
+              "value": "green"
+            },
+            {
+              "title": "Pink",
+              "value": "pink"
+            },
+            {
+              "title": "Orange",
+              "value": "orange"
+            }
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "yellow",
+        "name": "color",
+        "type": "string",
+        "title": "Note Color"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Top Right",
+              "value": "top-right"
+            },
+            {
+              "title": "Top Left",
+              "value": "top-left"
+            },
+            {
+              "title": "Bottom Right",
+              "value": "bottom-right"
+            },
+            {
+              "title": "Bottom Left",
+              "value": "bottom-left"
+            }
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "top-right",
+        "name": "position",
+        "type": "string"
+      },
+      {
+        "initialValue": 2,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": -10
+              },
+              {
+                "flag": "max",
+                "constraint": 10
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Slight tilt for natural look (-5 to 5)",
+        "name": "rotation",
+        "type": "number",
+        "title": "Rotation (degrees)"
+      }
+    ],
+    "name": "stickyNote",
+    "type": "document"
+  }
+]
