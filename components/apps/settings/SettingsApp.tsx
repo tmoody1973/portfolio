@@ -6,15 +6,14 @@ import Image from 'next/image'
 export function SettingsApp() {
   const { currentWallpaper, sanityWallpapers, setWallpaper } = useWallpaperStore()
 
-  // Combine default and Sanity wallpapers
-  const allWallpapers = [
-    ...DEFAULT_WALLPAPERS.map((w) => ({
-      id: w.key,
-      name: w.name,
-      url: w.url,
-    })),
-    ...sanityWallpapers,
-  ]
+  // Use Sanity wallpapers if available, otherwise fall back to defaults
+  const allWallpapers = sanityWallpapers.length > 0
+    ? sanityWallpapers
+    : DEFAULT_WALLPAPERS.map((w) => ({
+        id: w.key,
+        name: w.name,
+        url: w.url,
+      }))
 
   return (
     <div className="h-full bg-[#1e1e1e] text-white overflow-auto">

@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { useBootStore, useWindowStore, useWallpaperStore } from '@/store'
 import { useViewport } from '@/hooks'
 import { BootSequence } from './boot'
-import { getBootSequenceConfig, BootSequenceConfig, getStickyNoteConfig, StickyNoteConfig, getActiveWallpaper, WallpaperConfig } from '@/lib/sanity'
+import { getBootSequenceConfig, BootSequenceConfig, getStickyNoteConfig, StickyNoteConfig, getActiveWallpaper, WallpaperConfig, getSiteSettings, SiteSettings, getAllWallpapers } from '@/lib/sanity'
 import { Desktop, Dock, ShortcutGrid, DesktopShortcut, StickyNote, DOCK_APPS, DEFAULT_SHORTCUTS, EXTERNAL_SHORTCUTS } from './desktop'
 import { WindowShell } from './window'
 import { MobileAppDrawer, MobileBottomNav, MobileAppView } from './mobile'
@@ -93,6 +93,7 @@ export function UbuntuDesktop() {
   const [bootConfig, setBootConfig] = useState<BootSequenceConfig | null>(null)
   const [bootConfigLoaded, setBootConfigLoaded] = useState(false)
   const [stickyNoteConfig, setStickyNoteConfig] = useState<StickyNoteConfig | null>(null)
+  const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null)
 
   // Viewport detection
   const { isMobile, isTablet } = useViewport()
@@ -141,7 +142,29 @@ export function UbuntuDesktop() {
     }).catch(() => {
       // Silently fail - use default wallpaper
     })
-  }, [startBoot, loadFromStorage, setWallpaper])
+
+    // Fetch all wallpapers for Settings app
+    getAllWallpapers().then((wallpapers) => {
+      if (wallpapers && wallpapers.length > 0) {
+        setSanityWallpapers(wallpapers.map((w) => ({
+          id: w._id,
+          name: w.name,
+          url: w.imageUrl,
+        })))
+      }
+    }).catch(() => {
+      // Silently fail - use default wallpapers
+    })
+
+    // Fetch site settings for profile info
+    getSiteSettings().then((settings) => {
+      if (settings) {
+        setSiteSettings(settings)
+      }
+    }).catch(() => {
+      // Silently fail - use hardcoded defaults
+    })
+  }, [startBoot, loadFromStorage, setWallpaper, setSanityWallpapers])
 
   // Sync screen state with boot store
   useEffect(() => {
@@ -289,7 +312,9 @@ export function UbuntuDesktop() {
             className="w-24 h-24"
           />
         </div>
-        <h2 className="text-white text-2xl font-medium mb-2">Tarik Moody</h2>
+        <h2 className="text-white text-2xl font-medium mb-2">
+          {siteSettings?.authorName || 'Tarik Moody'}
+        </h2>
         <p className="text-white/70 text-sm">Tap anywhere to unlock</p>
       </div>
     )
@@ -322,9 +347,11 @@ export function UbuntuDesktop() {
                 alt="Ubuntu Logo"
                 className="w-16 h-16 mx-auto mb-4"
               />
-              <h1 className="text-2xl font-bold text-white mb-2">Tarik Moody</h1>
+              <h1 className="text-2xl font-bold text-white mb-2">
+                {siteSettings?.authorName || 'Tarik Moody'}
+              </h1>
               <p className="text-white/70 text-sm mb-4">
-                Software Engineer & Creative Technologist
+                {siteSettings?.authorTitle || 'Software Engineer & Creative Technologist'}
               </p>
               <p className="text-white/50 text-xs">
                 Use the navigation below to explore

@@ -390,3 +390,32 @@ export const projectsQuery = `*[_type == "project" && enabled != false] | order(
 export async function getProjects(): Promise<Project[]> {
   return sanityClient.fetch(projectsQuery)
 }
+
+// Site Settings types
+export interface SiteSettings {
+  authorName: string
+  authorTitle?: string
+  siteTitle?: string
+  siteDescription?: string
+  contactEmail?: string
+  socialLinks?: Array<{
+    platform: string
+    url: string
+    label?: string
+  }>
+}
+
+// GROQ query for site settings
+export const siteSettingsQuery = `*[_type == "siteSettings"][0] {
+  authorName,
+  authorTitle,
+  siteTitle,
+  siteDescription,
+  contactEmail,
+  socialLinks
+}`
+
+// Fetch site settings
+export async function getSiteSettings(): Promise<SiteSettings | null> {
+  return sanityClient.fetch(siteSettingsQuery)
+}

@@ -27,7 +27,7 @@ interface MixcloudAppProps {
  * Mixcloud App for browsing Rhythm Lab Radio shows
  * Fetches and displays past radio shows with embedded player
  */
-export function MixcloudApp({ className = '', username = 'RhythmLabRadio' }: MixcloudAppProps) {
+export function MixcloudApp({ className = '', username = 'rhythmlab' }: MixcloudAppProps) {
   const [shows, setShows] = useState<MixcloudShow[]>([])
   const [selectedShow, setSelectedShow] = useState<MixcloudShow | null>(null)
   const [loading, setLoading] = useState(true)
