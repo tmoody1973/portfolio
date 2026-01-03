@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { AboutTabs, AboutTabPanel, AboutTab } from './AboutTabs'
 import { BioSection, JourneySection, EducationSection, SkillsSection } from './sections'
+import { trackAbout } from '@/lib/analytics'
 
 const ABOUT_TABS: AboutTab[] = [
   { id: 'bio', label: 'Bio' },
@@ -28,7 +29,10 @@ export function AboutApp({ className = '' }: AboutAppProps) {
       <AboutTabs
         tabs={ABOUT_TABS}
         activeTab={activeTab}
-        onTabChange={setActiveTab}
+        onTabChange={(tab) => {
+          setActiveTab(tab)
+          trackAbout(tab)
+        }}
       />
 
       {/* Tab content */}

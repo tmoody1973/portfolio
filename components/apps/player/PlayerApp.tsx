@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { useAudioStore, RadioStream, DEFAULT_STREAMS } from '@/store'
 import { useSpinitronPolling } from '@/hooks'
 import { getRadioStreams, SanityRadioStream } from '@/lib/sanity'
+import { trackPlayer } from '@/lib/analytics'
 
 interface PlayerAppProps {
   className?: string
@@ -129,9 +130,11 @@ export function PlayerApp({ className = '' }: PlayerAppProps) {
 
     if (isPlaying) {
       audioElement.pause()
+      trackPlayer('pause', currentStream.name)
     } else {
       setLoading(true)
       audioElement.play().catch(() => setLoading(false))
+      trackPlayer('play', currentStream.name)
     }
   }
 
@@ -141,6 +144,7 @@ export function PlayerApp({ className = '' }: PlayerAppProps) {
       audioElement.pause()
     }
     switchStream(stream)
+    trackPlayer('stream_selected', stream.name)
   }
 
   return (

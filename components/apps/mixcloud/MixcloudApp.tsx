@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
+import { trackRhythmLab } from '@/lib/analytics'
 
 interface MixcloudShow {
   key: string
@@ -105,7 +106,10 @@ export function MixcloudApp({ className = '', username = 'rhythmlab' }: Mixcloud
                   return (
                     <button
                       key={show.key}
-                      onClick={() => setSelectedShow(show)}
+                      onClick={() => {
+                        setSelectedShow(show)
+                        trackRhythmLab('show_selected', show.name)
+                      }}
                       className={`w-full text-left px-3 py-2.5 flex gap-3 transition-all ${
                         isSelected
                           ? 'bg-purple-600/20 border-l-2 border-purple-500'
