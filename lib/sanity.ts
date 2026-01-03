@@ -7,9 +7,12 @@ let _sanityClient: SanityClient | null = null
 
 function getClient(): SanityClient {
   if (!_sanityClient) {
+    const envProjectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID
+    const envDataset = process.env.NEXT_PUBLIC_SANITY_DATASET
+
     _sanityClient = createClient({
-      projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
-      dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
+      projectId: envProjectId && envProjectId.length > 0 ? envProjectId : 'zb08xdlz',
+      dataset: envDataset && envDataset.length > 0 ? envDataset : 'production',
       apiVersion,
       useCdn: true,
     })
@@ -149,4 +152,41 @@ export const stickyNoteQuery = `*[_type == "stickyNote"][0] {
 // Fetch sticky note config
 export async function getStickyNoteConfig(): Promise<StickyNoteConfig | null> {
   return sanityClient.fetch(stickyNoteQuery)
+}
+
+// Wallpaper types
+export interface WallpaperConfig {
+  _id: string
+  name: string
+  imageUrl: string
+  description?: string
+  colorScheme?: 'light' | 'dark'
+}
+
+// GROQ query for active wallpaper
+export const activeWallpaperQuery = `*[_type == "wallpaper" && enabled == true && isActive == true][0] {
+  _id,
+  name,
+  "imageUrl": image.asset->url,
+  description,
+  colorScheme
+}`
+
+// GROQ query for all wallpapers (for settings)
+export const allWallpapersQuery = `*[_type == "wallpaper" && enabled == true] | order(order asc) {
+  _id,
+  name,
+  "imageUrl": image.asset->url,
+  description,
+  colorScheme
+}`
+
+// Fetch active wallpaper
+export async function getActiveWallpaper(): Promise<WallpaperConfig | null> {
+  return sanityClient.fetch(activeWallpaperQuery)
+}
+
+// Fetch all wallpapers
+export async function getAllWallpapers(): Promise<WallpaperConfig[]> {
+  return sanityClient.fetch(allWallpapersQuery)
 }

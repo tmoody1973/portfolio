@@ -41,6 +41,12 @@ export const DOCK_APPS: DockAppConfig[] = [
     icon: '/themes/Yaru/apps/crates.svg',
     appType: 'crates',
   },
+  {
+    id: 'settings',
+    name: 'Settings',
+    icon: '/themes/Yaru/apps/gnome-control-center.png',
+    appType: 'settings',
+  },
 ]
 
 /**

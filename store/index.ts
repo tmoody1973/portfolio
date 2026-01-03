@@ -59,3 +59,9 @@ export type {
   RecentTrack,
   MixcloudEpisode,
 } from './useAudioStore'
+
+// Wallpaper store
+export {
+  useWallpaperStore,
+  DEFAULT_WALLPAPERS,
+} from './useWallpaperStore'

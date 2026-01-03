@@ -1,10 +1,10 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import { useBootStore, useWindowStore } from '@/store'
+import { useBootStore, useWindowStore, useWallpaperStore } from '@/store'
 import { useViewport } from '@/hooks'
 import { BootSequence } from './boot'
-import { getBootSequenceConfig, BootSequenceConfig, getStickyNoteConfig, StickyNoteConfig } from '@/lib/sanity'
+import { getBootSequenceConfig, BootSequenceConfig, getStickyNoteConfig, StickyNoteConfig, getActiveWallpaper, WallpaperConfig } from '@/lib/sanity'
 import { Desktop, Dock, ShortcutGrid, DesktopShortcut, StickyNote, DOCK_APPS, DEFAULT_SHORTCUTS, EXTERNAL_SHORTCUTS } from './desktop'
 import { WindowShell } from './window'
 import { MobileAppDrawer, MobileBottomNav, MobileAppView } from './mobile'
@@ -14,10 +14,38 @@ import { PlayerApp } from './apps/player/PlayerApp'
 import { ChromeApp } from './apps/chrome/ChromeApp'
 import { ContactApp } from './apps/contact'
 import { CratesApp } from './apps/crates'
+import { SettingsApp } from './apps/settings/SettingsApp'
 import Navbar from './screen/navbar'
 
 // Screen states
 type ScreenState = 'boot' | 'desktop' | 'locked' | 'shutdown'
+
+// Default wallpapers map for resolving keys to URLs
+const WALLPAPER_MAP: Record<string, string> = {
+  'wall-1': '/images/wallpapers/wall-1.webp',
+  'wall-2': '/images/wallpapers/wall-2.webp',
+  'wall-3': '/images/wallpapers/wall-3.webp',
+  'wall-4': '/images/wallpapers/wall-4.webp',
+  'wall-5': '/images/wallpapers/wall-5.webp',
+  'wall-6': '/images/wallpapers/wall-6.webp',
+  'wall-7': '/images/wallpapers/wall-7.webp',
+  'wall-8': '/images/wallpapers/wall-8.webp',
+  'wall-9': '/images/wallpapers/wall-9.webp',
+}
+
+// Helper to resolve wallpaper key or URL to a full URL
+function resolveWallpaperUrl(wallpaper: string): string {
+  // If it's a key from our default wallpapers
+  if (wallpaper in WALLPAPER_MAP) {
+    return WALLPAPER_MAP[wallpaper]
+  }
+  // If it looks like a URL (starts with http or /)
+  if (wallpaper.startsWith('http') || wallpaper.startsWith('/')) {
+    return wallpaper
+  }
+  // Fallback to default
+  return WALLPAPER_MAP['wall-9']
+}
 
 // App configuration for both desktop and mobile
 const APP_CONFIGS: Record<string, { title: string; icon: string; appType: string }> = {
@@ -29,6 +57,7 @@ const APP_CONFIGS: Record<string, { title: string; icon: string; appType: string
   player: { title: 'Music', icon: '/themes/Yaru/apps/music-player.png', appType: 'player' },
   crates: { title: 'Crates', icon: '/themes/Yaru/apps/crates.svg', appType: 'crates' },
   contact: { title: 'Contact', icon: '/themes/Yaru/apps/email.svg', appType: 'contact' },
+  settings: { title: 'Settings', icon: '/themes/Yaru/apps/gnome-control-center.png', appType: 'settings' },
 }
 
 // Mobile nav items (subset of apps for quick access)
@@ -52,9 +81,11 @@ const MOBILE_DRAWER_APPS = Object.entries(APP_CONFIGS).map(([id, config]) => ({
  * Orchestrates the entire desktop experience using Zustand stores
  * Now with responsive support for mobile/tablet
  */
+// Local storage key for user wallpaper preference
+const WALLPAPER_PREF_KEY = 'portfolio-wallpaper-pref'
+
 export function UbuntuDesktop() {
   const [screenState, setScreenState] = useState<ScreenState>('boot')
-  const [wallpaper, setWallpaper] = useState('wall-9')
   const [mobileActiveApp, setMobileActiveApp] = useState<string | null>(null)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [bootConfig, setBootConfig] = useState<BootSequenceConfig | null>(null)
@@ -69,8 +100,14 @@ export function UbuntuDesktop() {
   // Window store (for desktop)
   const { openWindow, windows, closeWindow } = useWindowStore()
 
+  // Wallpaper store
+  const { currentWallpaper, setWallpaper, setSanityWallpapers, loadFromStorage } = useWallpaperStore()
+
   // Fetch configs from Sanity on mount
   useEffect(() => {
+    // Load wallpaper from localStorage first
+    loadFromStorage()
+
     // Fetch boot config
     getBootSequenceConfig().then((config) => {
       setBootConfig(config)
@@ -87,7 +124,19 @@ export function UbuntuDesktop() {
     }).catch(() => {
       // Silently fail - sticky note is optional
     })
-  }, [startBoot])
+
+    // Fetch active wallpaper from Sanity
+    getActiveWallpaper().then((wp) => {
+      // Check for user preference first
+      const userPref = localStorage.getItem(WALLPAPER_PREF_KEY)
+      if (!userPref && wp?.imageUrl) {
+        // No user preference, use Sanity wallpaper as default
+        setWallpaper(wp.imageUrl)
+      }
+    }).catch(() => {
+      // Silently fail - use default wallpaper
+    })
+  }, [startBoot, loadFromStorage, setWallpaper])
 
   // Sync screen state with boot store
   useEffect(() => {
@@ -97,14 +146,6 @@ export function UbuntuDesktop() {
       setScreenState('boot')
     }
   }, [isBooting, isComplete])
-
-  // Load wallpaper preference from localStorage
-  useEffect(() => {
-    const savedWallpaper = localStorage.getItem('bg-image')
-    if (savedWallpaper) {
-      setWallpaper(savedWallpaper)
-    }
-  }, [])
 
   // Handle boot sequence completion
   const handleBootComplete = useCallback(() => {
@@ -221,7 +262,7 @@ export function UbuntuDesktop() {
     return (
       <div
         className="fixed inset-0 bg-cover bg-center flex flex-col items-center justify-center z-50 cursor-pointer"
-        style={{ backgroundImage: `url(/images/wallpapers/${wallpaper}.webp)` }}
+        style={{ backgroundImage: `url(${resolveWallpaperUrl(currentWallpaper)})` }}
         onClick={handleUnlock}
         onKeyDown={(e) => e.key && handleUnlock()}
         role="button"
@@ -247,7 +288,7 @@ export function UbuntuDesktop() {
     return (
       <div
         className="w-screen h-screen overflow-hidden bg-cover bg-center"
-        style={{ backgroundImage: `url(/images/wallpapers/${wallpaper}.webp)` }}
+        style={{ backgroundImage: `url(${resolveWallpaperUrl(currentWallpaper)})` }}
         id="ubuntu-mobile"
       >
         {/* Active App (Full Screen) */}
@@ -302,7 +343,7 @@ export function UbuntuDesktop() {
     return (
       <div className="w-screen h-screen overflow-hidden" id="ubuntu-tablet">
         <Desktop
-          wallpaper={wallpaper}
+          wallpaper={currentWallpaper}
           topBar={
             <Navbar
               lockScreen={handleLockScreen}
@@ -356,7 +397,7 @@ export function UbuntuDesktop() {
   return (
     <div className="w-screen h-screen overflow-hidden" id="ubuntu-desktop">
       <Desktop
-        wallpaper={wallpaper}
+        wallpaper={currentWallpaper}
         topBar={
           <Navbar
             lockScreen={handleLockScreen}
@@ -480,6 +521,8 @@ function AppContent({ appType, windowId }: { appType: string; windowId: string }
       return <ContactApp />
     case 'crates':
       return <CratesApp />
+    case 'settings':
+      return <SettingsApp />
     default:
       return <AppPlaceholder appType={appType} windowId={windowId} />
   }

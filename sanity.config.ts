@@ -4,8 +4,9 @@ import { visionTool } from '@sanity/vision'
 import { schemaTypes } from './schemaTypes'
 import { structure } from './sanity.structure'
 
-const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!
-const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production'
+// Hardcode values directly - env vars are unreliable during client-side hydration
+const projectId = 'zb08xdlz'
+const dataset = 'production'
 
 // Singleton types that should not appear in the default "Create new" menu
 const singletonTypes = new Set(['siteSettings', 'bootSequence', 'playerConfig', 'themeSettings'])
