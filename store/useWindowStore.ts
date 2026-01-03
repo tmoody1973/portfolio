@@ -45,7 +45,7 @@ const DEFAULT_WINDOW_SIZES: Record<string, WindowSize> = {
   chrome: { width: 900, height: 600 },
   player: { width: 400, height: 300 },
   crates: { width: 800, height: 550 },
-  mixcloud: { width: 850, height: 550 },
+  mixcloud: { width: 950, height: 580 },
   settings: { width: 650, height: 500 },
   default: { width: 600, height: 400 },
 }

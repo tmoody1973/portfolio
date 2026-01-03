@@ -149,10 +149,10 @@ export function MixcloudApp({ className = '', username = 'rhythmlab' }: Mixcloud
           {selectedShow ? (
             <>
               {/* Now Playing Header */}
-              <div className="bg-gradient-to-r from-purple-900/40 to-pink-900/20 p-5 border-b border-white/5">
-                <div className="flex items-start gap-5">
+              <div className="bg-gradient-to-r from-purple-900/30 to-pink-900/15 p-4 border-b border-white/5">
+                <div className="flex items-center gap-4">
                   {/* Cover Art */}
-                  <div className="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0 shadow-2xl ring-1 ring-white/10">
+                  <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 shadow-xl ring-1 ring-white/10">
                     {selectedShow.pictures?.large ? (
                       <img
                         src={selectedShow.pictures.large}
@@ -161,7 +161,7 @@ export function MixcloudApp({ className = '', username = 'rhythmlab' }: Mixcloud
                       />
                     ) : (
                       <div className="w-full h-full bg-purple-900/50 flex items-center justify-center">
-                        <svg className="w-10 h-10 text-white/30" fill="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-8 h-8 text-white/30" fill="currentColor" viewBox="0 0 24 24">
                           <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
                         </svg>
                       </div>
@@ -169,16 +169,16 @@ export function MixcloudApp({ className = '', username = 'rhythmlab' }: Mixcloud
                   </div>
 
                   {/* Show Info */}
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs font-medium text-purple-400 uppercase tracking-wide mb-1">Now Playing</p>
-                    <h1 className="text-xl font-bold text-white leading-tight mb-2 line-clamp-2">
+                  <div className="flex-1 min-w-0 overflow-hidden">
+                    <p className="text-[10px] font-semibold text-purple-400 uppercase tracking-wider mb-1">Now Playing</p>
+                    <h1 className="text-base font-semibold text-white leading-snug truncate" title={selectedShow.name}>
                       {selectedShow.name}
                     </h1>
-                    <div className="flex items-center gap-4 text-sm text-white/50">
+                    <div className="flex items-center gap-3 mt-1.5 text-xs text-white/50">
                       <span>{formatDate(selectedShow.created_time)}</span>
-                      <span className="w-1 h-1 rounded-full bg-white/30" />
+                      <span className="text-white/20">•</span>
                       <span>{formatDuration(selectedShow.audio_length)}</span>
-                      <span className="w-1 h-1 rounded-full bg-white/30" />
+                      <span className="text-white/20">•</span>
                       <span>{selectedShow.play_count?.toLocaleString() || 0} plays</span>
                     </div>
                   </div>
@@ -191,7 +191,7 @@ export function MixcloudApp({ className = '', username = 'rhythmlab' }: Mixcloud
                     className="flex-shrink-0 p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
                     title="Open in Mixcloud"
                   >
-                    <svg className="w-5 h-5 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
                     </svg>
                   </a>
