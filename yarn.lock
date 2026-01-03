@@ -3522,6 +3522,11 @@
     "@uiw/codemirror-extensions-basic-setup" "4.25.4"
     codemirror "^6.0.0"
 
+"@vercel/analytics@^1.6.1":
+  version "1.6.1"
+  resolved "https://registry.npmjs.org/@vercel/analytics/-/analytics-1.6.1.tgz"
+  integrity sha512-oH9He/bEM+6oKlv3chWuOOcp8Y6fo6/PSro8hEkgCW3pu9/OiCXiUpRUogDh3Fs3LH2sosDrx8CxeOLBEE+afg==
+
 "@vercel/edge@^1.2.1":
   version "1.2.2"
   resolved "https://registry.npmjs.org/@vercel/edge/-/edge-1.2.2.tgz"
@@ -6292,7 +6297,7 @@ next-sanity@^12.0.7:
     history "^5.3.0"
     server-only "^0.0.1"
 
-next@^16.0.0-0, next@^16.1.1, next@>=16.0.0-0:
+next@^16.0.0-0, next@^16.1.1, "next@>= 13", next@>=16.0.0-0:
   version "16.1.1"
   resolved "https://registry.npmjs.org/next/-/next-16.1.1.tgz"
   integrity sha512-QI+T7xrxt1pF6SQ/JYFz95ro/mg/1Znk5vBebsWwbpejj1T0A23hO7GYEaVac9QUOT2BIMiuzm0L99ooq7k0/w==

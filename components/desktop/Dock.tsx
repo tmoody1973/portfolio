@@ -6,6 +6,7 @@ import { DockApp } from './DockApp'
 import { DockSocialMenu } from './DockSocialMenu'
 import { HelpModal } from './HelpModal'
 import { useWindowStore } from '@/store'
+import { trackAppOpen } from '@/lib/analytics'
 
 const HELP_SEEN_KEY = 'portfolio-help-seen'
 
@@ -97,6 +98,8 @@ export function Dock({
           icon: appConfig.icon,
           appType: appConfig.appType,
         })
+        // Track app open
+        trackAppOpen(appConfig.name, 'dock')
       }
     },
     [apps, windows, openWindow, focusWindow, restoreWindow]

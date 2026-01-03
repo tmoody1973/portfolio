@@ -5,6 +5,7 @@ import { CratesSidebar, ItemCategory } from './CratesSidebar'
 import { CrateItemCard } from './CrateItemCard'
 import { CrateItemDetail } from './CrateItemDetail'
 import { sanityClient, curatedItemsQuery } from '@/lib/sanity'
+import { trackCrates } from '@/lib/analytics'
 
 // Types for curated items
 export interface CuratedItem {
@@ -208,6 +209,7 @@ export function CratesApp({ className = '' }: CratesAppProps) {
   const handleSelectItem = (item: CuratedItem) => {
     setSelectedItem(item)
     setView('detail')
+    trackCrates('item_clicked', item.title)
   }
 
   // Handle back to grid
@@ -225,6 +227,7 @@ export function CratesApp({ className = '' }: CratesAppProps) {
           setSelectedCategory(cat)
           setView('grid')
           setSelectedItem(null)
+          trackCrates('category_filtered', cat)
         }}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}

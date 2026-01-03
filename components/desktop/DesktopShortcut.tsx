@@ -2,6 +2,7 @@
 
 import { useCallback, useState } from 'react'
 import Image from 'next/image'
+import { trackShortcut } from '@/lib/analytics'
 
 export interface DesktopShortcutProps {
   /** Unique identifier for the shortcut */
@@ -36,12 +37,13 @@ export function DesktopShortcut({
   const [isPressed, setIsPressed] = useState(false)
 
   const handleActivate = useCallback(() => {
+    trackShortcut(name, url)
     if (isExternal && url) {
       window.open(url, '_blank', 'noopener,noreferrer')
     } else if (onOpen) {
       onOpen(id)
     }
-  }, [id, isExternal, url, onOpen])
+  }, [id, name, isExternal, url, onOpen])
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {

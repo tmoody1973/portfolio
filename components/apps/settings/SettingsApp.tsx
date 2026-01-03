@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useWallpaperStore } from '@/store/useWallpaperStore'
 import { getAllWallpapers } from '@/lib/sanity'
 import Image from 'next/image'
+import { trackSettings } from '@/lib/analytics'
 
 interface WallpaperItem {
   id: string
@@ -86,7 +87,10 @@ export function SettingsApp() {
                 return (
                   <button
                     key={wallpaper.id}
-                    onClick={() => setWallpaper(wallpaper.url)}
+                    onClick={() => {
+                      setWallpaper(wallpaper.url)
+                      trackSettings('wallpaper_changed', wallpaper.name)
+                    }}
                     className={`
                       relative aspect-video rounded-lg overflow-hidden
                       transition-all duration-200

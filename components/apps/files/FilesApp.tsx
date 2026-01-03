@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { getFolders, getFiles, Folder, FileItem } from '@/lib/sanity'
 import Image from 'next/image'
+import { trackFileManager } from '@/lib/analytics'
 
 interface FilesAppProps {
   className?: string
@@ -63,6 +64,7 @@ export function FilesApp({ className = '' }: FilesAppProps) {
   const openFolder = (folder: Folder) => {
     setFolderPath([...folderPath, folder])
     setCurrentFolderId(folder._id)
+    trackFileManager('folder_opened', folder.name)
   }
 
   // Navigate to a specific level in breadcrumb
@@ -82,9 +84,11 @@ export function FilesApp({ className = '' }: FilesAppProps) {
   const handleFileDoubleClick = (file: FileItem) => {
     if (file.fileType === 'image' || file.fileType === 'pdf') {
       setPreviewFile(file)
+      trackFileManager('file_preview', file.name)
     } else if (file.fileUrl) {
       // Open other files in new tab
       window.open(file.fileUrl, '_blank')
+      trackFileManager('file_opened', file.name)
     }
   }
 
