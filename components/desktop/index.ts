@@ -6,6 +6,7 @@ export { ShortcutGrid } from './ShortcutGrid'
 export { Dock } from './Dock'
 export { DockApp } from './DockApp'
 export { DockSocialMenu } from './DockSocialMenu'
+export { HelpModal } from './HelpModal'
 export { StickyNote } from './StickyNote'
 
 // Shortcuts configuration

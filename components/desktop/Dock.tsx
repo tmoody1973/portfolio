@@ -1,10 +1,13 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import Image from 'next/image'
 import { DockApp } from './DockApp'
 import { DockSocialMenu } from './DockSocialMenu'
+import { HelpModal } from './HelpModal'
 import { useWindowStore } from '@/store'
+
+const HELP_SEEN_KEY = 'portfolio-help-seen'
 
 export interface DockAppConfig {
   /** Unique identifier for the app */
@@ -40,8 +43,35 @@ export function Dock({
 }: DockProps) {
   const [isHidden, setIsHidden] = useState(autoHide)
   const [showAppsTooltip, setShowAppsTooltip] = useState(false)
+  const [showHelpTooltip, setShowHelpTooltip] = useState(false)
+  const [isHelpOpen, setIsHelpOpen] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
 
   const { windows, activeWindowId, openWindow, focusWindow, restoreWindow } = useWindowStore()
+
+  // Check if help has been seen before and show modal on first visit
+  useEffect(() => {
+    setIsMounted(true)
+    const hasSeenHelp = localStorage.getItem(HELP_SEEN_KEY)
+    if (!hasSeenHelp) {
+      // Small delay to let the page load first
+      const timer = setTimeout(() => {
+        setIsHelpOpen(true)
+      }, 500)
+      return () => clearTimeout(timer)
+    }
+  }, [])
+
+  // Handle closing help modal
+  const handleCloseHelp = useCallback(() => {
+    setIsHelpOpen(false)
+    localStorage.setItem(HELP_SEEN_KEY, 'true')
+  }, [])
+
+  // Handle opening help modal
+  const handleOpenHelp = useCallback(() => {
+    setIsHelpOpen(true)
+  }, [])
 
   // Handle app click - open new window or focus/restore existing
   const handleAppClick = useCallback(
@@ -134,6 +164,68 @@ export function Dock({
           ))}
         </div>
 
+        {/* Help Button */}
+        <div
+          className="
+            dock-help
+            relative
+            w-12 h-12
+            p-2
+            m-1
+            rounded-lg
+            cursor-pointer
+            hover:bg-white/10
+            transition-colors
+            flex items-center justify-center
+          "
+          onClick={handleOpenHelp}
+          onMouseEnter={() => setShowHelpTooltip(true)}
+          onMouseLeave={() => setShowHelpTooltip(false)}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault()
+              handleOpenHelp()
+            }
+          }}
+          aria-label="Help"
+        >
+          <Image
+            src="/themes/Yaru/apps/help.svg"
+            alt="Help"
+            width={32}
+            height={32}
+            className="w-8 h-8"
+          />
+
+          {/* Tooltip */}
+          <div
+            className={`
+              tooltip
+              absolute
+              top-1/2
+              left-full
+              ml-3
+              -translate-y-1/2
+              whitespace-nowrap
+              py-1 px-2
+              text-sm
+              text-ubt-grey
+              bg-ub-grey/80
+              border border-gray-500/40
+              rounded-md
+              z-50
+              pointer-events-none
+              transition-opacity duration-150
+              ${showHelpTooltip ? 'opacity-100 visible' : 'opacity-0 invisible'}
+            `}
+            role="tooltip"
+          >
+            Help & Guide
+          </div>
+        </div>
+
         {/* Social Links Menu */}
         <DockSocialMenu />
 
@@ -207,6 +299,9 @@ export function Dock({
           onMouseEnter={handleMouseEnter}
         />
       )}
+
+      {/* Help Modal */}
+      {isMounted && <HelpModal isOpen={isHelpOpen} onClose={handleCloseHelp} />}
     </>
   )
 }
