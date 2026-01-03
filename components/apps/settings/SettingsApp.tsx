@@ -1,12 +1,50 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { useWallpaperStore } from '@/store/useWallpaperStore'
+import { getAllWallpapers } from '@/lib/sanity'
 import Image from 'next/image'
 
-export function SettingsApp() {
-  const { currentWallpaper, sanityWallpapers, setWallpaper } = useWallpaperStore()
+interface WallpaperItem {
+  id: string
+  name: string
+  url: string
+}
 
-  // Only show wallpapers from Sanity - no hardcoded fallbacks
+export function SettingsApp() {
+  const { currentWallpaper, sanityWallpapers, setWallpaper, setSanityWallpapers } = useWallpaperStore()
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  // Fetch wallpapers directly if store is empty
+  useEffect(() => {
+    if (sanityWallpapers.length === 0) {
+      setLoading(true)
+      setError(null)
+
+      getAllWallpapers()
+        .then((wallpapers) => {
+          if (wallpapers && wallpapers.length > 0) {
+            const mapped: WallpaperItem[] = wallpapers.map((w) => ({
+              id: w._id,
+              name: w.name,
+              url: w.imageUrl,
+            }))
+            setSanityWallpapers(mapped)
+          } else {
+            setError('No wallpapers found in Sanity')
+          }
+        })
+        .catch((err) => {
+          console.error('Failed to fetch wallpapers:', err)
+          setError('Failed to load wallpapers')
+        })
+        .finally(() => {
+          setLoading(false)
+        })
+    }
+  }, [sanityWallpapers.length, setSanityWallpapers])
+
   const allWallpapers = sanityWallpapers
 
   return (
@@ -26,9 +64,20 @@ export function SettingsApp() {
           </p>
 
           {/* Wallpaper Grid */}
-          {allWallpapers.length === 0 ? (
+          {loading ? (
             <div className="text-center py-8 text-white/40">
-              <p>Loading wallpapers from Sanity...</p>
+              <div className="w-6 h-6 border-2 border-white/20 border-t-white/60 rounded-full animate-spin mx-auto mb-3" />
+              <p>Loading wallpapers...</p>
+            </div>
+          ) : error ? (
+            <div className="text-center py-8 text-white/40">
+              <p>{error}</p>
+              <p className="text-xs mt-2">Add wallpapers in Sanity Studio</p>
+            </div>
+          ) : allWallpapers.length === 0 ? (
+            <div className="text-center py-8 text-white/40">
+              <p>No wallpapers available</p>
+              <p className="text-xs mt-2">Add wallpapers in Sanity Studio</p>
             </div>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
