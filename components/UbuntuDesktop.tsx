@@ -16,6 +16,7 @@ import { ContactApp } from './apps/contact'
 import { CratesApp } from './apps/crates'
 import { MixcloudApp } from './apps/mixcloud'
 import { SettingsApp } from './apps/settings/SettingsApp'
+import { FilesApp } from './apps/files'
 import Navbar from './screen/navbar'
 
 // Screen states
@@ -566,6 +567,8 @@ function AppContent({ appType, windowId }: { appType: string; windowId: string }
       return <MixcloudApp />
     case 'settings':
       return <SettingsApp />
+    case 'files':
+      return <FilesApp />
     default:
       return <AppPlaceholder appType={appType} windowId={windowId} />
   }

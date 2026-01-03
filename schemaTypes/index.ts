@@ -28,6 +28,10 @@ import curatedItem from './curatedItem'
 // Desktop extras
 import stickyNote from './stickyNote'
 
+// File manager schemas
+import folder from './folder'
+import fileItem from './file'
+
 // Export all schema types
 export const schemaTypes = [
   // Singletons (Story 1.4)
@@ -59,4 +63,8 @@ export const schemaTypes = [
 
   // Desktop extras
   stickyNote,
+
+  // File manager schemas
+  folder,
+  fileItem,
 ]

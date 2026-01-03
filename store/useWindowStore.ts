@@ -47,6 +47,7 @@ const DEFAULT_WINDOW_SIZES: Record<string, WindowSize> = {
   crates: { width: 800, height: 550 },
   mixcloud: { width: 950, height: 580 },
   settings: { width: 650, height: 500 },
+  files: { width: 800, height: 500 },
   default: { width: 600, height: 400 },
 }
 

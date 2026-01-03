@@ -420,3 +420,56 @@ export const siteSettingsQuery = `*[_type == "siteSettings"][0] {
 export async function getSiteSettings(): Promise<SiteSettings | null> {
   return sanityClient.fetch(siteSettingsQuery)
 }
+
+// File Manager types
+export interface Folder {
+  _id: string
+  name: string
+  parentFolder?: { _ref: string }
+  parentFolderId?: string
+  color?: string
+  order?: number
+}
+
+export interface FileItem {
+  _id: string
+  name: string
+  fileType: 'image' | 'pdf' | 'document'
+  imageUrl?: string
+  fileUrl?: string
+  folder?: { _ref: string }
+  folderId?: string
+  description?: string
+  order?: number
+}
+
+// GROQ query for folders
+export const foldersQuery = `*[_type == "folder"] | order(order asc, name asc) {
+  _id,
+  name,
+  "parentFolderId": parentFolder._ref,
+  color,
+  order
+}`
+
+// GROQ query for files
+export const filesQuery = `*[_type == "fileItem"] | order(order asc, name asc) {
+  _id,
+  name,
+  fileType,
+  "imageUrl": image.asset->url,
+  "fileUrl": coalesce(pdfFile.asset->url, documentFile.asset->url),
+  "folderId": folder._ref,
+  description,
+  order
+}`
+
+// Fetch all folders
+export async function getFolders(): Promise<Folder[]> {
+  return sanityClient.fetch(foldersQuery)
+}
+
+// Fetch all files
+export async function getFiles(): Promise<FileItem[]> {
+  return sanityClient.fetch(filesQuery)
+}
