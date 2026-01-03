@@ -29,8 +29,8 @@ export const metadata: Metadata = {
     creator: '@taaborern',
   },
   icons: {
-    icon: '/images/logos/fevicon.svg',
-    apple: '/images/logos/logo.png',
+    icon: '/favicon.ico',
+    apple: '/favicon.ico',
   },
 }
 
