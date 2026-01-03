@@ -151,7 +151,7 @@ export function StickyNote({ config }: StickyNoteProps) {
             transition={{ duration: 0.2 }}
             onClick={handleShow}
             className={`
-              fixed top-16 right-4 z-30
+              fixed bottom-4 right-4 z-30
               w-10 h-10 rounded-lg ${colors.icon}
               flex items-center justify-center
               shadow-lg hover:scale-110 transition-transform
