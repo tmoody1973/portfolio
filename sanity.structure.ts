@@ -8,6 +8,7 @@ const icons = {
   projects: () => '📁',
   terminal: () => '💻',
   media: () => '🎨',
+  fileManager: () => '🗂️',
   crates: () => '📦',
 }
 
@@ -180,6 +181,35 @@ export const structure: StructureResolver = (S) =>
                 .child(
                   S.documentTypeList('wallpaper')
                     .title('Wallpapers')
+                    .defaultOrdering([{ field: 'order', direction: 'asc' }])
+                ),
+            ])
+        ),
+
+      // ==========================================
+      // File Manager Group
+      // ==========================================
+      S.listItem()
+        .title('File Manager')
+        .icon(icons.fileManager)
+        .child(
+          S.list()
+            .title('File Manager')
+            .items([
+              S.listItem()
+                .title('Folders')
+                .icon(() => '📁')
+                .child(
+                  S.documentTypeList('folder')
+                    .title('Folders')
+                    .defaultOrdering([{ field: 'order', direction: 'asc' }])
+                ),
+              S.listItem()
+                .title('Files')
+                .icon(() => '📄')
+                .child(
+                  S.documentTypeList('fileItem')
+                    .title('Files')
                     .defaultOrdering([{ field: 'order', direction: 'asc' }])
                 ),
             ])
