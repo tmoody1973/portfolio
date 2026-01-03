@@ -2,17 +2,18 @@ import { createClient, type SanityClient } from 'next-sanity'
 
 const apiVersion = '2024-01-01'
 
+// Hardcoded values - env vars were causing issues
+const SANITY_PROJECT_ID = 'zb08xdlz'
+const SANITY_DATASET = 'production'
+
 // Lazy-initialized client to avoid issues during build time
 let _sanityClient: SanityClient | null = null
 
 function getClient(): SanityClient {
   if (!_sanityClient) {
-    const envProjectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID
-    const envDataset = process.env.NEXT_PUBLIC_SANITY_DATASET
-
     _sanityClient = createClient({
-      projectId: envProjectId && envProjectId.length > 0 ? envProjectId : 'zb08xdlz',
-      dataset: envDataset && envDataset.length > 0 ? envDataset : 'production',
+      projectId: SANITY_PROJECT_ID,
+      dataset: SANITY_DATASET,
       apiVersion,
       useCdn: true,
     })
