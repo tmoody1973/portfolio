@@ -1,19 +1,13 @@
 'use client'
 
-import { useWallpaperStore, DEFAULT_WALLPAPERS } from '@/store/useWallpaperStore'
+import { useWallpaperStore } from '@/store/useWallpaperStore'
 import Image from 'next/image'
 
 export function SettingsApp() {
   const { currentWallpaper, sanityWallpapers, setWallpaper } = useWallpaperStore()
 
-  // Use Sanity wallpapers if available, otherwise fall back to defaults
-  const allWallpapers = sanityWallpapers.length > 0
-    ? sanityWallpapers
-    : DEFAULT_WALLPAPERS.map((w) => ({
-        id: w.key,
-        name: w.name,
-        url: w.url,
-      }))
+  // Only show wallpapers from Sanity - no hardcoded fallbacks
+  const allWallpapers = sanityWallpapers
 
   return (
     <div className="h-full bg-[#1e1e1e] text-white overflow-auto">
@@ -32,47 +26,53 @@ export function SettingsApp() {
           </p>
 
           {/* Wallpaper Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-            {allWallpapers.map((wallpaper) => {
-              const isSelected = currentWallpaper === wallpaper.url
-              return (
-                <button
-                  key={wallpaper.id}
-                  onClick={() => setWallpaper(wallpaper.url)}
-                  className={`
-                    relative aspect-video rounded-lg overflow-hidden
-                    transition-all duration-200
-                    ${isSelected
-                      ? 'ring-2 ring-[#E95420] ring-offset-2 ring-offset-[#1e1e1e]'
-                      : 'hover:ring-2 hover:ring-white/30 hover:ring-offset-2 hover:ring-offset-[#1e1e1e]'
-                    }
-                  `}
-                >
-                  <Image
-                    src={wallpaper.url}
-                    alt={wallpaper.name}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
-                  />
-                  {/* Overlay with name */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-2">
-                    <span className="text-xs text-white/90 truncate">
-                      {wallpaper.name}
-                    </span>
-                  </div>
-                  {/* Selected checkmark */}
-                  {isSelected && (
-                    <div className="absolute top-2 right-2 bg-[#E95420] rounded-full p-1">
-                      <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                      </svg>
+          {allWallpapers.length === 0 ? (
+            <div className="text-center py-8 text-white/40">
+              <p>Loading wallpapers from Sanity...</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+              {allWallpapers.map((wallpaper) => {
+                const isSelected = currentWallpaper === wallpaper.url
+                return (
+                  <button
+                    key={wallpaper.id}
+                    onClick={() => setWallpaper(wallpaper.url)}
+                    className={`
+                      relative aspect-video rounded-lg overflow-hidden
+                      transition-all duration-200
+                      ${isSelected
+                        ? 'ring-2 ring-[#E95420] ring-offset-2 ring-offset-[#1e1e1e]'
+                        : 'hover:ring-2 hover:ring-white/30 hover:ring-offset-2 hover:ring-offset-[#1e1e1e]'
+                      }
+                    `}
+                  >
+                    <Image
+                      src={wallpaper.url}
+                      alt={wallpaper.name}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
+                    />
+                    {/* Overlay with name */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-2">
+                      <span className="text-xs text-white/90 truncate">
+                        {wallpaper.name}
+                      </span>
                     </div>
-                  )}
-                </button>
-              )
-            })}
-          </div>
+                    {/* Selected checkmark */}
+                    {isSelected && (
+                      <div className="absolute top-2 right-2 bg-[#E95420] rounded-full p-1">
+                        <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                        </svg>
+                      </div>
+                    )}
+                  </button>
+                )
+              })}
+            </div>
+          )}
         </section>
 
         {/* About Section */}

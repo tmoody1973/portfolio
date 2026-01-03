@@ -36,6 +36,12 @@ export const DOCK_APPS: DockAppConfig[] = [
     appType: 'player',
   },
   {
+    id: 'mixcloud',
+    name: 'Rhythm Lab',
+    icon: '/themes/Yaru/apps/rlr-logo.svg',
+    appType: 'mixcloud',
+  },
+  {
     id: 'crates',
     name: 'Crates',
     icon: '/themes/Yaru/apps/crates.svg',
