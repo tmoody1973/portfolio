@@ -168,7 +168,7 @@ export interface WallpaperConfig {
 }
 
 // GROQ query for active wallpaper
-export const activeWallpaperQuery = `*[_type == "wallpaper" && enabled == true && isActive == true][0] {
+export const activeWallpaperQuery = `*[_type == "wallpaper" && enabled != false && isActive == true][0] {
   _id,
   name,
   "imageUrl": image.asset->url,
@@ -177,7 +177,7 @@ export const activeWallpaperQuery = `*[_type == "wallpaper" && enabled == true &
 }`
 
 // GROQ query for all wallpapers (for settings)
-export const allWallpapersQuery = `*[_type == "wallpaper" && enabled == true] | order(order asc) {
+export const allWallpapersQuery = `*[_type == "wallpaper" && enabled != false] | order(order asc) {
   _id,
   name,
   "imageUrl": image.asset->url,
