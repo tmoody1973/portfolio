@@ -287,3 +287,65 @@ export async function getBioSection(): Promise<AboutSection | null> {
     order
   }`)
 }
+
+// Radio Stream types (for player)
+export interface SanityRadioStream {
+  _id: string
+  name: string
+  streamUrl: string
+  description?: string
+  genre?: string
+  spinitronStationId?: string
+  isDefault?: boolean
+  order?: number
+  enabled?: boolean
+}
+
+// GROQ query for radio streams
+export const radioStreamsQuery = `*[_type == "radioStream" && enabled != false] | order(order asc) {
+  _id,
+  name,
+  streamUrl,
+  description,
+  genre,
+  spinitronStationId,
+  isDefault,
+  order
+}`
+
+// Fetch radio streams
+export async function getRadioStreams(): Promise<SanityRadioStream[]> {
+  return sanityClient.fetch(radioStreamsQuery)
+}
+
+// Education types
+export interface Education {
+  _id: string
+  institution: string
+  degree: string
+  fieldOfStudy?: string
+  startYear?: number
+  endYear?: number
+  inProgress?: boolean
+  details?: string
+  order?: number
+  enabled?: boolean
+}
+
+// GROQ query for education
+export const educationQuery = `*[_type == "education" && enabled != false] | order(order asc) {
+  _id,
+  institution,
+  degree,
+  fieldOfStudy,
+  startYear,
+  endYear,
+  inProgress,
+  details,
+  order
+}`
+
+// Fetch education
+export async function getEducation(): Promise<Education[]> {
+  return sanityClient.fetch(educationQuery)
+}

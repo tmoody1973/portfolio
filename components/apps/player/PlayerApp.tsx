@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { useAudioStore, RadioStream, DEFAULT_STREAMS } from '@/store'
 import { useSpinitronPolling } from '@/hooks'
+import { getRadioStreams, SanityRadioStream } from '@/lib/sanity'
 
 interface PlayerAppProps {
   className?: string
@@ -28,9 +29,48 @@ export function PlayerApp({ className = '' }: PlayerAppProps) {
     toggleMute,
     setLoading,
     isLoading,
+    setStreams,
   } = useAudioStore()
 
   const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(null)
+  const [streamsLoaded, setStreamsLoaded] = useState(false)
+
+  // Fetch streams from Sanity on mount
+  useEffect(() => {
+    if (streamsLoaded) return
+
+    getRadioStreams()
+      .then((sanityStreams) => {
+        if (sanityStreams && sanityStreams.length > 0) {
+          // Convert Sanity streams to RadioStream format
+          const streams: RadioStream[] = sanityStreams.map((s) => ({
+            id: s._id,
+            name: s.name,
+            url: s.streamUrl,
+            description: s.description,
+            hasSpinnitron: !!s.spinitronStationId,
+          }))
+          setStreams(streams)
+
+          // Set default stream if current is null
+          const defaultStream = sanityStreams.find((s) => s.isDefault)
+          if (defaultStream && !currentStream) {
+            switchStream({
+              id: defaultStream._id,
+              name: defaultStream.name,
+              url: defaultStream.streamUrl,
+              description: defaultStream.description,
+              hasSpinnitron: !!defaultStream.spinitronStationId,
+            })
+          }
+        }
+      })
+      .catch(() => {
+        // Fallback to default streams
+        setStreams(DEFAULT_STREAMS)
+      })
+      .finally(() => setStreamsLoaded(true))
+  }, [streamsLoaded, setStreams, switchStream, currentStream])
 
   // Initialize Spinitron polling for now playing data
   useSpinitronPolling()
@@ -143,17 +183,22 @@ export function PlayerApp({ className = '' }: PlayerAppProps) {
             </>
           ) : isPlaying ? (
             <div className="flex items-end justify-center gap-1 h-24">
-              {[...Array(5)].map((_, i) => (
-                <div
-                  key={i}
-                  className="w-3 bg-ub-orange rounded-t animate-pulse"
-                  style={{
-                    height: `${20 + Math.random() * 60}%`,
-                    animationDelay: `${i * 0.1}s`,
-                    animationDuration: `${0.5 + Math.random() * 0.5}s`,
-                  }}
-                />
-              ))}
+              {[...Array(5)].map((_, i) => {
+                // Use deterministic values based on index to avoid hydration mismatch
+                const heights = [45, 70, 55, 80, 60]
+                const durations = [0.6, 0.8, 0.7, 0.9, 0.75]
+                return (
+                  <div
+                    key={i}
+                    className="w-3 bg-ub-orange rounded-t animate-pulse"
+                    style={{
+                      height: `${heights[i]}%`,
+                      animationDelay: `${i * 0.1}s`,
+                      animationDuration: `${durations[i]}s`,
+                    }}
+                  />
+                )
+              })}
             </div>
           ) : (
             <svg className="w-20 h-20 text-white/20" fill="currentColor" viewBox="0 0 24 24">
