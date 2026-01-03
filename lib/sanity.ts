@@ -1,15 +1,27 @@
-import { createClient } from 'next-sanity'
+import { createClient, type SanityClient } from 'next-sanity'
 
-const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID
-const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production'
 const apiVersion = '2024-01-01'
 
-export const sanityClient = createClient({
-  projectId,
-  dataset,
-  apiVersion,
-  useCdn: true, // Enable CDN for faster reads
-})
+// Lazy-initialized client to avoid issues during build time
+let _sanityClient: SanityClient | null = null
+
+function getClient(): SanityClient {
+  if (!_sanityClient) {
+    _sanityClient = createClient({
+      projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
+      dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
+      apiVersion,
+      useCdn: true,
+    })
+  }
+  return _sanityClient
+}
+
+// Proxy object for backwards compatibility
+export const sanityClient = {
+  fetch: <T>(query: string, params?: Record<string, unknown>) =>
+    getClient().fetch<T>(query, params)
+}
 
 // Type definitions for curated items
 export interface CuratedItem {

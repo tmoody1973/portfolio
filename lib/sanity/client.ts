@@ -1,11 +1,25 @@
-import { createClient } from 'next-sanity'
+import { createClient, type SanityClient } from 'next-sanity'
 
-export const client = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
-  apiVersion: '2024-01-01',
-  useCdn: process.env.NODE_ENV === 'production',
-})
+// Lazy-initialized client to avoid issues during build time
+let _client: SanityClient | null = null
+
+export function getClient(): SanityClient {
+  if (!_client) {
+    _client = createClient({
+      projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
+      dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
+      apiVersion: '2024-01-01',
+      useCdn: process.env.NODE_ENV === 'production',
+    })
+  }
+  return _client
+}
+
+// For backwards compatibility
+export const client = {
+  fetch: <T>(query: string, params?: Record<string, unknown>, options?: Parameters<SanityClient['fetch']>[2]) =>
+    getClient().fetch<T>(query, params, options)
+}
 
 // Helper for fetching data with caching
 export async function sanityFetch<T>({
