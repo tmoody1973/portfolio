@@ -33,12 +33,12 @@ export function MixcloudApp({ className = '', username = 'RhythmLabRadio' }: Mix
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  // Fetch shows from Mixcloud API
+  // Fetch shows from our API proxy (to bypass CORS)
   useEffect(() => {
     const fetchShows = async () => {
       try {
         const response = await fetch(
-          `https://api.mixcloud.com/${username}/cloudcasts/?limit=20`
+          `/api/mixcloud?username=${username}&limit=20`
         )
         if (!response.ok) throw new Error('Failed to fetch shows')
         const data = await response.json()

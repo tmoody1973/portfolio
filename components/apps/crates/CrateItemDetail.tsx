@@ -11,15 +11,17 @@ interface MediaEmbedProps {
   embedType?: string
   embedUrl: string
   title: string
+  bandcampAlbumId?: string
+  bandcampTrackId?: string
 }
 
 /**
  * Renders embedded media players for YouTube, Bandcamp, Spotify, SoundCloud
  */
-function MediaEmbed({ embedType, embedUrl, title }: MediaEmbedProps) {
+function MediaEmbed({ embedType, embedUrl, title, bandcampAlbumId, bandcampTrackId }: MediaEmbedProps) {
   // Extract video/track IDs and build embed URLs
   const getEmbedSrc = (): string | null => {
-    if (!embedUrl) return null
+    if (!embedUrl && !bandcampAlbumId) return null
 
     switch (embedType) {
       case 'youtube': {
@@ -40,9 +42,12 @@ function MediaEmbed({ embedType, embedUrl, title }: MediaEmbedProps) {
         return null
       }
       case 'bandcamp': {
-        // Bandcamp requires album/track ID - if URL provided, show iframe with link
-        // For proper embed, you'd need to get the album_id from Bandcamp
-        return null // Bandcamp embeds need special handling
+        // Use bandcampAlbumId if provided for proper embed
+        if (bandcampAlbumId) {
+          const trackParam = bandcampTrackId ? `/track=${bandcampTrackId}` : ''
+          return `https://bandcamp.com/EmbeddedPlayer/album=${bandcampAlbumId}${trackParam}/size=large/bgcol=1a1612/linkcol=e69500/tracklist=true/artwork=small/transparent=true/`
+        }
+        return null
       }
       case 'soundcloud': {
         // SoundCloud uses their widget API
@@ -129,8 +134,24 @@ function MediaEmbed({ embedType, embedUrl, title }: MediaEmbedProps) {
     )
   }
 
-  // Bandcamp - show a styled link since embeds need album IDs
-  if (embedType === 'bandcamp') {
+  // Bandcamp embed - responsive iframe
+  if (embedType === 'bandcamp' && embedSrc) {
+    return (
+      <div className="bg-amber-950/30 rounded-xl overflow-hidden border border-amber-900/30">
+        <iframe
+          src={embedSrc}
+          title={title}
+          className="w-full"
+          style={{ height: '470px', border: 0 }}
+          seamless
+          loading="lazy"
+        />
+      </div>
+    )
+  }
+
+  // Bandcamp fallback - show a styled link when no album ID provided
+  if (embedType === 'bandcamp' && embedUrl && !embedSrc) {
     return (
       <div className="bg-amber-950/30 rounded-xl p-4 border border-amber-900/30">
         <div className="flex items-center gap-3">
@@ -343,9 +364,15 @@ export function CrateItemDetail({ item, onBack }: CrateItemDetailProps) {
       </div>
 
       {/* Media Embed Section */}
-      {item.itemType === 'music' && item.embedUrl && (
+      {item.itemType === 'music' && (item.embedUrl || item.bandcampAlbumId) && (
         <div className="mb-8">
-          <MediaEmbed embedType={item.embedType} embedUrl={item.embedUrl} title={item.title} />
+          <MediaEmbed
+            embedType={item.embedType}
+            embedUrl={item.embedUrl || ''}
+            title={item.title}
+            bandcampAlbumId={item.bandcampAlbumId}
+            bandcampTrackId={item.bandcampTrackId}
+          />
         </div>
       )}
 

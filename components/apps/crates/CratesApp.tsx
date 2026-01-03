@@ -19,8 +19,10 @@ export interface CuratedItem {
   tags?: string[]
   featured?: boolean
   // Music fields
-  embedType?: 'youtube' | 'bandcamp' | 'spotify' | 'soundcloud'
+  embedType?: 'youtube' | 'bandcamp' | 'spotify' | 'soundcloud' | 'mixcloud'
   embedUrl?: string
+  bandcampAlbumId?: string
+  bandcampTrackId?: string
   genre?: string
   // Book fields
   author?: string

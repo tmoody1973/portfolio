@@ -141,6 +141,22 @@ export default defineType({
       hidden: ({ parent }) => parent?.itemType !== 'music',
     }),
     defineField({
+      name: 'bandcampAlbumId',
+      title: 'Bandcamp Album/Track ID',
+      type: 'string',
+      description: 'The numeric ID from Bandcamp embed code (e.g., "3481572890"). Get this from the Share/Embed button on Bandcamp.',
+      group: 'music',
+      hidden: ({ parent }) => parent?.itemType !== 'music' || parent?.embedType !== 'bandcamp',
+    }),
+    defineField({
+      name: 'bandcampTrackId',
+      title: 'Bandcamp Track ID (optional)',
+      type: 'string',
+      description: 'For embedding a specific track from an album. Leave empty to embed the whole album.',
+      group: 'music',
+      hidden: ({ parent }) => parent?.itemType !== 'music' || parent?.embedType !== 'bandcamp',
+    }),
+    defineField({
       name: 'genre',
       title: 'Genre',
       type: 'string',

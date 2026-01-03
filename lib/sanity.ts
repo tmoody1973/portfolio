@@ -43,8 +43,10 @@ export interface CuratedItem {
   discoveryDate?: string
   tags?: string[]
   // Music fields
-  embedType?: 'youtube' | 'bandcamp' | 'spotify' | 'soundcloud'
+  embedType?: 'youtube' | 'bandcamp' | 'spotify' | 'soundcloud' | 'mixcloud'
   embedUrl?: string
+  bandcampAlbumId?: string
+  bandcampTrackId?: string
   genre?: string
   // Book fields
   author?: string
@@ -73,6 +75,8 @@ export const curatedItemsQuery = `*[_type == "curatedItem" && enabled != false] 
   tags,
   embedType,
   embedUrl,
+  bandcampAlbumId,
+  bandcampTrackId,
   genre,
   author,
   purchaseUrl,
