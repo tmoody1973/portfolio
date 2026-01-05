@@ -7,7 +7,9 @@ import { NextRequest, NextResponse } from 'next/server'
  */
 
 // Map station IDs to their Spinitron API keys
+// WYMS is the call sign for 88Nine Radio Milwaukee
 const SPINITRON_API_KEYS: Record<string, string | undefined> = {
+  'wyms': process.env.SPINITRON_88NINE_KEY,
   'rhythm-lab': process.env.SPINITRON_RHYTHM_LAB_KEY,
   '88nine': process.env.SPINITRON_88NINE_KEY,
   'hyfin': process.env.SPINITRON_HYFIN_KEY,
