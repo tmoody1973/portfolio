@@ -50,6 +50,7 @@ export function PlayerApp({ className = '' }: PlayerAppProps) {
             url: s.streamUrl,
             description: s.description,
             hasSpinnitron: !!s.spinitronStationId,
+            spinitronStationId: s.spinitronStationId,
           }))
           setStreams(streams)
 
@@ -62,6 +63,7 @@ export function PlayerApp({ className = '' }: PlayerAppProps) {
               url: defaultStream.streamUrl,
               description: defaultStream.description,
               hasSpinnitron: !!defaultStream.spinitronStationId,
+              spinitronStationId: defaultStream.spinitronStationId,
             })
           }
         }
@@ -80,6 +82,7 @@ export function PlayerApp({ className = '' }: PlayerAppProps) {
   useEffect(() => {
     const audio = new Audio()
     audio.volume = (isMuted ? 0 : volume) / 100
+    audio.preload = 'none'
 
     audio.addEventListener('playing', () => {
       setLoading(false)
@@ -94,7 +97,21 @@ export function PlayerApp({ className = '' }: PlayerAppProps) {
       setLoading(true)
     })
 
-    audio.addEventListener('error', () => {
+    audio.addEventListener('error', (e) => {
+      console.warn('Audio error:', e)
+      setLoading(false)
+      // Reset the audio element on error to allow retry
+      audio.load()
+    })
+
+    // Handle stream stalls (common with live streams)
+    audio.addEventListener('stalled', () => {
+      console.warn('Audio stalled, attempting recovery...')
+      setLoading(true)
+    })
+
+    // Handle when audio can play through
+    audio.addEventListener('canplay', () => {
       setLoading(false)
     })
 
@@ -133,7 +150,17 @@ export function PlayerApp({ className = '' }: PlayerAppProps) {
       trackPlayer('pause', currentStream.name)
     } else {
       setLoading(true)
-      audioElement.play().catch(() => setLoading(false))
+      // Reload source if needed (helps recover from stalled/error states)
+      if (!audioElement.src || audioElement.error) {
+        audioElement.src = currentStream.url
+      }
+      audioElement.play().catch((err) => {
+        console.warn('Play failed:', err)
+        setLoading(false)
+        // Try reloading the source on failure
+        audioElement.src = currentStream.url
+        audioElement.load()
+      })
       trackPlayer('play', currentStream.name)
     }
   }
@@ -142,6 +169,7 @@ export function PlayerApp({ className = '' }: PlayerAppProps) {
   const handleStreamChange = (stream: RadioStream) => {
     if (audioElement) {
       audioElement.pause()
+      audioElement.src = ''
     }
     switchStream(stream)
     trackPlayer('stream_selected', stream.name)

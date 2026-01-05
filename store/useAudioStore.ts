@@ -10,6 +10,7 @@ export interface RadioStream {
   url: string
   description?: string
   hasSpinnitron?: boolean
+  spinitronStationId?: string
 }
 
 /**

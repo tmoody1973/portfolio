@@ -55,7 +55,7 @@ export function useSpinitronPolling() {
     if (!currentStream?.hasSpinnitron) return
 
     try {
-      const response = await fetch(`/api/spinitron?station=${currentStream.id}`)
+      const response = await fetch(`/api/spinitron?station=${currentStream.spinitronStationId || currentStream.id}`)
 
       if (!response.ok) {
         console.warn(`Spinitron fetch failed: ${response.status}`)
